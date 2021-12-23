@@ -1,7 +1,7 @@
 # This script simulates the results of single-arm multi-stage with binary
 # outcome, for a single value of response rate theta.
-
-# Find a multi-stage design for p0=0.5, p1=0.6, alpha=0.1, power=0.8 and 
+#
+# Find a multi-stage design for p0=0.5, p1=0.6, alpha=0.1, power=0.8 and
 # satisfying various other parameters:
 
 ad <- curtailment::singlearmDesign(nmin=50,
@@ -35,8 +35,8 @@ for(i in 1:nsims){
     s.list <- cumsum(onetrial)[interims] # Number of responses at each interim
     fail.stage <- match(TRUE, s.list <= finite.bounds$fail, nomatch=100) # Earliest crossing of futility bound
     success.stage <- match(TRUE, s.list >= finite.bounds$success, nomatch=100)  # Earliest crossing of efficacy bound
-    reject <- success.stage<fail.stage 
-    stop.stage <- min(fail.stage, success.stage) 
+    reject <- success.stage<fail.stage
+    stop.stage <- min(fail.stage, success.stage)
     final.n <- interims[stop.stage] # Trial sample size
     final.s <- s.list[stop.stage] # Trial number of responses
     results[[i]] <- c(final.s, final.n, reject)
