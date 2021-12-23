@@ -2,10 +2,10 @@
 # for a single value of response rate theta.
 
 # Find possible Simon designs for p0=0.5, p1=0.6, alpha=0.05, power=0.9:
-x <- clinfun::ph2simon(pu=0.5, pa=0.6, ep1=0.05, ep2=0.1, nmax=500)
+all.designs <- clinfun::ph2simon(pu=0.5, pa=0.6, ep1=0.05, ep2=0.1, nmax=500)
 # Choose optimal Simon design:
-opt.index <- which.min(x$out[, "EN(p0)"])
-des <- x$out[opt.index, ]
+opt.index <- which.min(all.designs$out[, "EN(p0)"])
+des <- all.designs$out[opt.index, ]
 
 # Parameters of Simon design:
 n1 <- des[names(des)=="n1"]
