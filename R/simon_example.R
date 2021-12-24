@@ -15,7 +15,7 @@ r <- des[names(des)=="r"]
 
 
 ##### Set up and run simulation of this design for single value of response rate theta #####
-theta <- 0.6
+theta <- 0.4
 nsims <- 1e5
 s1 <- s <- numeric(nsims)
 states.data <- vector("list", nsims+1)

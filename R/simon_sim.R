@@ -1,6 +1,5 @@
 # This script simulates the results of a Simon design for a vector of response rates.
-# Uses function pwbSimon for finding precision weighted bias:
-source("pwbSimon.R")
+
 
 # We vary response rate theta from 0.1 to 0.9
 
@@ -56,40 +55,31 @@ simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
-       title="Bias in Simon design -- precision-weighted vs naive",
-       subtitle="Includes naive estimates for early stopped vs complete trials and also prop'n stopped early")+
+       title="Bias in Simon design",
+       subtitle="Includes proportion of trials stopped early")+
   annotate("text", x=theta.vec, y=-0.15, label=stop.early.count)+
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
-  scale_x_continuous(breaks=seq(0,1,0.1))
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  scale_x_continuous(breaks=theta.vec)
 simon.plot
 #ggsave(filename="simon_bias.png", device="png", plot=simon.plot, width=9, height=6)
 
 
-# showTable: shows results for single value of theta
-#
-# Arguments:
-#
-# theta (required)
-# latex: show Latex code for table (TRUE/FALSE)
-# digit: number of rounding digits for bias and SE
-#
-showTable <- function(theta, latex=FALSE, digit=4){
-  single.theta.df <- all.simon[abs(all.simon$theta-theta)<0.001, ]
-  rownames(single.theta.df) <- single.theta.df$type
-  if(latex==TRUE){
-    print(xtable(single.theta.df[, 1:4],
-               caption=paste("Bias, mean SE and emp SE for Simon design when theta=", theta, sep=""),
-               align=rep("r", 5),
-               digits=c(0, 0, digit, digit, digit),
-               label="tab:simon"),
-        include.rownames=TRUE,
-        booktabs=TRUE,
-        sanitize.text.function=function(x){x})
-  }
-  single.theta.df$bias <- round(single.theta.df$bias, digit)
-  single.theta.df$mean.SE <- round(single.theta.df$mean.SE, digit)
-  single.theta.df$emp.SE <- round(single.theta.df$emp.SE, digit)
-  single.theta.df
-}
-showTable(theta=0.4)
+#### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
+simon.plot2 <- ggplot(data=all.simon[all.simon$type %in% c("All (naive)", "All (precision-weghted)"), ], mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in Simon design",
+       subtitle="Includes proportion of trials stopped early")+
+  annotate("text", x=theta.vec, y=-0.01, label=stop.early.count)+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  scale_x_continuous(breaks=theta.vec)
+simon.plot2
+
+# See results for individual theta:
+showTable(bias.df=all.simon, theta=0.4)
