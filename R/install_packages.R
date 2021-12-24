@@ -11,7 +11,7 @@
 
 
 install.packages("librarian")
-librarian::shelf(ggplot2, clinfun, xtable, DHARMa, martinlaw/curtailment, mjg211/singlearm)
+librarian::shelf(ggplot2, gridExtra, clinfun, xtable, DHARMa, martinlaw/curtailment, mjg211/singlearm)
 
 # functions for finding precision weighted bias and displaying results:
 source("R/pwbSimon.R")

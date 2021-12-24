@@ -23,7 +23,7 @@ for(i in 1:length(theta.vec)){
 all.simon <- do.call(rbind, summary.data)
 
 stop.early.count.index <- grepl("Stopped early", rownames(all.simon))
-stop.early.count <- round(all.simon$nsims[stop.early.count.index]/1e5, 2)
+stop.early.count <- round(all.simon$nsims[stop.early.count.index]/1e5, 3)
 
 
 ##### UMVUE for Simon design #####
@@ -80,6 +80,8 @@ simon.plot2 <- ggplot(data=all.simon[all.simon$type %in% c("All (naive)", "All (
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   scale_x_continuous(breaks=theta.vec)
 simon.plot2
+
+gridExtra::grid.arrange(simon.plot, simon.plot2)
 
 # See results for individual theta:
 showTable(bias.df=all.simon, theta=0.4)

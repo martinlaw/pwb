@@ -71,6 +71,8 @@ gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (naive)", "All (precision
   scale_x_continuous(breaks=theta.vec)
 gs.plot2
 
+gridExtra::grid.arrange(gs.plot, gs.plot2)
+
 
 # See results for individual theta:
 showTable(bias.df=all.gs, theta=0.4)
