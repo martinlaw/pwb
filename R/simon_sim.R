@@ -14,8 +14,9 @@ des <- all.designs$out[opt.index, ]
 theta.vec <- seq(0.1, 0.9, 0.1)
 summary.data <- vector("list", length(theta.vec))
 raw.data <- vector("list", length(theta.vec))
+nsims <- 10000
 for(i in 1:length(theta.vec)){
-  one.run <- pwbSimon(theta=theta.vec[i], des=des, nsims=1e5)
+  one.run <- pwbSimon(theta=theta.vec[i], des=des, nsims=nsims)
   raw.data[[i]] <- one.run$results
   summary.data[[i]] <- one.run$ests
 }
@@ -23,7 +24,7 @@ for(i in 1:length(theta.vec)){
 all.simon <- do.call(rbind, summary.data)
 
 stop.early.count.index <- grepl("Stopped early", rownames(all.simon))
-stop.early.count <- round(all.simon$nsims[stop.early.count.index]/1e5, 3)
+stop.early.count <- round(all.simon$nsims[stop.early.count.index]/nsims, 3)
 
 
 ##### UMVUE for Simon design #####
@@ -48,6 +49,8 @@ umvue$bias <- est$perf$`Bias(hat(pi)|pi)`
 umvue$type <- "UMVUE"
 
 all.simon <- rbind(all.simon, umvue)
+
+
 
 #### Plot bias for all theta values ####
 simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
