@@ -14,3 +14,15 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Imports: 
+    ggplot2,
+    gridExtra,
+    clinfun,
+    xtable,
+    DHARMa,
+    librarian,
+    curtailment (>= 0.1.1),
+    singlearm (>= 1.0)
+Remotes: 
+    martinlaw/curtailment,
+    mjg211/singlearm
