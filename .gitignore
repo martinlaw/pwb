@@ -1,4 +1,7 @@
 .Rproj.user
 R/scratch.R
+R/example_sim.R
 R/GS_sim.R
 R/install_packages.R
+R/simon_example.R
+R/simon_sim.R

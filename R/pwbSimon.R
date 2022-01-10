@@ -1,16 +1,15 @@
-# pwbSimon: a function to examine bias for a single Simon design
-#
-# Arguments:
-#
-# theta: true response probablity
-# des: a realisation of a Simon design, formatted as per output of clinfun::ph2simon
-#
-# Output: list of 3:
-#
-# results: individual sims
-# ests: estimates
-# mc.error
-#
+#' pwbSimon
+#'
+#' Examines bias for a single Simon design
+#'
+#' @param theta true response probablity
+#' @param des a realisation of a Simon design, formatted as per output of clinfun::ph2simon
+#' @param nsims number of simulations (default 1e5)
+#' @return # list of length 3:
+#' results: individual sims
+#' ests: estimates
+#' mc.error
+#' @export
 
 pwbSimon <- function(theta, des, nsims=1e5){
   ##### Setup #####
