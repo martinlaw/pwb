@@ -16,7 +16,7 @@ summary.data <- vector("list", length(theta.vec))
 raw.data <- vector("list", length(theta.vec))
 nsims <- 10000
 for(i in 1:length(theta.vec)){
-  one.run <- pwbSimon(theta=theta.vec[i], des=des, nsims=nsims)
+  one.run <- pwb::pwbSimon(theta=theta.vec[i], des=des, nsims=nsims)
   raw.data[[i]] <- one.run$results
   summary.data[[i]] <- one.run$ests
 }

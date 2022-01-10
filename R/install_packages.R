@@ -10,13 +10,10 @@
 # outside of R functions, and pwbSimon.R and pwbGS.R for actual functions.
 
 
-install.packages("librarian")
-librarian::shelf(ggplot2, gridExtra, clinfun, xtable, DHARMa, martinlaw/curtailment, mjg211/singlearm)
-
 # functions for finding precision weighted bias and displaying results:
-source("R/pwbSimon.R")
-source("R/pwbGS.R")
-source("R/showTable.R")
+# pwbSimon
+# pwbGS
+# showTable
 
 #### Guide to new files ####
 #

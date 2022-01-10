@@ -28,7 +28,7 @@ raw.data <- vector("list", length(theta.vec))
 set.seed(53)
 
 for(i in 1:length(theta.vec)){
-  one.run <- pwbGS(theta=theta.vec[i], des=ad, interims=interims, nsims=1e5)
+  one.run <- pwb::pwbGS(theta=theta.vec[i], des=ad, interims=interims, nsims=1e5)
   raw.data[[i]] <- one.run$results
   summary.data[[i]] <- one.run$ests
 }
@@ -75,4 +75,4 @@ gridExtra::grid.arrange(gs.plot, gs.plot2)
 
 
 # See results for individual theta:
-showTable(bias.df=all.gs, theta=0.4)
+pwb::showTable(bias.df=all.gs, theta=0.4)
