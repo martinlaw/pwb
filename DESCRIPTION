@@ -20,9 +20,8 @@ Imports:
     clinfun,
     xtable,
     DHARMa,
-    librarian,
     curtailment (>= 0.1.1),
-    singlearm (>= 1.0)
+    singlearm (>= 1.0),
 Remotes: 
     martinlaw/curtailment,
     mjg211/singlearm

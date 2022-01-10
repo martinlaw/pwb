@@ -10,7 +10,7 @@
 #' results: individual sims
 #' ests: estimates
 #' mc.error
-#' @example pwbGS_example.R
+#' @example R/pwbGS_example.R
 #' @export
 
 
