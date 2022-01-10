@@ -1,16 +1,18 @@
-# pwbGS: a function to examine bias for a single group sequential design
-#
-# Arguments:
-#
-# theta: true response probablity
-# des: a realisation of a GS design, formatted as per output of curtailment::singlearmDesign
-#
-# Output: list of 3:
-#
-# results: individual sims
-# ests: estimates
-# mc.error
-#
+#' pwbGS
+#'
+#' For a single group sequential design, obtains bias for a single true response rate.
+#'
+#' @param theta true response probablity
+#' @param des a realisation of a GS design, formatted as per output of curtailment::singlearmDesign
+#' @param interims a vector of cumulative sample size at oeach interim analysis
+#' @param nsims number of simulations (default 1e5)
+#' @return # list of length 3:
+#' results: individual sims
+#' ests: estimates
+#' mc.error
+#' @example pwbGS_example.R
+#' @export
+
 
 pwbGS <- function(theta, des, interims, nsims=1e5){
   ##### Setup #####

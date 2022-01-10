@@ -1,13 +1,13 @@
 Package: pwb
-Title: What the Package Does (One Line, Title Case)
+Title: Functions For Examining Precision Weight Bias
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Martin",
+           family = "Law",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "martin.law@mrc-bsu.cam.ac.uk",
+           comment = c(ORCID = "0000-0001-9594-348X"))
+Description: Collates all functions and analysis for precision-weighted bias paper.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
