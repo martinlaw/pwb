@@ -2,11 +2,16 @@ Package: pwb
 Title: Functions For Examining Precision Weighted Bias
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Martin",
+    c(person(given = "Martin",
            family = "Law",
            role = c("aut", "cre"),
            email = "martin.law@mrc-bsu.cam.ac.uk",
-           comment = c(ORCID = "0000-0001-9594-348X"))
+           comment = c(ORCID = "0000-0001-9594-348X")),
+    person(given = "David",
+           family = "Robertson",
+           role = c("aut", "cre"),
+           email = "david.robertson@mrc-bsu.cam.ac.uk")
+           )
 Description: Collates all functions and analysis for precision-weighted bias paper.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
@@ -25,3 +30,5 @@ Imports:
 Remotes: 
     martinlaw/curtailment,
     mjg211/singlearm
+Depends: 
+    R (>= 2.10)
