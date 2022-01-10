@@ -1,5 +1,5 @@
 Package: pwb
-Title: Functions For Examining Precision Weight Bias
+Title: Functions For Examining Precision Weighted Bias
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Martin",

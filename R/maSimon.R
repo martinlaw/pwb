@@ -1,11 +1,15 @@
-#### Find Simon designs and select optimal designs ####
-all.designs <- clinfun::ph2simon(pu=0.5, pa=0.6, ep1=0.05, ep2=0.1, nmax=500)
-# Choose optimal Simon design:
-opt.index <- which.min(all.designs$out[, "EN(p0)"])
-des <- all.designs$out[opt.index, ]
-
-
-maSimon <- function(theta=0.5, nsims=10000, n.studies=4, des){
+#' maSimon
+#'
+#' Examines bias for a single Simon design WRT a meta-analysis of non-adaptive designs
+#'
+#' @param theta true response probablity
+#' @param des a realisation of a Simon design, formatted as per output of clinfun::ph2simon
+#' @param nsims number of simulations (default 1e5)
+#' @param n.studies number of non-adaptive studies in meta-analysis
+#' @return Data frame of results
+#' @export
+#'
+maSimon <- function(theta=0.5, nsims=1e5, n.studies=4, des){
 
   # Obtain bias for single true response probability:
   simon.data <- pwb::pwbSimon(theta=theta, des=des, nsims=nsims)$results
@@ -53,4 +57,3 @@ maSimon <- function(theta=0.5, nsims=10000, n.studies=4, des){
   return(ma.df)
 }
 
-maSimon(des=des)
