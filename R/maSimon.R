@@ -8,7 +8,7 @@ des <- all.designs$out[opt.index, ]
 maSimon <- function(theta=0.5, nsims=10000, n.studies=4, des){
 
   # Obtain bias for single true response probability:
-  simon.data <- pwbSimon(theta=theta, des=des, nsims=nsims)$results
+  simon.data <- pwb::pwbSimon(theta=theta, des=des, nsims=nsims)$results
 
   #### Meta-analysis: Simulate further trials  ####
   N <- des[names(des)=="n"] # max sample size of Simon design
