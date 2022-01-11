@@ -14,11 +14,14 @@
 #' @export
 
 
-pwbGS <- function(theta, des, interims, nsims=1e5){
+pwbGS <- function(theta, des, bounds, nsims=1e5){
   ##### Setup #####
   N <- des$all.des[, "n"] # max sample size
   results <- vector("list", nsims)
   states.data <- vector("list", nsims+1)
+
+  finite.bounds <- bounds[!is.infinite(bounds$success) | !is.infinite(bounds$fail), ]
+  interims <- finite.bounds$m
 
   ##### Simulate many trials of this design #####
   for(i in 1:nsims){

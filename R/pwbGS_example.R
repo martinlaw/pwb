@@ -10,6 +10,7 @@
                                    minthetaE=1,
                                    maxthetaF=0,
                                    max.combns=1e3)
-  interims <- c(80, 100, 120, 140)
-  pwbGS(theta=0.5, des=ad, interims=interims)
+# interims and their stopping bounds
+  bounds <- curtailment::drawDiagram(ad)$bounds.mat
+  pwbGS(theta=0.5, des=ad, bounds=bounds)
 #' }
