@@ -4,16 +4,16 @@
 \alias{pwbGS}
 \title{pwbGS}
 \usage{
-pwbGS(theta, des, interims, nsims = 1e+05)
+pwbGS(theta, des, bounds, nsims = 1e+05)
 }
 \arguments{
 \item{theta}{true response probablity}
 
 \item{des}{a realisation of a GS design, formatted as per output of curtailment::singlearmDesign}
 
-\item{interims}{a vector of cumulative sample size at oeach interim analysis}
-
 \item{nsims}{number of simulations (default 1e5)}
+
+\item{interims}{a vector of cumulative sample size at oeach interim analysis}
 }
 \value{
 list of length 3:
@@ -23,21 +23,4 @@ mc.error
 }
 \description{
 For a single group sequential design, obtains bias for a single true response rate.
-}
-\examples{
-#' \dontrun{
-  ad <- curtailment::singlearmDesign(nmin=50,
-                                   nmax=140,
-                                   C=20,
-                                   minstop=40,
-                                   p0=0.5,
-                                   p1=0.6,
-                                   alpha=0.1,
-                                   power=0.8,
-                                   minthetaE=1,
-                                   maxthetaF=0,
-                                   max.combns=1e3)
-  interims <- c(80, 100, 120, 140)
-  pwbGS(theta=0.5, des=ad, interims=interims)
-#' }
 }

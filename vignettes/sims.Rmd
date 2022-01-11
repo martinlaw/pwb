@@ -1,0 +1,20 @@
+---
+title: "sims"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sims}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+devtools::install_github("martinlaw/pwb")
+library(pwb)
+```
