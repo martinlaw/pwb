@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-9594-348X")),
     person(given = "David",
            family = "Robertson",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "david.robertson@mrc-bsu.cam.ac.uk")
            )
 Description: Collates all functions and analysis for precision-weighted bias paper.
@@ -32,3 +32,7 @@ Remotes:
     mjg211/singlearm
 Depends: 
     R (>= 2.10)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
