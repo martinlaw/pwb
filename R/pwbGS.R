@@ -4,7 +4,8 @@
 #'
 #' @param theta true response probablity
 #' @param des a realisation of a GS design, formatted as per output of curtailment::singlearmDesign
-#' @param interims a vector of cumulative sample size at oeach interim analysis
+#' @param bounds a data frame with 3 cols: m, fail, success, corresponding to
+#' cumulative sample size at each interim analysis, and fail/success boundaries
 #' @param nsims number of simulations (default 1e5)
 #' @return list of length 3:
 #' results: individual sims
