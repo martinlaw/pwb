@@ -11,9 +11,10 @@ pwbGS(theta, des, bounds, nsims = 1e+05)
 
 \item{des}{a realisation of a GS design, formatted as per output of curtailment::singlearmDesign}
 
-\item{nsims}{number of simulations (default 1e5)}
+\item{bounds}{a data frame with 3 cols: m, fail, success, corresponding to
+cumulative sample size at each interim analysis, and fail/success boundaries}
 
-\item{interims}{a vector of cumulative sample size at oeach interim analysis}
+\item{nsims}{number of simulations (default 1e5)}
 }
 \value{
 list of length 3:
