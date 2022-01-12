@@ -2,7 +2,7 @@
 title: "Group sequential design"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{sims}
+  %\VignetteIndexEntry{GS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

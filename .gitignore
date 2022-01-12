@@ -6,3 +6,4 @@ R/install_packages.R
 R/simon_example.R
 R/simon_sim.R
 inst/doc
+vignettes/sims.Rmd
