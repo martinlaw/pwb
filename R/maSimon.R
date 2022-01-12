@@ -9,10 +9,10 @@
 #' @return Data frame of results
 #' @export
 #'
-maSimon <- function(theta=0.5, nsims=1e5, n.studies=4, des){
+maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
 
   # Obtain bias for single true response probability:
-  simon.data <- pwb::pwbSimon(theta=theta, des=des, nsims=nsims)$results
+  simon.data <- pwbSimon(theta=theta, des=des, nsims=nsims)$results
 
   #### Meta-analysis: Simulate further trials  ####
   N <- des[names(des)=="n"] # max sample size of Simon design

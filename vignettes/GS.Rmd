@@ -38,7 +38,10 @@ Find single-arm group sequential design with p0=0.5, p1=0.6, type-I error-rate 0
   bounds <- curtailment::drawDiagram(ad)
 # Find bias for this design, for a single true response probability theta:
   nsims <- 1e5
-  single.GS <- pwbGS(theta=0.5, des=ad, bounds=bounds$bounds.mat, nsims=nsims)
+  single.GS <- pwbGS(theta=0.5,
+                     des=ad,
+                     bounds=bounds$bounds.mat,
+                     nsims=nsims)
   single.GS$ests[, 1:5]
   round(single.GS$mc.error, 5)
 ```

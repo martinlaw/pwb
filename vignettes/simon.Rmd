@@ -23,7 +23,11 @@ Find a Simon design with p0=0.5, p1=0.6, type-I error-rate 0.05, power
 0.9:
 
 ```{r, simon}
-all.designs <- clinfun::ph2simon(pu=0.5, pa=0.6, ep1=0.05, ep2=0.1, nmax=500)
+all.designs <- clinfun::ph2simon(pu=0.5,
+                                 pa=0.6,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=500)
 # Choose optimal Simon design:
 opt.index <- which.min(all.designs$out[, "EN(p0)"])
 simon.des <- all.designs$out[opt.index, ]
@@ -33,7 +37,9 @@ Find bias for a single true response probability theta:
 ```{r, find bias single }
 # Find bias for this design, for a single true response probability theta:
   nsims <- 1e4
-  single.simon <- pwbSimon(theta=0.5, des=simon.des, nsims=nsims)
+  single.simon <- pwbSimon(theta=0.5,
+                                des=simon.des,
+                                nsims=nsims)
   round(single.simon$ests[, 1:5], 5)
   round(single.simon$mc.error, 5)
 ```
@@ -47,7 +53,9 @@ summary.data <- raw.data <- vector("list", length(theta.vec))
 stop.early.count <- rep(NA, length(theta.vec))
 
 for(i in 1:length(theta.vec)){
-  one.run <- pwb::pwbSimon(theta=theta.vec[i], des=simon.des, nsims=nsims)
+  one.run <- pwbSimon(theta=theta.vec[i],
+                           des=simon.des,
+                           nsims=nsims)
   raw.data[[i]] <- one.run$results
   summary.data[[i]] <- one.run$ests
   stop.early.count[i] <- one.run$ests["Stopped early", "nsims"]/nsims
@@ -86,7 +94,7 @@ all.simon <- rbind(all.simon, umvue)
 
 The function _showTable_ will show a table of results for a single theta:
 ```{r, showtable}
-pwb::showTable(bias.df=all.simon, theta=0.4)
+showTable(bias.df=all.simon, theta=0.4)
 ```
 
 How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
