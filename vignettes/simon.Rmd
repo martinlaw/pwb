@@ -86,6 +86,52 @@ all.simon <- rbind(all.simon, umvue)
 
 The function _showTable_ will show a table of results for a single theta:
 ```{r, showtable}
-showTable(bias.df=all.simon, theta=0.4)
+pwb::showTable(bias.df=all.simon, theta=0.4)
+```
+
+How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
+
+```{r simon plot, fig.height=4, fig.width=6, echo=FALSE, warning=FALSE}
+
+#### Plot bias for all theta values ####
+simon.colours <- setNames(c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"),
+                         c("All (naive)", "All (precision-weghted)", "Complete (naive)", "Stopped early (naive)", "UMVUE"))
+
+simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in Simon design",
+       subtitle="Includes proportion of trials stopped early")+
+  annotate("text", x=theta.vec, y=-0.15, label=round(stop.early.count,2))+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  scale_x_continuous(breaks=theta.vec)+
+  scale_color_manual(values=simon.colours)
+simon.plot
+```
+
+
+Plot the same results, but removing the subsets "stopped early" or "stopped at N":
+
+
+```{r simon plot subset, fig.height=4, fig.width=6, echo=FALSE, warning=FALSE}
+#### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
+simon.plot2 <- ggplot(data=all.simon[all.simon$type %in% c("All (naive)", "All (precision-weghted)"), ], mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in Simon design",
+       subtitle="Includes proportion of trials stopped early")+
+  annotate("text", x=theta.vec, y=-0.01, label=round(stop.early.count,2))+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  scale_x_continuous(breaks=theta.vec)+
+  scale_color_manual(values=simon.colours)
+simon.plot2
 ```
 

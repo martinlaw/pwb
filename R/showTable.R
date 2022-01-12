@@ -10,7 +10,7 @@
 #' @import xtable
 #' @export
 #'
-showTable <- function(bias.df, theta, latex=FALSE, digit=4){
+showTable <- function(bias.df, theta, latex=FALSE, digit=4, inc.type=FALSE){
   single.theta.df <- bias.df[abs(bias.df$theta-theta)<0.001, ]
   rownames(single.theta.df) <- single.theta.df$type
   single.theta.df$bias <- round(single.theta.df$bias, digit)
@@ -25,6 +25,9 @@ showTable <- function(bias.df, theta, latex=FALSE, digit=4){
           include.rownames=TRUE,
           booktabs=TRUE,
           sanitize.text.function=function(x){x})
-      }
+    }
+  if(inc.type==FALSE){
+    single.theta.df <- single.theta.df[, which(names(single.theta.df)!="type")]
+  }
   single.theta.df
 }

@@ -4,7 +4,7 @@
 \alias{showTable}
 \title{showTable}
 \usage{
-showTable(bias.df, theta, latex = FALSE, digit = 4)
+showTable(bias.df, theta, latex = FALSE, digit = 4, inc.type = FALSE)
 }
 \arguments{
 \item{bias.df}{The data frame containing all results}
