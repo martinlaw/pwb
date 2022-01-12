@@ -6,8 +6,8 @@
 #' @param theta Response rate
 #' @param latex Print Latex code for table (TRUE/FALSE)
 #' @param digit Number of rounding digits for bias and SE
-#'
 #' @return A data frame showing the results for the single theta
+#' @import xtable
 #' @export
 #'
 showTable <- function(bias.df, theta, latex=FALSE, digit=4){
