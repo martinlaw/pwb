@@ -21,21 +21,18 @@ library(ggplot2)
 
 ```{r, set up sim}
 # Setup
-nsim = 10^3
-
+nsim = 10^6
 N = 1000
-
 p0 = 0.25
 p1 = 0.5
-
 theta = log(1-p1)-log(1-p0)
-
 set.seed(7)
-
 theta_U = theta_D = theta_C = ID = IU = N1 = rep(NA, nsim)
 ```
 
-```{r, simulate}
+
+Simulate _nsims_ two-arm RPW trials (not run):
+```{r, simulate, eval=FALSE}
 # Simulate trials:
 for(i in 1:nsim){
 
@@ -66,6 +63,7 @@ for(i in 1:nsim){
 
 }
 
+
 IC = IU - ID
 varC = 1/IC
 varU = 1/IU
@@ -78,7 +76,13 @@ RPWsim <- data.frame(varC=varC,
                      )
 ```
 
-Plot results:
+Load simulated data (to save time):
+```{r}
+data(RPWsim, package = "pwb")
+```
+
+
+Plot bias for each allocation prop:
 
 ```{r, fig.height=4, fig.width=6, echo=FALSE}
 cond_bias = data.frame(allocation = RPWsim$N1/N,

@@ -4,16 +4,16 @@
 \alias{maSimon}
 \title{maSimon}
 \usage{
-maSimon(theta = 0.5, nsims = 1e+05, n.studies = 4, des)
+maSimon(theta = 0.5, des, nsims = 1e+05, n.studies = 4)
 }
 \arguments{
 \item{theta}{true response probablity}
 
+\item{des}{a realisation of a Simon design, formatted as per output of clinfun::ph2simon}
+
 \item{nsims}{number of simulations (default 1e5)}
 
 \item{n.studies}{number of non-adaptive studies in meta-analysis}
-
-\item{des}{a realisation of a Simon design, formatted as per output of clinfun::ph2simon}
 }
 \value{
 Data frame of results
