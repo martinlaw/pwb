@@ -10,4 +10,5 @@ vignettes/sims.Rmd
 doc
 Meta
 RPWsim.RData
+Rplots.pdf
 R/bias_single.R
