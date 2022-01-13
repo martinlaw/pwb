@@ -1,0 +1,92 @@
+---
+title: "Non-adaptive designs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Non-adaptive_designs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+```{r setup}
+library(pwb)
+library(ggplot2)
+```
+
+Depending on the type of adaptation and the observed data, the progress of an adaptive design may not differ from a non-adaptive design. As such, it may be worthwhile to examine precision weighted bias in the context of non-adaptive designs. We simulate _nsims=1e5_ binary outcome single-stage designs with sample size _N=100_ for a series of response probabilities theta (0.1, 0.9, 0.1), then record the naive and precision weighted bias:
+
+```{r}
+# Simulate single-stage design:
+nsims <- 1e5
+N <- 100
+theta.vec <- seq(0.1, 0.9, 0.1)
+naive <- pwbias <- precision <- numeric(length(theta.vec))
+se.list <- vector("list", length(theta.vec))
+
+for (i in 1:length(theta.vec)) {
+  responses <- rbinom(nsims, N, theta.vec[i])
+  theta.hat <- responses/N
+  naive[i] <- mean(theta.hat-theta.vec[i])
+  se <- sqrt(theta.hat*(1-theta.hat)/N)
+  pwbias[i] <- weighted.mean(x=theta.hat-theta.vec[i], w=1/se^2)
+  se.list[[i]] <- se
+}
+
+dat <- data.frame(theta=rep(theta.vec, times=2),
+                  bias=c(naive, pwbias),
+                  type=rep(c("naive", "precision weighted"), each=length(theta.vec)))
+
+se.df <- data.frame(se=unlist(se.list),
+                    theta=rep(as.character(theta.vec), each=nsims))
+```
+
+```{r plot bias, echo=FALSE, fig.height=4, fig.width=6}
+ggplot(data=dat, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line()+
+  labs(title="Bias for single-arm, single-stage trial with N=100")+
+    scale_x_continuous(breaks=theta.vec)
+```
+
+
+
+This effect decreases as _N_ increases. For example, when _N=1000_ (note change in scale):
+
+
+
+```{r plot bias n1000, echo=FALSE, fig.height=4, fig.width=6}
+N <- 1000
+naive <- pwbias <- precision <- numeric(length(theta.vec))
+
+for (i in 1:length(theta.vec)) {
+  responses <- rbinom(nsims, N, theta.vec[i])
+  theta.hat <- responses/N
+  naive[i] <- mean(theta.hat-theta.vec[i])
+  se <- sqrt(theta.hat*(1-theta.hat)/N)
+  pwbias[i] <- weighted.mean(x=theta.hat-theta.vec[i], w=1/se^2)
+}
+
+dat1000 <- data.frame(theta=rep(theta.vec, times=2),
+                  bias=c(naive, pwbias),
+                  type=rep(c("naive", "precision weighted"), each=length(theta.vec)))
+
+ggplot(data=dat1000, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line()+
+  labs(title="Bias for single-arm, single-stage trial with N=1000")+
+    scale_x_continuous(breaks=theta.vec)
+```
+
+
+Here is the distribution of standard errors for the _N=100_ data:
+```{r SE, echo=FALSE, fig.height=4, fig.width=6}
+ggplot(data=se.df, mapping=aes(x=theta, y=se))+
+  geom_boxplot()
+```
+
+The farther theta is from 0.5, the greater the variation in SE. This increased variation means increased variation in weight, with more extreme (i.e. close to 0 or 1) values of theta hat receiving the most weight when calculating precision weighted bias. When theta is close to 0.5, there is low variation in SE, and weights will be similar. 

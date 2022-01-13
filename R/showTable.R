@@ -6,6 +6,7 @@
 #' @param theta Response rate
 #' @param latex Print Latex code for table (TRUE/FALSE)
 #' @param digit Number of rounding digits for bias and SE
+#' @param inc.type Include column for type (Default: FALSE)
 #' @return A data frame showing the results for the single theta
 #' @import xtable
 #' @export

@@ -13,8 +13,7 @@ Authors@R:
            email = "david.robertson@mrc-bsu.cam.ac.uk")
            )
 Description: Collates all functions and analysis for precision-weighted bias paper.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -27,6 +26,7 @@ Imports:
     DHARMa,
     curtailment (>= 0.1.1),
     singlearm (>= 1.0),
+    stats
 Remotes: 
     martinlaw/curtailment,
     mjg211/singlearm

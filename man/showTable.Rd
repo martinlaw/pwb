@@ -14,6 +14,8 @@ showTable(bias.df, theta, latex = FALSE, digit = 4, inc.type = FALSE)
 \item{latex}{Print Latex code for table (TRUE/FALSE)}
 
 \item{digit}{Number of rounding digits for bias and SE}
+
+\item{inc.type}{Include column for type (Default: FALSE)}
 }
 \value{
 A data frame showing the results for the single theta

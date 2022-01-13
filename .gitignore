@@ -10,3 +10,4 @@ vignettes/sims.Rmd
 doc
 Meta
 RPWsim.RData
+R/bias_single.R
