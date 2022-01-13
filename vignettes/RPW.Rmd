@@ -78,7 +78,7 @@ RPWsim <- data.frame(varC=varC,
 
 Load simulated data (to save time):
 ```{r}
-data(RPWsim, package = "pwb")
+data("RPWsim.rda", package = "pwb")
 ```
 
 
