@@ -76,15 +76,14 @@ RPWsim <- data.frame(varC=varC,
                      )
 ```
 
-Load simulated data (to save time):
-```{r}
-data("RPWsim.rda", package = "pwb")
-```
 
 
 Plot bias for each allocation prop:
 
 ```{r, fig.height=4, fig.width=6, echo=FALSE}
+# Load simulated data (to save time):
+data(RPWsim, package = "pwb")
+
 cond_bias = data.frame(allocation = RPWsim$N1/N,
                        uncond = (RPWsim$theta_U - theta)/theta,
                        cond = (RPWsim$theta_C - theta)/theta)
