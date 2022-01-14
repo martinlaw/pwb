@@ -29,9 +29,10 @@ Depends:
     R (>= 2.10)
 Suggests: 
     knitr,
-    rmarkdown,
     singlearm (>= 1.0),
     curtailment (>= 0.2.0),
     ggplot2,
-    gridExtra
+    gridExtra,
+    rmarkdown,
+    markdown
 VignetteBuilder: knitr
