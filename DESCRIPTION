@@ -22,7 +22,8 @@ Imports:
     clinfun,
     xtable,
     stats,
-    rmarkdown
+    rmarkdown,
+    singlearm (>= 1.0)
 Remotes: 
     mjg211/singlearm,
     martinlaw/curtailment
@@ -30,7 +31,6 @@ Depends:
     R (>= 2.10)
 Suggests: 
     knitr,
-    singlearm (>= 1.0),
     curtailment (>= 0.2.0),
     ggplot2,
     gridExtra,
