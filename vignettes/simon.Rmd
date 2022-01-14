@@ -185,7 +185,7 @@ all.simon2 <- do.call(rbind, summary.data2)
 
 ```{r simon plot 2 subset, fig.height=4, fig.width=6, echo=FALSE, warning=T}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (naive)", "All (precision-weghted)"), ]
+simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (naive)", "All (precision-weighted)"), ]
 simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
