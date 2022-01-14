@@ -21,7 +21,8 @@ RoxygenNote: 7.1.1
 Imports: 
     clinfun,
     xtable,
-    stats
+    stats,
+    rmarkdown
 Remotes: 
     mjg211/singlearm,
     martinlaw/curtailment
@@ -33,6 +34,5 @@ Suggests:
     curtailment (>= 0.2.0),
     ggplot2,
     gridExtra,
-    rmarkdown,
     markdown
 VignetteBuilder: knitr
