@@ -2,6 +2,9 @@
 #'
 #' Examines bias for a single Simon design
 #'
+#' @importFrom DHARMa getRandomState
+#' @importFrom clinfun ph2simon
+#' @importFrom clinfun ph2single
 #' @param theta true response probablity
 #' @param des a realisation of a Simon design, formatted as per output of clinfun::ph2simon
 #' @param nsims number of simulations (default 1e5)

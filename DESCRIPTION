@@ -19,20 +19,19 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
-    ggplot2,
-    gridExtra,
     clinfun,
     xtable,
-    DHARMa,
-    curtailment (>= 0.1.1),
-    singlearm (>= 1.0),
     stats
 Remotes: 
-    martinlaw/curtailment,
-    mjg211/singlearm
+    mjg211/singlearm,
+    martinlaw/curtailment
 Depends: 
     R (>= 2.10)
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    singlearm (>= 1.0),
+    curtailment (>= 0.2.0),
+    ggplot2,
+    gridExtra
 VignetteBuilder: knitr
