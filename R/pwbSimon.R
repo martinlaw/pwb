@@ -95,8 +95,8 @@ pwbSimon <- function(theta, des, nsims=1e5){
                      mean.SE,
                      emp.SE,
                      theta)
-  row.names(ests) <- c("Stopped early", "Complete", "All", "All (precision-weghted)")
-  ests$type <- c("Stopped early (naive)", "Complete (naive)", "All (naive)", "All (precision-weghted)")
+  row.names(ests) <- c("Stopped early", "Complete", "All", "All (precision-weighted)")
+  ests$type <- c("Stopped early (naive)", "Complete (naive)", "All (naive)", "All (precision-weighted)")
 
   mc.error.bias.all <- sqrt( 1/(nsims*(nsims-1)) * sum((results$theta.hat-all.theta.bar)^2) )
   mc.error.se.all <- all.emp.SE/sqrt(2*(nsims-1))

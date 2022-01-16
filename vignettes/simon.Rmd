@@ -1,5 +1,5 @@
 ---
-title: "Simon design"
+title: "Simon design: simulation study"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{simon}
@@ -14,12 +14,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+## ADEMP
+
+- Aim: Compare conditional, unconditional, precision-weighted and UMVUE bias in a Simon design
+- Data-generating mechanism: 
+    * Binary outcome with a series of response rates (0.1, 0.9, 0.1)
+    * Type-I error-rate 0.05 when response rate p~0~=0.5 and power 0.90 when response rate p~1~=0.6 
+    * Corresponding design: N=233, n~1~=104. Trial failure if number of responses less than or equal to 54 at interim or less than or equal to 128 at end.
+- Estimand: response rate
+- Method of analysis: point estimate, SE
+- Performance measures: Conditional, unconditional, precision-weighted and UMVUE bias
+- Number of simulations: 1e5
+
+
 ```{r setup}
 library(pwb)
 library(ggplot2)
 ```
 
-Find a Simon design with p0=0.5, p1=0.6, type-I error-rate 0.05, power
+Find a Simon design with p~0~=0.5, p~1~=0.6, type-I error-rate 0.05, power
 0.9:
 
 ```{r, simon}
@@ -32,6 +45,7 @@ all.designs <- clinfun::ph2simon(pu=0.5,
 opt.index <- which.min(all.designs$out[, "EN(p0)"])
 simon.des <- all.designs$out[opt.index, ]
 ```
+
 
 Find bias for a single true response probability theta:
 ```{r, find bias single }
@@ -46,11 +60,12 @@ Find bias for a single true response probability theta:
 ```
 
 
+Find bias for a vector of true response rates:
 
 ```{r, find bias vector}
 ##### Obtain bias for range of true response probabilities ####
 theta.vec <- seq(0.1, 0.9, 0.1) # Vector of true response probabilities
-summary.data <- raw.data <- vector("list", length(theta.vec))
+summary.data <- raw.data <- mc.error <- vector("list", length(theta.vec))
 stop.early.count <- rep(NA, length(theta.vec))
 
 for(i in 1:length(theta.vec)){
@@ -59,6 +74,7 @@ for(i in 1:length(theta.vec)){
                            nsims=nsims)
   raw.data[[i]] <- one.run$results
   summary.data[[i]] <- one.run$ests
+  mc.error[[i]] <- one.run$mc.error
   stop.early.count[i] <- one.run$ests["Stopped early", "nsims"]/nsims
 }
 
@@ -100,7 +116,7 @@ showTable(bias.df=all.simon, theta=0.4)
 
 How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
 
-```{r simon plot, fig.height=4, fig.width=6, echo=FALSE, warning=T}
+```{r simon plot, echo=FALSE, fig.height=4, fig.width=6, warning=TRUE}
 
 #### Plot bias for all theta values ####
 simon.colours <- setNames(c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"),
@@ -121,6 +137,12 @@ simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
   scale_x_continuous(breaks=theta.vec)+
   scale_color_manual(values=simon.colours)
 simon.plot
+
+# MC error:
+mc.error.df <- do.call(rbind, mc.error)
+mc.error.df <- data.frame(theta.vec, mc.error.df)
+names(mc.error.df) <- c("theta", "MC error: bias", "MC error: SE")
+round(mc.error.df, 5)
 ```
 
 
@@ -129,7 +151,7 @@ Plot the same results, but removing the subsets "stopped early" or "stopped at N
 
 ```{r simon plot subset, fig.height=4, fig.width=6, echo=FALSE, warning=T}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-simon.sub.df <- all.simon[all.simon$type %in% c("All (naive)", "All (precision-weghted)"), ]
+simon.sub.df <- all.simon[all.simon$type %in% c("All (naive)", "All (precision-weighted)"), ]
 simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=type))+  geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
@@ -151,7 +173,6 @@ simon.plot.sub
 
 ## Simulate trials again, now using values of p~0~ and p~1~ that are not close to 0.5
 
-Examine most likely values of theta. For example,
 ```{r, simon high p}
 all.designs2 <- clinfun::ph2simon(pu=0.8,
                                  pa=0.9,
@@ -164,10 +185,11 @@ simon.des2 <- all.designs2$out[opt.index, ]
 ```
 
 
+Show results for response rates (0.50, 0.90, 0.05): 
 ```{r, echo=FALSE}
 ##### Obtain bias for range of true response probabilities ####
 theta.vec2 <- seq(0.5, 0.9, 0.05) # Vector of true response probabilities
-summary.data2 <- raw.data2 <- vector("list", length(theta.vec2))
+summary.data2 <- raw.data2 <- mc.error2 <- vector("list", length(theta.vec2))
 stop.early.count2 <- rep(NA, length(theta.vec2))
 
 for(i in 1:length(theta.vec2)){
@@ -176,6 +198,7 @@ for(i in 1:length(theta.vec2)){
                            nsims=nsims)
   raw.data2[[i]] <- one.run$results
   summary.data2[[i]] <- one.run$ests
+  mc.error2[[i]] <- one.run$mc.error
   stop.early.count2[i] <- one.run$ests["Stopped early", "nsims"]/nsims
 }
 
@@ -201,4 +224,10 @@ simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=t
   scale_x_continuous(breaks=theta.vec2)+
   scale_color_manual(values=simon.colours)
 simon.plot.sub2
+
+# MC error:
+mc.error.df2 <- do.call(rbind, mc.error2)
+mc.error.df2 <- data.frame(theta.vec2, mc.error.df2)
+names(mc.error.df2) <- c("theta", "MC error: bias", "MC error: SE")
+round(mc.error.df2, 5)
 ```
