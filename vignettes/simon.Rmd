@@ -14,7 +14,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-## ADEMP
+## Simulate Simon design
+### ADEMP
 
 - Aim: Compare conditional, unconditional, precision-weighted and UMVUE bias in a Simon design
 - Data-generating mechanism: 
@@ -171,7 +172,18 @@ simon.plot.sub
 
 
 
-## Simulate trials again, now using values of p~0~ and p~1~ that are not close to 0.5
+## Simulate trials again, using values of p~0~ and p~1~ that are not close to 0.5
+### ADEMP
+
+- Aim: Compare unconditional and precision-weighted bias in a Simon design (again)
+- Data-generating mechanism: 
+    * Binary outcome with a series of response rates (0.5, 0.9, 0.05)
+    * Type-I error-rate 0.05 when response rate p~0~=0.8 and power 0.90 when response rate p~1~=0.9 
+    * Corresponding design: N=127, n~1~=44. Trial failure if number of responses less than or equal to 36 at interim or less than or equal to 108 at end.
+- Estimand: response rate
+- Method of analysis: point estimate, SE
+- Performance measures: Conditional and precision-weighted bias
+- Number of simulations: 1e5
 
 ```{r, simon high p}
 all.designs2 <- clinfun::ph2simon(pu=0.8,
