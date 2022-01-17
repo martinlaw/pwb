@@ -2,10 +2,10 @@ name: "R Markdown Website Template"
 navbar:
   title: "Site Template"
   left:
-    - text: "non-AD"
-      href: non-adaptive_designs.html
-    - text: "Page 1"
-      href: page_1.html
+    - text: "Home"
+      href: index.html
+    - text: "nonad"
+      href: vignettes/Non-adaptive_designs.html
     - text: "Menu"
       menu:
         - text: "Menu 1"
