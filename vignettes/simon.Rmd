@@ -158,11 +158,11 @@ simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=typ
        y="Bias (estimate - theta)",
        title="Bias in Simon design",
        subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec, y=-0.025, label=round(stop.early.count,2))+
+  annotate("text", x=theta.vec, y=-0.011, label=round(stop.early.count,2))+
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(simon.sub.df$bias)) * c(-1.1, 1.1) )+
+  ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
   scale_x_continuous(breaks=theta.vec)+
   scale_color_manual(values=simon.colours)
 simon.plot.sub
