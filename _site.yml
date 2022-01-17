@@ -6,10 +6,6 @@ navbar:
       href: index.html
     - text: "nonad"
       href: vignettes/Non-adaptive_designs.html
-    - text: "Menu"
-      menu:
-        - text: "Menu 1"
-          href: menu_1.html
   right:
     - icon: ion-social-github
       href: https://github.com
