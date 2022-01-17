@@ -120,7 +120,7 @@ How does bias compare when the true response probability is varied? Find results
 
 #### Plot bias for all theta values ####
 simon.colours <- setNames(c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"),
-                         c("All (naive)", "All (precision-weghted)", "Complete (naive)", "Stopped early (naive)", "UMVUE"))
+                         c("All (naive)", "All (precision-weighted)", "Complete (naive)", "Stopped early (naive)", "UMVUE"))
 
 simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
