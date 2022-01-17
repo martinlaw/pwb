@@ -2,7 +2,6 @@
 #'
 #' Examines bias for a single Simon design
 #'
-#' @importFrom DHARMa getRandomState
 #' @importFrom clinfun ph2simon
 #' @importFrom clinfun ph2single
 #' @param theta true response probablity
@@ -21,17 +20,14 @@ pwbSimon <- function(theta, des, nsims=1e5){
   N <- des[names(des)=="n"] # max sample size
   r <- des[names(des)=="r"]
   reject <- s1 <- s <- numeric(nsims)
-  states.data <- vector("list", nsims+1)
 
 
   ##### Simulate many trials of this design #####
   for(i in 1:nsims){
-    states.data[[i]] <- DHARMa::getRandomState(NULL)
     onetrial <- rbinom(n=N, size=1, prob=theta) # Simulate one trial of N results
     s1[i] <- cumsum(onetrial)[n1] # Number of responses at n1
     s[i] <- sum(onetrial) # Number of responses at N
   }
-  states.data[[i+1]] <- DHARMa::getRandomState(NULL)
 
   ##### Combine results into data frame #####
   results <- data.frame(early.stop=s1<=r1)
