@@ -51,7 +51,9 @@ maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
   ma.df <- data.frame(reps=rep(nsims, 2),
                       mean.studies=c(n.studies+1, mean.trials),
                       bias=round(c(mean(bias.all), mean(bias.exclude)), 5),
-                      mean.se=round(c(sd(wtdmeans.all), sd(wtdmeans.exclude)), 3)
+                      mean.se=round(c(sd(wtdmeans.all), sd(wtdmeans.exclude)), 3),
+                      theta=rep(theta, 2),
+                      type=c("All trials", "Exclude early stopped")
                       )
   row.names(ma.df) <- c("All trials", "Exclude early stopped")
   return(ma.df)
