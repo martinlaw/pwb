@@ -93,9 +93,41 @@
                             nsims<span class="op">=</span><span class="fl">1e4</span>,
                             n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
 <span class="va">ma.simon.results</span>
-<span class="co">#&gt;                        reps mean.studies     bias mean.se</span>
-<span class="co">#&gt; All trials            10000       5.0000 -0.00032   0.015</span>
-<span class="co">#&gt; Exclude early stopped 10000       4.3118  0.00138   0.016</span></code></pre></div>
+<span class="co">#&gt;                        reps mean.studies     bias mean.se theta</span>
+<span class="co">#&gt; All trials            10000       5.0000 -0.00034   0.016   0.5</span>
+<span class="co">#&gt; Exclude early stopped 10000       4.3125  0.00140   0.016   0.5</span>
+<span class="co">#&gt;                                        type</span>
+<span class="co">#&gt; All trials                       All trials</span>
+<span class="co">#&gt; Exclude early stopped Exclude early stopped</span></code></pre></div>
+<div class="section level4">
+<h4 id="moving-away-from-theta0-5">Moving away from theta=0.5<a class="anchor" aria-label="anchor" href="#moving-away-from-theta0-5"></a>
+</h4>
+<p>As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a Simon design for p0=0.8, p1=0.9:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">all.designs2</span> <span class="op">&lt;-</span> <span class="fu">clinfun</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/clinfun/man/ph2simon.html" class="external-link">ph2simon</a></span><span class="op">(</span>pu<span class="op">=</span><span class="fl">0.8</span>,
+                                 pa<span class="op">=</span><span class="fl">0.9</span>,
+                                 ep1<span class="op">=</span><span class="fl">0.05</span>,
+                                 ep2<span class="op">=</span><span class="fl">0.1</span>,
+                                 nmax<span class="op">=</span><span class="fl">150</span><span class="op">)</span>
+<span class="co"># Choose optimal Simon design:</span>
+<span class="va">opt.index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">all.designs2</span><span class="op">$</span><span class="va">out</span><span class="op">[</span>, <span class="st">"EN(p0)"</span><span class="op">]</span><span class="op">)</span>
+<span class="va">simon.des2</span> <span class="op">&lt;-</span> <span class="va">all.designs2</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">opt.index</span>, <span class="op">]</span></code></pre></div>
+<p>Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the Simon design:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">theta.vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.05</span><span class="op">)</span>
+<span class="va">ma.simon.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec</span><span class="op">)</span><span class="op">)</span>
+<span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">ma.simon.results2</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maSimon.html">maSimon</a></span><span class="op">(</span>theta<span class="op">=</span><span class="va">theta.vec</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
+                                    des<span class="op">=</span><span class="va">simon.des2</span>,
+                                    nsims<span class="op">=</span><span class="fl">1e4</span>,
+                                    n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
+  <span class="op">}</span>
+
+<span class="va">ma.simon.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results2</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">#&gt; Warning in register(): Can't find generic `scale_type` in package ggplot2 to</span>
+<span class="co">#&gt; register S3 method.</span></code></pre>
+<p><img src="MA_simon_files/figure-html/simon%20plot%202%20subset-1.png" width="576"></p>
+</div>
   </main>
 </div>
 
