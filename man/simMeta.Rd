@@ -16,5 +16,5 @@ simMeta(N, theta, n.studies, nsims)
 \item{nsims}{number of meta-analyses to simulate}
 }
 \description{
-Simulates binary data for a meta-analysis
+Simulates binary data for a meta-analysis.
 }
