@@ -20,7 +20,7 @@ theta.MA <- seq(0.1, 0.9, 0.1)
 bias <- rep(NA, length(theta.MA))
 
 for(i in 1:length(theta.MA)){
-  MA.results <- simMeta(N=100, theta=theta.MA[i], n.studies=5, nsims=nsims)
+  MA.results <- pwb::simMeta(N=100, theta=theta.MA[i], n.studies=5, nsims=nsims)
   wtdmeans <- rep(NA, nsims)
   ses <- rep(NA, nsims)
   for(j in 1:nsims){

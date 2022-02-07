@@ -7,7 +7,6 @@ R/simon_example.R
 R/simon_sim.R
 inst/doc
 vignettes/sims.Rmd
-vignettes/MA_general.Rmd
 Meta
 RPWsim.RData
 Rplots.pdf
