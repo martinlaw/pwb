@@ -1,6 +1,6 @@
 #' Meta-analysis simulation (binary outcome)
 #'
-#' Simulates binary data for a meta-analysis
+#' Simulates binary data for a meta-analysis.
 #'
 #' @param N sample size (shared for all trials)
 #' @param theta response rate (shared for all trials)
