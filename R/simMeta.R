@@ -1,3 +1,14 @@
+#' Meta-analysis simulation (binary outcome)
+#'
+#' Simulates binary data for a meta-analysis
+#'
+#' @param N sample size (shared for all trials)
+#' @param theta response rate (shared for all trials)
+#' @param n.studies number of trials to simulate
+#' @param nsims number of meta-analyses to simulate
+#'
+#' @export
+#'
 simMeta <- function(N, theta, n.studies, nsims){
 
   responses <- vector("list", nsims)
