@@ -8,6 +8,7 @@ R/simon_sim.R
 inst/doc
 vignettes/sims.Rmd
 Meta
+vignettes/figures/
 RPWsim.RData
 Rplots.pdf
 R/bias_single.R

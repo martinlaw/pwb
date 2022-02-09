@@ -87,7 +87,7 @@ pwbGS <- function(theta, des, bounds, nsims=1e5){
                      emp.SE=round(emp.SE, 4),
                      theta)
   row.names(ests) <- c("Stopped early", "Complete", "All", "All (precision-weghted)")
-  ests$type <- c("Stopped early (naive)", "Complete (naive)", "All (naive)", "All (precision-weghted)")
+  ests$type <- c("Stopped early (unadjusted)", "Complete (unadjusted)", "All (unadjusted)", "All (precision-weghted)")
   ests
 
   mc.error.bias.all <- sqrt( 1/(nsims*(nsims-1)) * sum((results$theta.hat-all.theta.bar)^2) )

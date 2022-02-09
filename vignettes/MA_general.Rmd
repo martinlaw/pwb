@@ -3,10 +3,13 @@ title: 'Meta-analysis: general'
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r 'setup', include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      dev='png',
+                      fig.path="figures/")
 library(ggplot2)
 ```
+
 
 ## Meta-analysis with no adaptive designs
 
@@ -15,9 +18,9 @@ sample size _N_. Examine a range of true response probabilities *theta*:
 
 ```{r meta}
 # Simulate the trials:
-nsims <- 100000
+nsims <- 10000
 theta.MA <- seq(0.1, 0.9, 0.1)
-bias <- rep(NA, length(theta.MA))
+pwbias <- rep(NA, length(theta.MA))
 mean.se <- rep(NA, length(theta.MA))
 
 for(i in 1:length(theta.MA)){
@@ -31,25 +34,25 @@ for(i in 1:length(theta.MA)){
     var.ma <- 1/sum(wi)
     ses[j] <- sqrt(var.ma)
   }
-  bias[i] <- mean(wtdmeans-theta.MA[i])
+  pwbias[i] <- mean(wtdmeans-theta.MA[i])
   mean.se[i] <- mean(ses)
 }
-bias.df <- data.frame(bias=bias,
+bias.df <- data.frame(bias=pwbias,
                       se=mean.se,
-                      lower=bias-1.95*mean.se,
-                      upper=bias+1.95*mean.se,
+                      lower=pwbias-1.95*mean.se,
+                      upper=pwbias+1.95*mean.se,
                       theta=theta.MA)
 ```
 
-```{r plot bias}
+```{r "non-AD_MA_bias", fig.height=5, fig.width=5}
 ggplot(data=bias.df, mapping=aes(x=theta, y=bias))+
  geom_line()+
  geom_point()+
   geom_ribbon(aes(x=theta, ymin=lower, ymax=upper), fill="red", alpha=0.1)+
   labs(x="True response probability theta",
-       y="Bias (estimate - theta)",
-      title="Bias in meta-analysis",
-       subtitle="No adaptive designs")+
+       y="Bias (precision weighted estimate - theta)",
+      title="Bias in meta-analysis studies",
+       subtitle="Five non-adaptive single-arm trials, N=100")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(c(bias.df$lower, bias.df$upper))) * c(-1, 1) )+
   scale_x_continuous(breaks=theta.MA)
