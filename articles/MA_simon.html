@@ -89,14 +89,15 @@
 <span class="va">simon.des</span> <span class="op">&lt;-</span> <span class="va">all.designs</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">opt.index</span>, <span class="op">]</span></code></pre></div>
 <p>Now simulate meta-analyses of a single Simon design and some number of single-arm single-stage trials with the same maximum sample size <em>N</em> as the Simon design. We also choose the true response probability theta.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ma.simon.results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maSimon.html">maSimon</a></span><span class="op">(</span>theta<span class="op">=</span><span class="fl">0.5</span>,
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1453</span><span class="op">)</span>
+<span class="va">ma.simon.results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maSimon.html">maSimon</a></span><span class="op">(</span>theta<span class="op">=</span><span class="fl">0.5</span>,
                             des<span class="op">=</span><span class="va">simon.des</span>,
                             nsims<span class="op">=</span><span class="fl">1e4</span>,
                             n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
 <span class="va">ma.simon.results</span>
 <span class="co">#&gt;                        reps mean.studies          bias    mean.se theta</span>
-<span class="co">#&gt; All trials            10000       5.0000 -0.0004961679 0.01513145   0.5</span>
-<span class="co">#&gt; Exclude early stopped 10000       4.3086  0.0012482974 0.01572963   0.5</span>
+<span class="co">#&gt; All trials            10000       5.0000 -0.0002368025 0.01540445   0.5</span>
+<span class="co">#&gt; Exclude early stopped 10000       4.3067  0.0015904926 0.01601703   0.5</span>
 <span class="co">#&gt;                                        type</span>
 <span class="co">#&gt; All trials                       All trials</span>
 <span class="co">#&gt; Exclude early stopped Exclude early stopped</span></code></pre></div>
@@ -112,7 +113,7 @@
   <span class="op">}</span>
 
 <span class="va">ma.simon.results0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results0</span><span class="op">)</span></code></pre></div>
-<p><img src="MA_simon_files/figure-html/simon%20MA%20plot-1.png" width="576"></p>
+<p><img src="figures/simon_MA_p05-1.png" width="384"></p>
 <div class="section level3">
 <h3 id="moving-away-from-theta0-5">Moving away from theta=0.5<a class="anchor" aria-label="anchor" href="#moving-away-from-theta0-5"></a>
 </h3>
@@ -142,10 +143,10 @@
   <span class="op">}</span>
 
 <span class="va">ma.simon.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results2</span><span class="op">)</span></code></pre></div>
-<p><img src="MA_simon_files/figure-html/simon%20plot%202-1.png" width="576"></p>
+<p><img src="figures/simon_MA_p08-1.png" width="384"></p>
 </div>
 <div class="section level3">
-<h3 id="p00-1">p0=0.1<a class="anchor" aria-label="anchor" href="#p00-1"></a>
+<h3 id="p00-2">p0=0.2<a class="anchor" aria-label="anchor" href="#p00-2"></a>
 </h3>
 <p>Obtain a Simon design for p0=0.2, p1=0.3:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -168,8 +169,12 @@
                                     n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
   <span class="op">}</span>
 
-<span class="va">ma.simon.results3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results3</span><span class="op">)</span></code></pre></div>
-<p><img src="MA_simon_files/figure-html/simon%20plot%20low-1.png" width="576"></p>
+<span class="va">ma.simon.results3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results3</span><span class="op">)</span>
+
+<span class="co"># Biggest improvement in bias:</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"All trials"</span><span class="op">]</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"Exclude early stopped"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.002002201</span></code></pre></div>
+<p><img src="figures/simon_MA_p02-1.png" width="384"></p>
 </div>
   </main>
 </div>
