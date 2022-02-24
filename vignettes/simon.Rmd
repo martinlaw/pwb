@@ -153,7 +153,7 @@ round(mc.error.df, 5)
 Plot the same results, but removing the subsets "stopped early" or "stopped at N":
 
 
-```{r "simon_subset", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+```{r "simon_subset", echo=FALSE, fig.height=4, fig.width=4, warning=TRUE}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
 simon.sub.df <- all.simon[all.simon$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
 simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=type))+  geom_line(alpha=0.4, size=1)+
