@@ -10,8 +10,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
 ```
 
 ```{r setup}
@@ -65,10 +67,10 @@ all.gs <- do.call(rbind, summary.data)
 
 Plot the results for all theta values:
 
-```{r GS plot, fig.height=4, fig.width=6, echo=FALSE, warning=FALSE}
+```{r "GS", fig.height=4, fig.width=6, echo=FALSE, warning=FALSE}
 #### Plot bias for all theta values ####
 type.colours <- setNames(c("#F8766D", "#00BFC4", "#7CAE00", "#C77CFF"),
-                         c("All (naive)", "All (precision-weghted)", "Complete (naive)", "Stopped early (naive)"))
+                         c("All (unadjusted)", "All (precision-weghted)", "Complete (unadjusted)", "Stopped early (unadjusted)"))
 gs.plot <- ggplot(data=all.gs, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
@@ -86,9 +88,9 @@ gs.plot
 ```
 
 Plot the same results, but removing the subsets "stopped early" or "stopped at N":
-```{r GS plot subset, fig.height=4, fig.width=6, echo=FALSE}
+```{r "GS_subset", fig.height=4, fig.width=6, echo=FALSE}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (naive)", "All (precision-weghted)"), ],
+gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (unadjusted)", "All (precision-weghted)"), ],
                    mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
