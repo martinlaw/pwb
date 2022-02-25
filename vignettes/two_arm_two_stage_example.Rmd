@@ -68,7 +68,7 @@ continue = (pval > 0.001)
 ```
 
 #### Plot the results:
-```{r plot results, echo=FALSE, fig.height=4, fig.width=6}
+```{r "plot_results", echo=FALSE, fig.height=4, fig.width=6}
 plot(RD_interim[continue], RD_final[continue], col = 'blue',
      xlim = c(-0.15, 0.05), ylim = c(-0.1, 0),
      xlab = 'Risk difference interim',
