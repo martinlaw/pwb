@@ -2,6 +2,9 @@
 #'
 #' Examines bias for a 2-stage binary outcome design WRT a meta-analysis of non-adaptive designs
 #'
+#' @param N Maximum sample size (equal for all trials)
+#' @param theta0 Response probability for control group
+#' @param theta1 Response probability for experimental group
 #' @param nsims number of simulations (default 1e5)
 #' @param n.studies number of non-adaptive studies in meta-analysis
 #' @return Data frame of results
