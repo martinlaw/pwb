@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r}
 library(pwb)
+library(ggplot2)
 theta1.vec <- seq(0.1, 0.8, 0.1)
 iw.results <- vector("list", length(theta1.vec))
 mc.error <- numeric(length(theta1.vec))
@@ -51,7 +52,6 @@ iw.plot
 
 ```{r}
 # Now fix theta0 and vary theta1 only:
-theta1.vec <- seq(0.1, 0.8, 0.1)
 iw.results2 <- vector("list", length(theta1.vec))
 mc.error2 <- numeric(length(theta1.vec))
 for(i in 1:length(theta1.vec)){
@@ -85,4 +85,31 @@ iw.plot2
 ```
 
 
+
+```{r "MA 2-stage"}
+ma2stage.results <- vector("list", length(theta1.vec))
+
+for(i in 1:length(theta1.vec)){
+  ma2stage.results[[i]] <- ma2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i],
+                                    n.studies=4, nsims=1e5)
+}
+  
+ma2stage.results <- do.call(rbind, ma2stage.results)
+```
+
+```{r "MA 2-stage plot",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.2stage.plot <- ggplot(data=ma2stage.results, mapping=aes(x=theta1, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="theta1",
+       y="Bias (estimate - RD)",
+       title="Bias in meta-analysis",
+       subtitle="One 2-stage design, four non-ADs")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma2stage.results$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  theme(legend.position="bottom")
+ma.2stage.plot
+
+```
 

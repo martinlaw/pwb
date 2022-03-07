@@ -15,7 +15,10 @@
 
 pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
 
-  RD_interim = RD_final = SE_interim = SE_final = pval = rep(NA, N)
+  RD_interim = RD_final = SE_interim = SE_final = pval = rep(NA, nsims)
+
+  #results <- vector("list", nsims)
+
 
   for(i in 1:nsims){
     # Stage 1:
@@ -48,10 +51,36 @@ pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
 
     SE_final[i] = sqrt(EE*EN/(EE+EN)^3 + CE*CN/(CE+CN)^3)
 
+    #results[[i]] <- c(sum(X0), sum(X1), sum(X0+Y0), sum(X1+Y1))
+
   }
 
   stop_early = (pval <= 0.001)
   continue = (pval > 0.001)
+
+  #results <- do.call(rbind, results)
+  results <- data.frame(early.stop=stop_early,
+                        RD=RD_final,
+                        SE=SE_final)
+
+  results$RD[stop_early] <- RD_interim[stop_early]
+  results$SE[stop_early] <- SE_interim[stop_early]
+
+  #names(results) <- c("C.int", "E.int", "C.final", "E.final")
+
+
+
+  # results$early.stop <- stop_early
+  # results$SE.int <- SE_interim
+  # results$SE.final <- SE_final
+  # results$RD.int <- RD_interim
+  # results$RD.final <- RD_final
+  # results$n <- rep(N/2, nsims)
+  # results$n[results$early.stop] <- N/4
+  # results$RD <- RD_final
+  # results$RD[stop_early] <- RD_interim
+  # results$SE <- SE_final
+  # results$SE[stop_early] <- SE_interim
 
   trueRD <- theta1-theta0 # True RD no longer fixed at -0.05
 
@@ -81,6 +110,7 @@ pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
   theta.hat <- c(RD_interim[stop_early], RD_final[continue])
   all.theta.bar <- mean(theta.hat)
   mc.error.bias <- sqrt( 1/(nsims*(nsims-1)) * sum((theta.hat-all.theta.bar)^2) )
-  return(list(ests=ests,
+  return(list(results=results,
+              ests=ests,
               mc.error.bias=mc.error.bias))
 }
