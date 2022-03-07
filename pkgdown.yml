@@ -9,7 +9,8 @@ articles:
   RPW: RPW.html
   simon: simon.html
   two_arm_two_stage_example: two_arm_two_stage_example.html
-last_built: 2022-02-24T17:02Z
+  two_arm_two_stage_full: two_arm_two_stage_full.html
+last_built: 2022-03-07T15:33Z
 urls:
   reference: https://martinlaw.github.io/pwb/reference
   article: https://martinlaw.github.io/pwb/articles

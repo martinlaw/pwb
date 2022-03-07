@@ -31,6 +31,9 @@
     <loc>https://martinlaw.github.io/pwb/articles/two_arm_two_stage_example.html</loc>
   </url>
   <url>
+    <loc>https://martinlaw.github.io/pwb/articles/two_arm_two_stage_full.html</loc>
+  </url>
+  <url>
     <loc>https://martinlaw.github.io/pwb/authors.html</loc>
   </url>
   <url>
@@ -40,7 +43,13 @@
     <loc>https://martinlaw.github.io/pwb/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://martinlaw.github.io/pwb/reference/ma2stage.html</loc>
+  </url>
+  <url>
     <loc>https://martinlaw.github.io/pwb/reference/maSimon.html</loc>
+  </url>
+  <url>
+    <loc>https://martinlaw.github.io/pwb/reference/pwb2stage.html</loc>
   </url>
   <url>
     <loc>https://martinlaw.github.io/pwb/reference/pwbGS.html</loc>
