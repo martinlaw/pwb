@@ -26,8 +26,8 @@ maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
   se <- sqrt((theta.hat)*(1-theta.hat)/N)
 
   # Combine results from Simon simulation and MA simulation:
-  theta.hat <- cbind(simon.data$theta.hat, theta.hat)
-  se <- cbind(simon.data$se, se)
+  theta.hat <- cbind(simon.data$theta.hat.cor, theta.hat)
+  se <- cbind(simon.data$se.cor, se)
 
 
   # Summary estimate and bias for all 5 trials:
@@ -50,8 +50,10 @@ maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
   # Present results #
   ma.df <- data.frame(reps=rep(nsims, 2),
                       mean.studies=c(n.studies+1, mean.trials),
-                      bias=round(c(mean(bias.all), mean(bias.exclude)), 5),
-                      mean.se=round(c(sd(wtdmeans.all), sd(wtdmeans.exclude)), 3)
+                      bias=c(mean(bias.all), mean(bias.exclude)),
+                      mean.se=c(sd(wtdmeans.all), sd(wtdmeans.exclude)),
+                      theta=rep(theta, 2),
+                      type=c("All trials", "Exclude early stopped")
                       )
   row.names(ma.df) <- c("All trials", "Exclude early stopped")
   return(ma.df)

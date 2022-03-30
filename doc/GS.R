@@ -1,30 +1,14 @@
----
-title: "GS"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{GS}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
-
-```{r, include = FALSE}
+## ---- include = FALSE----------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  echo = TRUE,
-  dev='png',
-  fig.path="figures/")
-```
+  comment = "#>"
+)
 
-```{r setup}
+## ----setup---------------------------------------------------------------
 library(pwb)
 library(ggplot2)
-```
 
-Find single-arm group sequential design with p0=0.5, p1=0.6, type-I error-rate 0.1, power
-0.8, with stopping for both benefit and futility:
-
-```{r, single GS}
+## ---- single GS----------------------------------------------------------
   ad <- curtailment::singlearmDesign(nmin=50,
                                    nmax=140,
                                    C=20,
@@ -46,11 +30,8 @@ Find single-arm group sequential design with p0=0.5, p1=0.6, type-I error-rate 0
                      nsims=nsims)
   single.GS$ests[, 1:5]
   round(single.GS$mc.error, 5)
-```
 
-How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
-
-```{r, multiple GS}
+## ---- multiple GS--------------------------------------------------------
 theta.vec <- seq(0.2, 0.8, 0.1) # Vector of true response probabilities
 summary.data <- raw.data <- vector("list", length(theta.vec))
 stop.early.count <- rep(NA, length(theta.vec))
@@ -63,14 +44,11 @@ for(i in 1:length(theta.vec)){
 }
 
 all.gs <- do.call(rbind, summary.data)
-```
 
-Plot the results for all theta values:
-
-```{r "GS", fig.height=4, fig.width=6, echo=FALSE, warning=FALSE}
+## ----GS plot, fig.height=4, fig.width=6, echo=FALSE, warning=FALSE-------
 #### Plot bias for all theta values ####
 type.colours <- setNames(c("#F8766D", "#00BFC4", "#7CAE00", "#C77CFF"),
-                         c("All (unadjusted)", "All (precision-weghted)", "Complete (unadjusted)", "Stopped early (unadjusted)"))
+                         c("All (naive)", "All (precision-weghted)", "Complete (naive)", "Stopped early (naive)"))
 gs.plot <- ggplot(data=all.gs, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
@@ -85,12 +63,10 @@ gs.plot <- ggplot(data=all.gs, mapping=aes(x=theta, y=bias, col=type))+
   scale_x_continuous(breaks=theta.vec)+
   scale_color_manual(values=type.colours)
 gs.plot
-```
 
-Plot the same results, but removing the subsets "stopped early" or "stopped at N":
-```{r "GS_subset", fig.height=4, fig.width=6, echo=FALSE}
+## ----GS plot subset, fig.height=4, fig.width=6, echo=FALSE---------------
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (unadjusted)", "All (precision-weghted)"), ],
+gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (naive)", "All (precision-weghted)"), ],
                    mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
@@ -105,5 +81,4 @@ gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (unadjusted)", "All (prec
   scale_x_continuous(breaks=theta.vec)+
   scale_color_manual(values=type.colours)
 gs.plot2
-```
 

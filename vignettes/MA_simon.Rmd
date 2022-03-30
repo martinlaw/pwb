@@ -10,8 +10,10 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
 ```
 
 ```{r setup}
@@ -35,6 +37,7 @@ simon.des <- all.designs$out[opt.index, ]
 Now simulate meta-analyses of a single Simon design and some number of single-arm single-stage trials with the same maximum sample size _N_ as the Simon design. We also choose the true response probability theta.
 
 ```{r}
+set.seed(1453)
 ma.simon.results <- maSimon(theta=0.5,
                             des=simon.des,
                             nsims=1e4,
@@ -42,3 +45,137 @@ ma.simon.results <- maSimon(theta=0.5,
 ma.simon.results
 ```
 
+What does the bias look like as theta is varied?
+
+```{r, theta varied}
+theta.vec.0.5 <- seq(0.1, 0.9, 0.1)
+ma.simon.results0 <- vector("list", length(theta.vec.0.5))
+for(i in 1:length(theta.vec.0.5)){
+  ma.simon.results0[[i]] <- maSimon(theta=theta.vec.0.5[i],
+                                    des=simon.des,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results0 <- do.call(rbind, ma.simon.results0)
+```
+
+
+```{r "simon_MA_p05", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+library(ggplot2)
+ma.simon.plot0 <- ggplot(data=ma.simon.results0, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.5, p1=0.6), four non-ADs")+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results0$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.0.5)+
+  theme(legend.position="bottom")
+ma.simon.plot0
+```
+
+### Moving away from theta=0.5
+
+### p0=0.8
+
+As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a Simon design for p0=0.8, p1=0.9:
+
+```{r, simon high p}
+all.designs2 <- clinfun::ph2simon(pu=0.8,
+                                 pa=0.9,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=150)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs2$out[, "EN(p0)"])
+simon.des2 <- all.designs2$out[opt.index, ]
+```
+
+Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+
+```{r, large thetea}
+theta.vec <- seq(0.5, 0.9, 0.05)
+ma.simon.results2 <- vector("list", length(theta.vec))
+for(i in 1:length(theta.vec)){
+  ma.simon.results2[[i]] <- maSimon(theta=theta.vec[i],
+                                    des=simon.des2,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results2 <- do.call(rbind, ma.simon.results2)
+
+
+```
+```{r "simon_MA_p08", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.simon.plot <- ggplot(data=ma.simon.results2, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.8, p1=0.9), four non-ADs")+
+  #annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results2$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec)+
+  theme(legend.position="bottom")
+ma.simon.plot
+```
+
+### p0=0.2
+
+Obtain a Simon design for p0=0.2, p1=0.3:
+
+```{r, simon low p}
+all.designs3 <- clinfun::ph2simon(pu=0.2,
+                                  pa=0.3,
+                                  ep1=0.05,
+                                  ep2=0.1,
+                                  nmax=200)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs3$out[, "EN(p0)"])
+simon.des3 <- all.designs3$out[opt.index, ]
+```
+
+Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+
+```{r, low theta}
+theta.vec.low <- seq(0.1, 0.4, 0.05)
+ma.simon.results3 <- vector("list", length(theta.vec.low))
+for(i in 1:length(theta.vec.low)){
+  ma.simon.results3[[i]] <- maSimon(theta=theta.vec.low[i],
+                                    des=simon.des3,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results3 <- do.call(rbind, ma.simon.results3)
+
+# Biggest improvement in bias:
+max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))
+```
+
+```{r "simon_MA_p02", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.simon.plot.low <- ggplot(data=ma.simon.results3, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.2, p1=0.3), four non-ADs")+
+  geom_vline(aes(xintercept=0.2), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.3), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results3$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  theme(legend.position="bottom")
+ma.simon.plot.low
+```

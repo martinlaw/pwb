@@ -10,11 +10,14 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
 ```
 
-## ADEMP
+## Simulate Simon design
+### ADEMP
 
 - Aim: Compare conditional, unconditional, precision-weighted and UMVUE bias in a Simon design
 - Data-generating mechanism: 
@@ -35,7 +38,7 @@ library(ggplot2)
 Find a Simon design with p~0~=0.5, p~1~=0.6, type-I error-rate 0.05, power
 0.9:
 
-```{r, simon}
+```{r find_design}
 all.designs <- clinfun::ph2simon(pu=0.5,
                                  pa=0.6,
                                  ep1=0.05,
@@ -116,11 +119,11 @@ showTable(bias.df=all.simon, theta=0.4)
 
 How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
 
-```{r simon plot, echo=FALSE, fig.height=4, fig.width=6, warning=TRUE}
+```{r "simon", echo=FALSE, fig.height=4, fig.width=4, warning=TRUE}
 
 #### Plot bias for all theta values ####
 simon.colours <- setNames(c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"),
-                         c("All (naive)", "All (precision-weghted)", "Complete (naive)", "Stopped early (naive)", "UMVUE"))
+                         c("All (unadjusted)", "All (precision-weighted)", "Complete (unadjusted)", "Stopped early (unadjusted)", "UMVUE"))
 
 simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
@@ -135,7 +138,8 @@ simon.plot <- ggplot(data=all.simon, mapping=aes(x=theta, y=bias, col=type))+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(all.simon$bias)) * c(-1.2, 1.2) )+
   scale_x_continuous(breaks=theta.vec)+
-  scale_color_manual(values=simon.colours)
+  scale_color_manual(values=simon.colours)+
+  theme(legend.position="bottom")
 simon.plot
 
 # MC error:
@@ -149,31 +153,43 @@ round(mc.error.df, 5)
 Plot the same results, but removing the subsets "stopped early" or "stopped at N":
 
 
-```{r simon plot subset, fig.height=4, fig.width=6, echo=FALSE, warning=T}
+```{r "simon_subset", echo=FALSE, fig.height=4, fig.width=4, warning=TRUE}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-simon.sub.df <- all.simon[all.simon$type %in% c("All (naive)", "All (precision-weighted)"), ]
+simon.sub.df <- all.simon[all.simon$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
 simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=type))+  geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
        title="Bias in Simon design",
        subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec, y=-0.025, label=round(stop.early.count,2))+
+  annotate("text", x=theta.vec, y=-0.011, label=round(stop.early.count,2))+
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(simon.sub.df$bias)) * c(-1.1, 1.1) )+
+  ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
   scale_x_continuous(breaks=theta.vec)+
-  scale_color_manual(values=simon.colours)
+  scale_color_manual(values=simon.colours)+
+  theme(legend.position="bottom")
 simon.plot.sub
 ```
 
 
 
 
-## Simulate trials again, now using values of p~0~ and p~1~ that are not close to 0.5
+## Simulate trials again, using values of p~0~ and p~1~ that are not close to 0.5
+### ADEMP
 
-```{r, simon high p}
+- Aim: Compare unconditional and precision-weighted bias in a Simon design (again)
+- Data-generating mechanism: 
+    * Binary outcome with a series of response rates (0.5, 0.9, 0.05)
+    * Type-I error-rate 0.05 when response rate p~0~=0.8 and power 0.90 when response rate p~1~=0.9 
+    * Corresponding design: N=127, n~1~=44. Trial failure if number of responses less than or equal to 36 at interim or less than or equal to 108 at end.
+- Estimand: response rate
+- Method of analysis: point estimate, SE
+- Performance measures: Conditional and precision-weighted bias
+- Number of simulations: 1e5
+
+```{r "simon_high_p"}
 all.designs2 <- clinfun::ph2simon(pu=0.8,
                                  pa=0.9,
                                  ep1=0.05,
@@ -206,9 +222,9 @@ all.simon2 <- do.call(rbind, summary.data2)
 ```
 
 
-```{r simon plot 2 subset, fig.height=4, fig.width=6, echo=FALSE, warning=T}
+```{r "simon2_subset", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
-simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (naive)", "All (precision-weighted)"), ]
+simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
 simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
@@ -222,7 +238,8 @@ simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=t
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(simon.sub.df2$bias)) * c(-1.1, 1.1) )+
   scale_x_continuous(breaks=theta.vec2)+
-  scale_color_manual(values=simon.colours)
+  scale_color_manual(values=simon.colours)+
+  theme(legend.position="bottom")
 simon.plot.sub2
 
 # MC error:

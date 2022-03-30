@@ -1,0 +1,115 @@
+---
+title: "two_arm_two_stage_full"
+author: "Martin"
+date: "25/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
+```
+
+```{r}
+library(pwb)
+library(ggplot2)
+theta1.vec <- seq(0.1, 0.8, 0.1)
+iw.results <- vector("list", length(theta1.vec))
+mc.error <- numeric(length(theta1.vec))
+
+for(i in 1:length(theta1.vec)){
+  one.result <- pwb2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i], nsims=1e4)
+  iw.results[[i]] <- one.result$ests
+  mc.error[i] <- one.result$mc.error.bias
+}
+
+iw.results <- do.call(rbind, iw.results)
+```
+
+```{r "twostage1", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+iw.results.sub <- iw.results[iw.results$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
+iw.plot <- ggplot(data=iw.results.sub, mapping=aes(x=theta1, y=`Bias in RD`, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True theta1",
+       y="Bias (estimate - true RD)",
+       title="Bias in two-arm two-stage design (theta1-theta0=-0.05)",
+       subtitle="Varying theta0 and theta1, fixed theta1-theta0")+
+  #annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  #geom_vline(aes(xintercept=theta0[1]), col="grey", linetype="dashed")+
+  #geom_vline(aes(xintercept=theta1[1]), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(iw.results.sub$`Bias in RD`)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  theme(legend.position="bottom")
+  #scale_color_manual(values=simon.colours)
+iw.plot
+```
+
+```{r}
+# Now fix theta0 and vary theta1 only:
+iw.results2 <- vector("list", length(theta1.vec))
+mc.error2 <- numeric(length(theta1.vec))
+for(i in 1:length(theta1.vec)){
+  one.result <- pwb2stage(theta0=0.3, theta1=theta1.vec[i], nsim=1e4)
+  iw.results2[[i]] <- one.result$ests
+  mc.error2[i] <- one.result$mc.error.bias
+}
+
+iw.results2 <- do.call(rbind, iw.results2)
+```
+
+
+```{r "twostage2", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+iw.results.sub2 <- iw.results2[iw.results2$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
+iw.plot2 <- ggplot(data=iw.results.sub2, mapping=aes(x=theta1, y=`Bias in RD`, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True theta1",
+       y="Bias (estimate - true RD)",
+       title="Bias in two-arm two-stage design (theta0=0.30)",
+       subtitle="Varying theta1 only, fixed theta0")+
+  #annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  #geom_vline(aes(xintercept=theta0[1]), col="grey", linetype="dashed")+
+  #geom_vline(aes(xintercept=theta1[1]), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(iw.results.sub2$`Bias in RD`)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  theme(legend.position="bottom")
+  #scale_color_manual(values=simon.colours)
+iw.plot2
+```
+
+
+
+```{r "MA 2-stage"}
+ma2stage.results <- vector("list", length(theta1.vec))
+
+for(i in 1:length(theta1.vec)){
+  ma2stage.results[[i]] <- ma2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i],
+                                    n.studies=4, nsims=1e5)
+}
+  
+ma2stage.results <- do.call(rbind, ma2stage.results)
+```
+
+```{r "MA 2-stage plot",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.2stage.plot <- ggplot(data=ma2stage.results, mapping=aes(x=theta1, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="theta1",
+       y="Bias (estimate - RD)",
+       title="Bias in meta-analysis",
+       subtitle="One 2-stage design, four non-ADs")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma2stage.results$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  theme(legend.position="bottom")
+ma.2stage.plot
+
+```
+
