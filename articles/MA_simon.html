@@ -113,7 +113,9 @@
                                     n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
   <span class="op">}</span>
 
-<span class="va">ma.simon.results0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results0</span><span class="op">)</span></code></pre></div>
+<span class="va">ma.simon.results0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results0</span><span class="op">)</span>
+<span class="co">#ma.simon.results0$p0p1 &lt;- bquote(p[0]==0.5~","~p[1]==0.6)</span>
+<span class="va">ma.simon.results0</span><span class="op">$</span><span class="va">p0p1</span> <span class="op">&lt;-</span> <span class="st">"p0=0.5, p1=0.6"</span></code></pre></div>
 <p><img src="figures/simon_MA_p05-1.png" width="384"></p>
 <div class="section level3">
 <h3 id="moving-away-from-theta0-5">Moving away from theta=0.5<a class="anchor" aria-label="anchor" href="#moving-away-from-theta0-5"></a>
