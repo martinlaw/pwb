@@ -58,6 +58,9 @@ for(i in 1:length(theta.vec.0.5)){
   }
 
 ma.simon.results0 <- do.call(rbind, ma.simon.results0)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.results0$p0p1 <- "p0=0.5, p1=0.6"
+
 ```
 
 
