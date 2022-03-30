@@ -6,7 +6,7 @@
 #' @param theta response rate (shared for all trials)
 #' @param n.studies number of trials to simulate
 #' @param nsims number of meta-analyses to simulate
-#'
+#' @return A list of two vectors of length N: response rate theta hat and SE
 #' @export
 #'
 simMeta <- function(N, theta, n.studies, nsims){

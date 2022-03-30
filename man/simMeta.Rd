@@ -15,6 +15,9 @@ simMeta(N, theta, n.studies, nsims)
 
 \item{nsims}{number of meta-analyses to simulate}
 }
+\value{
+A list of two vectors of length N: response rate theta hat and SE
+}
 \description{
 Simulates binary data for a meta-analysis.
 }

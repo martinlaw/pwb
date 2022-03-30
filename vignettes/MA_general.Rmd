@@ -48,7 +48,7 @@ bias.df <- data.frame(bias=pwbias,
 ggplot(data=bias.df, mapping=aes(x=theta, y=bias))+
  geom_line()+
  geom_point()+
-  geom_ribbon(aes(x=theta, ymin=lower, ymax=upper), fill="red", alpha=0.1)+
+ # geom_ribbon(aes(x=theta, ymin=lower, ymax=upper), fill="red", alpha=0.1)+
   labs(x="True response probability theta",
        y="Bias (precision weighted estimate - theta)",
       title="Bias in meta-analysis studies",
