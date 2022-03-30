@@ -54,7 +54,7 @@ ggplot(data=bias.df, mapping=aes(x=theta, y=bias))+
       title="Bias in meta-analysis studies",
        subtitle="Five non-adaptive single-arm trials, N=100")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(c(bias.df$lower, bias.df$upper))) * c(-1, 1) )+
+#  ylim(max(abs(c(bias.df$lower, bias.df$upper))) * c(-1, 1) )+
   scale_x_continuous(breaks=theta.MA)
 ```
 
