@@ -102,7 +102,7 @@ simon.des2 <- all.designs2$out[opt.index, ]
 Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
 
 ```{r, large thetea}
-theta.vec <- seq(0.5, 0.9, 0.05)
+theta.vec <- seq(0.1, 0.9, 0.1)
 ma.simon.results2 <- vector("list", length(theta.vec))
 for(i in 1:length(theta.vec)){
   ma.simon.results2[[i]] <- maSimon(theta=theta.vec[i],
@@ -112,6 +112,7 @@ for(i in 1:length(theta.vec)){
   }
 
 ma.simon.results2 <- do.call(rbind, ma.simon.results2)
+ma.simon.results2$p0p1 <- "p0=0.8, p1=0.9"
 
 
 ```
@@ -151,7 +152,7 @@ simon.des3 <- all.designs3$out[opt.index, ]
 Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
 
 ```{r, low theta}
-theta.vec.low <- seq(0.1, 0.4, 0.05)
+theta.vec.low <- seq(0.1, 0.9, 0.1)
 ma.simon.results3 <- vector("list", length(theta.vec.low))
 for(i in 1:length(theta.vec.low)){
   ma.simon.results3[[i]] <- maSimon(theta=theta.vec.low[i],
@@ -161,6 +162,7 @@ for(i in 1:length(theta.vec.low)){
   }
 
 ma.simon.results3 <- do.call(rbind, ma.simon.results3)
+ma.simon.results3$p0p1 <- "p0=0.2, p1=0.3"
 
 # Biggest improvement in bias:
 max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))
@@ -181,4 +183,23 @@ ma.simon.plot.low <- ggplot(data=ma.simon.results3, mapping=aes(x=theta, y=bias,
   scale_x_continuous(breaks=theta.vec.low)+
   theme(legend.position="bottom")
 ma.simon.plot.low
+```
+
+```{r "simon_MA_combined", fig.height=4, fig.width=8, echo=FALSE, warning=T}
+ma.simon.results.comb <- rbind(ma.simon.results0, ma.simon.results2, ma.simon.results3)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.simon.results.comb$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  facet_wrap(~p0p1, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.simon.plot.comb
 ```

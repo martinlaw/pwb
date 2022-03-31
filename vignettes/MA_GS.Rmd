@@ -1,0 +1,224 @@
+---
+title: "Meta Analysis: Group Sequential"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MA_GS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
+```
+
+```{r setup}
+library(pwb)
+```
+
+Find a GS design with p0=0.5, p1=0.6, type-I error-rate 0.1, power 0.8:
+
+```{r, gs}
+gs.des <- curtailment::singlearmDesign(nmin=50,
+                                   nmax=140,
+                                   C=20,
+                                   minstop=40,
+                                   p0=0.5,
+                                   p1=0.6,
+                                   alpha=0.1,
+                                   power=0.8,
+                                   minthetaE=1,
+                                   maxthetaF=0,
+                                   max.combns=1e3)
+# Obtain stopping bounds:
+bounds <- curtailment::drawDiagram(gs.des)
+```
+
+Now simulate meta-analyses of a single GS design and some number of single-arm single-stage trials with the same maximum sample size _N_ as the GS design. We also choose the true response probability theta.
+
+```{r}
+set.seed(1453)
+ma.gs.results <- maGS(theta=0.5,
+                      des=gs.des,
+                      bounds=bounds,
+                      nsims=1e5,
+                      n.studies=4)
+ma.gs.results
+
+```
+
+What does the bias look like as theta is varied?
+
+```{r, theta varied}
+theta.vec.0.5 <- seq(0.2, 0.8, 0.1)
+ma.gs.results0 <- vector("list", length(theta.vec.0.5))
+for(i in 1:length(theta.vec.0.5)){
+  ma.gs.results0[[i]] <- maGS(theta=theta.vec.0.5[i],
+                              des=gs.des,
+                              bounds=bounds,
+                              nsims=1e4,
+                              n.studies=4)
+  }
+
+ma.gs.results0 <- do.call(rbind, ma.gs.results0)
+ma.gs.results0$p0p1 <- "p0=0.5, p1=0.6"
+
+```
+
+
+```{r "GS_MA_p05", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+library(ggplot2)
+ma.gs.plot0 <- ggplot(data=ma.gs.results0, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One GS design (p0=0.5, p1=0.6), four non-ADs")+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.gs.results0$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.0.5)+
+  theme(legend.position="bottom")
+ma.gs.plot0
+```
+
+### Moving away from theta=0.5
+
+### p0=0.8
+
+As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a Simon design for p0=0.8, p1=0.9. We reduce type-I error-rate to 0.05 and increase power to 90\% to increase the maximum sample size and number of interim analysis, both of which would be otherwise reduced by the high anticipated response rates.
+
+```{r, simon high p}
+gs.des2 <- curtailment::singlearmDesign(nmin=50,
+                                   nmax=140,
+                                   C=20,
+                                   minstop=40,
+                                   p0=0.8,
+                                   p1=0.9,
+                                   alpha=0.05,
+                                   power=0.9,
+                                   minthetaE=1,
+                                   maxthetaF=0,
+                                   max.combns=1e3)
+
+# Obtain stopping bounds:
+bounds2 <- curtailment::drawDiagram(gs.des2)
+```
+
+Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+
+```{r, large thetea}
+theta.vec <- seq(0.1, 0.9, 0.1)
+ma.gs.results2 <- vector("list", length(theta.vec))
+for(i in 1:length(theta.vec)){
+  ma.gs.results2[[i]] <- maGS(theta=theta.vec[i],
+                              des=gs.des2,
+                              bounds=bounds2,
+                              nsims=1e4,
+                              n.studies=4)
+  }
+
+ma.gs.results2 <- do.call(rbind, ma.gs.results2)
+ma.gs.results2$p0p1 <- "p0=0.8, p1=0.9"
+```
+
+```{r "gs_MA_p08", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.gs.plot <- ggplot(data=ma.gs.results2, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One GS design (p0=0.8, p1=0.9), four non-ADs")+
+  #annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.gs.results2$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec)+
+  theme(legend.position="bottom")
+ma.gs.plot
+```
+
+### p0=0.2
+
+Obtain a GS design for p0=0.2, p1=0.3:
+
+```{r, simon low p}
+gs.des3 <-  curtailment::singlearmDesign(nmin=50,
+                                   nmax=180,
+                                   C=20,
+                                   minstop=40,
+                                   p0=0.2,
+                                   p1=0.3,
+                                   alpha=0.1,
+                                   power=0.8,
+                                   minthetaE=1,
+                                   maxthetaF=0,
+                                   max.combns=1e3)
+# Obtain stopping bounds:
+bounds3 <- curtailment::drawDiagram(gs.des3)
+```
+
+Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+
+```{r, low theta}
+theta.vec.low <- seq(0.1, 0.9, 0.1)
+ma.gs.results3 <- vector("list", length(theta.vec.low))
+for(i in 1:length(theta.vec.low)){
+  ma.gs.results3[[i]] <-  maGS(theta=theta.vec.low[i],
+                              des=gs.des3,
+                              bounds=bounds3,
+                              nsims=1e4,
+                              n.studies=4)
+  }
+
+ma.gs.results3 <- do.call(rbind, ma.gs.results3)
+ma.gs.results3$p0p1 <- "p0=0.2, p1=0.3"
+
+# Biggest improvement in bias:
+max(abs(ma.gs.results3$bias[ma.gs.results3$type=="All trials"])-abs(ma.gs.results3$bias[ma.gs.results3$type=="Exclude early stopped"]))
+```
+
+```{r "gs_MA_p02", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.gs.plot.low <- ggplot(data=ma.gs.results3, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One GS design (p0=0.2, p1=0.3), four non-ADs")+
+  geom_vline(aes(xintercept=0.2), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.3), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.gs.results3$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  theme(legend.position="bottom")
+ma.gs.plot.low
+```
+
+```{r "gs_MA_combined", echo=FALSE, fig.height=4, fig.width=8, warning=TRUE}
+ma.gs.results.comb <- rbind(ma.gs.results0, ma.gs.results2, ma.gs.results3)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.gs.plot.comb <- ggplot(data=ma.gs.results.comb, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.gs.results.comb$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  facet_wrap(~p0p1, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.gs.plot.comb
+```
+
