@@ -3,6 +3,7 @@ pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
   GS: GS.html
+  MA_GS: MA_GS.html
   MA_general: MA_general.html
   MA_simon: MA_simon.html
   Non-adaptive_designs: Non-adaptive_designs.html
@@ -10,7 +11,7 @@ articles:
   simon: simon.html
   two_arm_two_stage_example: two_arm_two_stage_example.html
   two_arm_two_stage_full: two_arm_two_stage_full.html
-last_built: 2022-03-30T16:55Z
+last_built: 2022-03-31T16:34Z
 urls:
   reference: https://martinlaw.github.io/pwb/reference
   article: https://martinlaw.github.io/pwb/articles
