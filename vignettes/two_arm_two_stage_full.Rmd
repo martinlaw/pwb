@@ -91,10 +91,11 @@ ma2stage.results <- vector("list", length(theta1.vec))
 
 for(i in 1:length(theta1.vec)){
   ma2stage.results[[i]] <- ma2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i],
-                                    n.studies=4, nsims=1e5)
+                                    n.studies=4, nsims=1e4)
 }
   
 ma2stage.results <- do.call(rbind, ma2stage.results)
+ma2stage.results$theta01 <- "theta1-theta0=0.05"
 ```
 
 ```{r "MA 2-stage plot",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
@@ -103,13 +104,58 @@ ma.2stage.plot <- ggplot(data=ma2stage.results, mapping=aes(x=theta1, y=bias, co
   geom_point()+
   labs(x="theta1",
        y="Bias (estimate - RD)",
-       title="Bias in meta-analysis",
+       title="Bias in meta-analysis (theta1-theta0=0.05)",
        subtitle="One 2-stage design, four non-ADs")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(ma2stage.results$bias)) * c(-1.1, 1.1) )+
   scale_x_continuous(breaks=theta1.vec)+
   theme(legend.position="bottom")
 ma.2stage.plot
+```
+```{r "MA 2-stage 2"}
+ma2stage.results2 <- vector("list", length(theta1.vec))
 
+for(i in 1:length(theta1.vec)){
+  ma2stage.results2[[i]] <- ma2stage(N=2428, theta0=0.3, theta1=theta1.vec[i],
+                                    n.studies=4, nsims=1e4)
+}
+  
+ma2stage.results2 <- do.call(rbind, ma2stage.results2)
+ma2stage.results2$theta01 <- "theta0=0.3"
+```
+
+
+```{r "MA 2-stage plot 2",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
+ma.2stage.plot2 <- ggplot(data=ma2stage.results2, mapping=aes(x=theta1, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="theta1",
+       y="Bias (estimate - RD)",
+       title="Bias in meta-analysis (theta0=0.3)",
+       subtitle="One 2-stage design, four non-ADs")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma2stage.results2$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  theme(legend.position="bottom")
+ma.2stage.plot2
+```
+
+```{r "combined plot", fig.height=4, fig.width=6, echo=FALSE, warning=T}
+ma.2stage.results.comb <- rbind(ma2stage.results, ma2stage.results2)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.2stage.plot.comb <- ggplot(data=ma.2stage.results.comb, mapping=aes(x=theta1, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="theta1",
+       y="Bias (estimate - RD)",
+       title="Bias in meta-analysis (2-stage design)")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.2stage.results.comb$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta1.vec)+
+  facet_wrap(~theta01, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.2stage.plot.comb
 ```
 

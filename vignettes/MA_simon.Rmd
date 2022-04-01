@@ -193,7 +193,7 @@ ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
-       title="Bias in meta-analysis")+
+       title="Bias in meta-analysis (Simon design)")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   theme(legend.position="bottom")+
   ylim(max(abs(ma.simon.results.comb$bias)) * c(-1.1, 1.1) )+

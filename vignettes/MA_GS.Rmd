@@ -92,9 +92,9 @@ ma.gs.plot0
 
 ### p0=0.8
 
-As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a Simon design for p0=0.8, p1=0.9. We reduce type-I error-rate to 0.05 and increase power to 90\% to increase the maximum sample size and number of interim analysis, both of which would be otherwise reduced by the high anticipated response rates.
+As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a GS design for p0=0.8, p1=0.9. We reduce type-I error-rate to 0.05 and increase power to 90\% to increase the maximum sample size and number of interim analysis, both of which would be otherwise reduced by the high anticipated response rates.
 
-```{r, simon high p}
+```{r, gs high p}
 gs.des2 <- curtailment::singlearmDesign(nmin=50,
                                    nmax=140,
                                    C=20,
@@ -111,7 +111,7 @@ gs.des2 <- curtailment::singlearmDesign(nmin=50,
 bounds2 <- curtailment::drawDiagram(gs.des2)
 ```
 
-Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+Again, simulate meta-analyses of this group sequential design and single-arm single-stage trials with the same maximum sample size _N_ as the group sequential design:
 
 ```{r, large thetea}
 theta.vec <- seq(0.1, 0.9, 0.1)
@@ -150,7 +150,7 @@ ma.gs.plot
 
 Obtain a GS design for p0=0.2, p1=0.3:
 
-```{r, simon low p}
+```{r, gs low p}
 gs.des3 <-  curtailment::singlearmDesign(nmin=50,
                                    nmax=180,
                                    C=20,
@@ -166,7 +166,7 @@ gs.des3 <-  curtailment::singlearmDesign(nmin=50,
 bounds3 <- curtailment::drawDiagram(gs.des3)
 ```
 
-Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
+Again, simulate meta-analyses of this group sequential design and single-arm single-stage trials with the same maximum sample size _N_ as the group sequential design:
 
 ```{r, low theta}
 theta.vec.low <- seq(0.1, 0.9, 0.1)
@@ -211,7 +211,7 @@ ma.gs.plot.comb <- ggplot(data=ma.gs.results.comb, mapping=aes(x=theta, y=bias, 
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
-       title="Bias in meta-analysis")+
+       title="Bias in meta-analysis (group sequential design)")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   theme(legend.position="bottom")+
   ylim(max(abs(ma.gs.results.comb$bias)) * c(-1.1, 1.1) )+

@@ -3,8 +3,8 @@
 #' For two-arm two-stage design, obtains bias for a single true response rate.
 #'
 #' @param N Maximum sample size
-#' @param theta0 true response probablity for control arm
-#' @param theta1 true response probablity for treatment arm
+#' @param theta0 true response probability for control arm
+#' @param theta1 true response probability for treatment arm
 #' @param nsims number of simulations (default 1e4)
 #' @return list of length 2:
 #' ests: estimates
