@@ -9,9 +9,9 @@ pwb2stage(N = 2428, theta0 = 0.2, theta1 = 0.15, nsims = 10000)
 \arguments{
 \item{N}{Maximum sample size}
 
-\item{theta0}{true response probablity for control arm}
+\item{theta0}{true response probability for control arm}
 
-\item{theta1}{true response probablity for treatment arm}
+\item{theta1}{true response probability for treatment arm}
 
 \item{nsims}{number of simulations (default 1e4)}
 }
