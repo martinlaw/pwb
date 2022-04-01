@@ -131,7 +131,7 @@
 <div class="section level3">
 <h3 id="p00-8">p0=0.8<a class="anchor" aria-label="anchor" href="#p00-8"></a>
 </h3>
-<p>As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a Simon design for p0=0.8, p1=0.9. We reduce type-I error-rate to 0.05 and increase power to 90% to increase the maximum sample size and number of interim analysis, both of which would be otherwise reduced by the high anticipated response rates.</p>
+<p>As with the single Simon design, let us examine what happens when the response rate is not close to 0.5. Here, we obtain a GS design for p0=0.8, p1=0.9. We reduce type-I error-rate to 0.05 and increase power to 90% to increase the maximum sample size and number of interim analysis, both of which would be otherwise reduced by the high anticipated response rates.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gs.des2</span> <span class="op">&lt;-</span> <span class="fu">curtailment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curtailment/man/singlearmDesign.html" class="external-link">singlearmDesign</a></span><span class="op">(</span>nmin<span class="op">=</span><span class="fl">50</span>,
                                    nmax<span class="op">=</span><span class="fl">140</span>,
@@ -147,7 +147,7 @@
 
 <span class="co"># Obtain stopping bounds:</span>
 <span class="va">bounds2</span> <span class="op">&lt;-</span> <span class="fu">curtailment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curtailment/man/drawDiagram.html" class="external-link">drawDiagram</a></span><span class="op">(</span><span class="va">gs.des2</span><span class="op">)</span></code></pre></div>
-<p>Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the Simon design:</p>
+<p>Again, simulate meta-analyses of this group sequential design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the group sequential design:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta.vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>
 <span class="va">ma.gs.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec</span><span class="op">)</span><span class="op">)</span>
@@ -183,7 +183,7 @@
                                    max.combns<span class="op">=</span><span class="fl">1e3</span><span class="op">)</span>
 <span class="co"># Obtain stopping bounds:</span>
 <span class="va">bounds3</span> <span class="op">&lt;-</span> <span class="fu">curtailment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/curtailment/man/drawDiagram.html" class="external-link">drawDiagram</a></span><span class="op">(</span><span class="va">gs.des3</span><span class="op">)</span></code></pre></div>
-<p>Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the Simon design:</p>
+<p>Again, simulate meta-analyses of this group sequential design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the group sequential design:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta.vec.low</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>
 <span class="va">ma.gs.results3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec.low</span><span class="op">)</span><span class="op">)</span>
