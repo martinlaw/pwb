@@ -102,8 +102,8 @@ gs.plot2 <- ggplot(data=all.gs[all.gs$type %in% c("All (unadjusted)", "All (prec
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  scale_x_continuous(breaks=theta.vec)+
-  scale_color_manual(values=type.colours)
+  #scale_color_manual(values=type.colours)+
+  scale_x_continuous(breaks=theta.vec)
 gs.plot2
 ```
 

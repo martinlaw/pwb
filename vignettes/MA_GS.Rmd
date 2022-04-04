@@ -60,7 +60,7 @@ for(i in 1:length(theta.vec.0.5)){
   ma.gs.results0[[i]] <- maGS(theta=theta.vec.0.5[i],
                               des=gs.des,
                               bounds=bounds,
-                              nsims=1e4,
+                              nsims=1e5,
                               n.studies=4)
   }
 
@@ -120,7 +120,7 @@ for(i in 1:length(theta.vec)){
   ma.gs.results2[[i]] <- maGS(theta=theta.vec[i],
                               des=gs.des2,
                               bounds=bounds2,
-                              nsims=1e4,
+                              nsims=1e5,
                               n.studies=4)
   }
 
@@ -175,7 +175,7 @@ for(i in 1:length(theta.vec.low)){
   ma.gs.results3[[i]] <-  maGS(theta=theta.vec.low[i],
                               des=gs.des3,
                               bounds=bounds3,
-                              nsims=1e4,
+                              nsims=1e5,
                               n.studies=4)
   }
 
