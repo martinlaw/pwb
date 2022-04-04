@@ -117,7 +117,7 @@
   <span class="va">ma.gs.results0</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maGS.html">maGS</a></span><span class="op">(</span>theta<span class="op">=</span><span class="va">theta.vec.0.5</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
                               des<span class="op">=</span><span class="va">gs.des</span>,
                               bounds<span class="op">=</span><span class="va">bounds</span>,
-                              nsims<span class="op">=</span><span class="fl">1e4</span>,
+                              nsims<span class="op">=</span><span class="fl">1e5</span>,
                               n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
   <span class="op">}</span>
 
@@ -155,14 +155,14 @@
   <span class="va">ma.gs.results2</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maGS.html">maGS</a></span><span class="op">(</span>theta<span class="op">=</span><span class="va">theta.vec</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
                               des<span class="op">=</span><span class="va">gs.des2</span>,
                               bounds<span class="op">=</span><span class="va">bounds2</span>,
-                              nsims<span class="op">=</span><span class="fl">1e4</span>,
+                              nsims<span class="op">=</span><span class="fl">1e5</span>,
                               n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
   <span class="op">}</span>
 
 <span class="va">ma.gs.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.gs.results2</span><span class="op">)</span>
 <span class="va">ma.gs.results2</span><span class="op">$</span><span class="va">p0p1</span> <span class="op">&lt;-</span> <span class="st">"p0=0.8, p1=0.9"</span></code></pre></div>
-<pre><code><span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span>
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span></code></pre>
+<pre><code><span class="co">#&gt; Warning: Removed 5 row(s) containing missing values (geom_path).</span>
+<span class="co">#&gt; Warning: Removed 5 rows containing missing values (geom_point).</span></code></pre>
 <p><img src="figures/gs_MA_p08-1.png" width="384"></p>
 </div>
 <div class="section level3">
@@ -191,7 +191,7 @@
   <span class="va">ma.gs.results3</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/maGS.html">maGS</a></span><span class="op">(</span>theta<span class="op">=</span><span class="va">theta.vec.low</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
                               des<span class="op">=</span><span class="va">gs.des3</span>,
                               bounds<span class="op">=</span><span class="va">bounds3</span>,
-                              nsims<span class="op">=</span><span class="fl">1e4</span>,
+                              nsims<span class="op">=</span><span class="fl">1e5</span>,
                               n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
   <span class="op">}</span>
 
@@ -201,11 +201,11 @@
 <span class="co"># Biggest improvement in bias:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.gs.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.gs.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"All trials"</span><span class="op">]</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.gs.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.gs.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"Exclude early stopped"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] NaN</span></code></pre></div>
-<pre><code><span class="co">#&gt; Warning: Removed 4 row(s) containing missing values (geom_path).</span>
-<span class="co">#&gt; Warning: Removed 4 rows containing missing values (geom_point).</span></code></pre>
+<pre><code><span class="co">#&gt; Warning: Removed 5 row(s) containing missing values (geom_path).</span>
+<span class="co">#&gt; Warning: Removed 5 rows containing missing values (geom_point).</span></code></pre>
 <p><img src="figures/gs_MA_p02-1.png" width="384"></p>
-<pre><code><span class="co">#&gt; Warning: Removed 1 row(s) containing missing values (geom_path).</span>
-<span class="co">#&gt; Warning: Removed 6 rows containing missing values (geom_point).</span></code></pre>
+<pre><code><span class="co">#&gt; Warning: Removed 4 row(s) containing missing values (geom_path).</span>
+<span class="co">#&gt; Warning: Removed 10 rows containing missing values (geom_point).</span></code></pre>
 <p><img src="figures/gs_MA_combined-1.png" width="768"></p>
 </div>
   </main>
