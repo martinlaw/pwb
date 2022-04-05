@@ -168,7 +168,7 @@ simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=typ
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
   scale_x_continuous(breaks=theta.vec)+
-  scale_color_manual(values=simon.colours)+
+ # scale_color_manual(values=simon.colours)+
   theme(legend.position="bottom")
 simon.plot.sub
 ```
@@ -201,10 +201,10 @@ simon.des2 <- all.designs2$out[opt.index, ]
 ```
 
 
-Show results for response rates (0.50, 0.90, 0.05): 
+Show results for response rates (0.10, 0.90, 0.05): 
 ```{r, echo=FALSE}
 ##### Obtain bias for range of true response probabilities ####
-theta.vec2 <- seq(0.5, 0.9, 0.05) # Vector of true response probabilities
+theta.vec2 <- seq(0.1, 0.9, 0.05) # Vector of true response probabilities
 summary.data2 <- raw.data2 <- mc.error2 <- vector("list", length(theta.vec2))
 stop.early.count2 <- rep(NA, length(theta.vec2))
 
@@ -225,6 +225,8 @@ all.simon2 <- do.call(rbind, summary.data2)
 ```{r "simon2_subset", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
 simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
+#simon.sub.df2$type <- factor(simon.sub.df2$type)
+#levels(simon.sub.df2$type)
 simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
@@ -232,13 +234,13 @@ simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=t
        y="Bias (estimate - theta)",
        title="Bias in Simon design (p0=0.8, p1=0.9)",
        subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2), size=2)+
   geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   ylim(max(abs(simon.sub.df2$bias)) * c(-1.1, 1.1) )+
-  scale_x_continuous(breaks=theta.vec2)+
-  scale_color_manual(values=simon.colours)+
+  scale_x_continuous(breaks=seq(0.1, 0.9, 0.1))+
+  #scale_color_manual(values=simon.colours)+
   theme(legend.position="bottom")
 simon.plot.sub2
 
