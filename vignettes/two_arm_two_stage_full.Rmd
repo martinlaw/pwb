@@ -22,7 +22,7 @@ iw.results <- vector("list", length(theta1.vec))
 mc.error <- numeric(length(theta1.vec))
 
 for(i in 1:length(theta1.vec)){
-  one.result <- pwb2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i], nsims=1e4)
+  one.result <- pwb2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i], nsims=1e5)
   iw.results[[i]] <- one.result$ests
   mc.error[i] <- one.result$mc.error.bias
 }
@@ -55,7 +55,7 @@ iw.plot
 iw.results2 <- vector("list", length(theta1.vec))
 mc.error2 <- numeric(length(theta1.vec))
 for(i in 1:length(theta1.vec)){
-  one.result <- pwb2stage(theta0=0.3, theta1=theta1.vec[i], nsim=1e4)
+  one.result <- pwb2stage(theta0=0.3, theta1=theta1.vec[i], nsim=1e5)
   iw.results2[[i]] <- one.result$ests
   mc.error2[i] <- one.result$mc.error.bias
 }
@@ -97,7 +97,7 @@ for(i in 1:length(theta1.vec)){
 ma2stage.results <- do.call(rbind, ma2stage.results)
 ```
 
-```{r "MA 2-stage plot",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
+```{r "MA_2-stage_plot",  fig.height=4, fig.width=4, echo=FALSE, warning=T}
 ma.2stage.plot <- ggplot(data=ma2stage.results, mapping=aes(x=theta1, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
