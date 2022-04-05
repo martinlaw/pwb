@@ -34,6 +34,7 @@ Suggests:
     curtailment (>= 0.2.0),
     ggplot2,
     gridExtra,
-    markdown
+    markdown,
+    forcats
 VignetteBuilder: knitr
 URL: https://martinlaw.github.io/pwb/
