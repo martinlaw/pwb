@@ -98,10 +98,12 @@
                             n.studies<span class="op">=</span><span class="fl">4</span><span class="op">)</span>
 <span class="va">ma.simon.results</span>
 <span class="co">#&gt;                        reps mean.studies          bias    mean.se theta</span>
-<span class="co">#&gt; All trials            10000       5.0000 -0.0002368025 0.01540445   0.5</span>
+<span class="co">#&gt; All trials (unwtd)    10000       5.0000 -0.0020020163         NA   0.5</span>
+<span class="co">#&gt; All trials (wtd)      10000       5.0000 -0.0002368025 0.01540445   0.5</span>
 <span class="co">#&gt; Exclude early stopped 10000       4.3067  0.0015904926 0.01601703   0.5</span>
 <span class="co">#&gt;                                        type</span>
-<span class="co">#&gt; All trials                       All trials</span>
+<span class="co">#&gt; All trials (unwtd)       All trials (unwtd)</span>
+<span class="co">#&gt; All trials (wtd)           All trials (wtd)</span>
 <span class="co">#&gt; Exclude early stopped Exclude early stopped</span></code></pre></div>
 <p>What does the bias look like as theta is varied?</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -179,7 +181,9 @@
 
 <span class="co"># Biggest improvement in bias:</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"All trials"</span><span class="op">]</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">bias</span><span class="op">[</span><span class="va">ma.simon.results3</span><span class="op">$</span><span class="va">type</span><span class="op">==</span><span class="st">"Exclude early stopped"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.001934055</span></code></pre></div>
+<span class="co">#&gt; Warning in max(abs(ma.simon.results3$bias[ma.simon.results3$type == "All</span>
+<span class="co">#&gt; trials"]) - : no non-missing arguments to max; returning -Inf</span>
+<span class="co">#&gt; [1] -Inf</span></code></pre></div>
 <p><img src="figures/simon_MA_p02-1.png" width="384"></p>
 <p><img src="figures/simon_MA_combined-1.png" width="768"></p>
 </div>
