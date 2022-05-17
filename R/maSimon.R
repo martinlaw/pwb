@@ -37,6 +37,7 @@ maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
   }
   bias.all <- wtdmeans.all-theta
 
+  bias.all.unwtd <- apply(theta.hat, 1, mean) - theta # Bias using simple mean of estimates
 
   # Summary estimate and bias, excluding adaptive design if stopped early:
   wtdmeans.exclude <- wtdmeans.all
@@ -48,14 +49,14 @@ maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
   mean.trials <- n.studies+mean(simon.data$early.stop==FALSE)
 
   # Present results #
-  ma.df <- data.frame(reps=rep(nsims, 2),
-                      mean.studies=c(n.studies+1, mean.trials),
-                      bias=c(mean(bias.all), mean(bias.exclude)),
-                      mean.se=c(sd(wtdmeans.all), sd(wtdmeans.exclude)),
-                      theta=rep(theta, 2),
-                      type=c("All trials", "Exclude early stopped")
+  ma.df <- data.frame(reps=rep(nsims, 3),
+                      mean.studies=c(n.studies+1,n.studies+1, mean.trials),
+                      bias=c(mean(bias.all.unwtd), mean(bias.all), mean(bias.exclude)),
+                      mean.se=c(NA, sd(wtdmeans.all), sd(wtdmeans.exclude)),
+                      theta=rep(theta, 3),
+                      type=c("All trials (unwtd)", "All trials (wtd)", "Exclude early stopped")
                       )
-  row.names(ma.df) <- c("All trials", "Exclude early stopped")
+  row.names(ma.df) <- c("All trials (unwtd)", "All trials (wtd)", "Exclude early stopped")
   return(ma.df)
 }
 
