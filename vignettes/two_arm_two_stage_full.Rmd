@@ -92,7 +92,7 @@ ma2stage.results <- vector("list", length(theta1.vec))
 
 for(i in 1:length(theta1.vec)){
   ma2stage.results[[i]] <- ma2stage(N=2428, theta0=theta1.vec[i]+0.05, theta1=theta1.vec[i],
-                                    n.studies=4, nsims=1e4)
+                                    n.studies=4, nsims=1e5)
 }
   
 ma2stage.results <- do.call(rbind, ma2stage.results)
@@ -118,7 +118,7 @@ ma2stage.results2 <- vector("list", length(theta1.vec))
 
 for(i in 1:length(theta1.vec)){
   ma2stage.results2[[i]] <- ma2stage(N=2428, theta0=0.3, theta1=theta1.vec[i],
-                                    n.studies=4, nsims=1e4)
+                                    n.studies=4, nsims=1e5)
 }
   
 ma2stage.results2 <- do.call(rbind, ma2stage.results2)

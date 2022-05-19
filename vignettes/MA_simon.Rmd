@@ -40,7 +40,7 @@ Now simulate meta-analyses of a single Simon design and some number of single-ar
 set.seed(1453)
 ma.simon.results <- maSimon(theta=0.5,
                             des=simon.des,
-                            nsims=1e4,
+                            nsims=1e5,
                             n.studies=4)
 ma.simon.results
 ```
@@ -53,7 +53,7 @@ ma.simon.results0 <- vector("list", length(theta.vec.0.5))
 for(i in 1:length(theta.vec.0.5)){
   ma.simon.results0[[i]] <- maSimon(theta=theta.vec.0.5[i],
                                     des=simon.des,
-                                    nsims=1e4,
+                                    nsims=1e5,
                                     n.studies=4)
   }
 
@@ -107,7 +107,7 @@ ma.simon.results2 <- vector("list", length(theta.vec))
 for(i in 1:length(theta.vec)){
   ma.simon.results2[[i]] <- maSimon(theta=theta.vec[i],
                                     des=simon.des2,
-                                    nsims=1e4,
+                                    nsims=1e5,
                                     n.studies=4)
   }
 
@@ -157,7 +157,7 @@ ma.simon.results3 <- vector("list", length(theta.vec.low))
 for(i in 1:length(theta.vec.low)){
   ma.simon.results3[[i]] <- maSimon(theta=theta.vec.low[i],
                                     des=simon.des3,
-                                    nsims=1e4,
+                                    nsims=1e5,
                                     n.studies=4)
   }
 
@@ -165,7 +165,7 @@ ma.simon.results3 <- do.call(rbind, ma.simon.results3)
 ma.simon.results3$p0p1 <- "p0=0.2, p1=0.3"
 
 # Biggest improvement in bias:
-max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))
+#max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))
 ```
 
 ```{r "simon_MA_p02", fig.height=4, fig.width=4, echo=FALSE, warning=T}
