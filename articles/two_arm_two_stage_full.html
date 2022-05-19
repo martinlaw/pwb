@@ -112,7 +112,7 @@
 
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta1.vec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="va">ma2stage.results</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ma2stage.html">ma2stage</a></span><span class="op">(</span>N<span class="op">=</span><span class="fl">2428</span>, theta0<span class="op">=</span><span class="va">theta1.vec</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">+</span><span class="fl">0.05</span>, theta1<span class="op">=</span><span class="va">theta1.vec</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
-                                    n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="fl">1e4</span><span class="op">)</span>
+                                    n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="fl">1e5</span><span class="op">)</span>
 <span class="op">}</span>
   
 <span class="va">ma2stage.results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma2stage.results</span><span class="op">)</span>
@@ -123,7 +123,7 @@
 
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta1.vec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
   <span class="va">ma2stage.results2</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ma2stage.html">ma2stage</a></span><span class="op">(</span>N<span class="op">=</span><span class="fl">2428</span>, theta0<span class="op">=</span><span class="fl">0.3</span>, theta1<span class="op">=</span><span class="va">theta1.vec</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,
-                                    n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="fl">1e4</span><span class="op">)</span>
+                                    n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="fl">1e5</span><span class="op">)</span>
 <span class="op">}</span>
   
 <span class="va">ma2stage.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma2stage.results2</span><span class="op">)</span>
