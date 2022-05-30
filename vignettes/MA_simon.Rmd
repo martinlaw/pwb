@@ -101,7 +101,7 @@ simon.des2 <- all.designs2$out[opt.index, ]
 
 Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size _N_ as the Simon design:
 
-```{r, large thetea}
+```{r, large theta}
 theta.vec <- seq(0.1, 0.9, 0.1)
 ma.simon.results2 <- vector("list", length(theta.vec))
 for(i in 1:length(theta.vec)){
@@ -113,9 +113,8 @@ for(i in 1:length(theta.vec)){
 
 ma.simon.results2 <- do.call(rbind, ma.simon.results2)
 ma.simon.results2$p0p1 <- "p0=0.8, p1=0.9"
-
-
 ```
+
 ```{r "simon_MA_p08", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 ma.simon.plot <- ggplot(data=ma.simon.results2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
@@ -202,4 +201,89 @@ ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=
              scales = "free_x")#,
              #labeller=labeller(p0p1=letters[1:3]))
 ma.simon.plot.comb
+```
+
+
+## Include equal weighting for all studies and vary study sizes
+
+```{r "different MA sizes", echo=FALSE}
+ma.sample.sizes <- simon.des[names(simon.des)=="n"]*c(1, 2, 4, 10)
+ma.simon.results.tim <- vector("list", length(theta.vec.0.5))
+for(i in 1:length(theta.vec.0.5)){
+  ma.simon.results.tim[[i]] <- maSimon(theta=theta.vec.0.5[i],
+                                    des=simon.des,
+                                    N=ma.sample.sizes,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results.tim <- do.call(rbind, ma.simon.results.tim)
+#ma.simon.results.tim$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.results.tim$p0p1 <- "p0=0.5, p1=0.6"
+
+
+
+ma.sample.sizes2 <- simon.des[names(simon.des2)=="n"]*c(1, 2, 4, 10)
+ma.simon.results2.tim <- vector("list", length(theta.vec))
+for(i in 1:length(theta.vec)){
+  ma.simon.results2.tim[[i]] <- maSimon(theta=theta.vec[i],
+                                    des=simon.des2,
+                                    N=ma.sample.sizes2,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+ma.simon.results2.tim <- do.call(rbind, ma.simon.results2.tim)
+ma.simon.results2.tim$p0p1 <- "p0=0.8, p1=0.9"
+
+
+ma.sample.sizes3 <- simon.des[names(simon.des2)=="n"]*c(1, 2, 4, 10)
+ma.simon.results3.tim <- vector("list", length(theta.vec.low))
+for(i in 1:length(theta.vec.low)){
+  ma.simon.results3.tim[[i]] <- maSimon(theta=theta.vec.low[i],
+                                    des=simon.des3,
+                                    N=ma.sample.sizes3,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results3.tim <- do.call(rbind, ma.simon.results3.tim)
+ma.simon.results3.tim$p0p1 <- "p0=0.2, p1=0.3"
+
+```
+
+```{r "simon_MA_combined_Tim", fig.height=4, fig.width=8, echo=FALSE, warning=T}
+ma.simon.results.comb.tim <- rbind(ma.simon.results.tim, ma.simon.results2.tim, ma.simon.results3.tim)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.plot.comb.tim <- ggplot(data=ma.simon.results.comb.tim, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis (Simon design)")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.simon.results.comb.tim$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  facet_wrap(~p0p1, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.simon.plot.comb.tim
+```
+
+```{r "simon_MA_Tim", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+library(ggplot2)
+ma.simon.plot.tim <- ggplot(data=ma.simon.results.tim, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.5, p1=0.6), four non-ADs")+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results.tim$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.0.5)+
+  theme(legend.position="bottom")
+ma.simon.plot.tim
 ```

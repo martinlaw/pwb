@@ -9,25 +9,28 @@
 #' @return Data frame of results
 #' @export
 #'
-maSimon <- function(theta=0.5, des, nsims=1e5, n.studies=4){
+maSimon <- function(theta=0.5, des, N=NULL, nsims=1e5, n.studies=4){
 
   # Obtain bias for single true response probability:
   simon.data <- pwbSimon(theta=theta, des=des, nsims=nsims)$results
 
   #### Meta-analysis: Simulate further trials  ####
-  N <- des[names(des)=="n"] # max sample size of Simon design
+  if(is.null(N))  N <- des[names(des)=="n"] # Default: use max sample size of Simon design
   responses <- vector("list", nsims)
 
-  for(i in 1:nsims){
-    responses[[i]] <- rbinom(n=n.studies, size=N, prob=theta)
-  }
-  responses <- do.call(rbind, responses)
-  theta.hat <- responses/N
-  se <- sqrt((theta.hat)*(1-theta.hat)/N)
+  # for(i in 1:nsims){
+  #   responses[[i]] <- rbinom(n=n.studies, size=N, prob=theta)
+  # }
+  # responses <- do.call(rbind, responses)
+  # theta.hat <- responses/N
+  # se <- sqrt((theta.hat)*(1-theta.hat)/N)
+
+  # Simulate all other MA studies:
+  nonAD.results <- simMeta(N=N, theta=theta, n.studies=n.studies, nsims=nsims)
 
   # Combine results from Simon simulation and MA simulation:
-  theta.hat <- cbind(simon.data$theta.hat.cor, theta.hat)
-  se <- cbind(simon.data$se.cor, se)
+  theta.hat <- cbind(simon.data$theta.hat.cor, nonAD.results$theta.hat)
+  se <- cbind(simon.data$se.cor, nonAD.results$se)
 
 
   # Summary estimate and bias for all 5 trials:
