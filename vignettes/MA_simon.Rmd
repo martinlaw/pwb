@@ -206,6 +206,8 @@ ma.simon.plot.comb
 
 ## Include equal weighting for all studies and vary study sizes
 
+Relative sample sizes of studies: Simon design: $N$; Other studies: $N, 2N, 4N, 10N$
+
 ```{r "different MA sizes", echo=FALSE}
 ma.sample.sizes <- simon.des[names(simon.des)=="n"]*c(1, 2, 4, 10)
 ma.simon.results.tim <- vector("list", length(theta.vec.0.5))
@@ -251,6 +253,7 @@ ma.simon.results3.tim$p0p1 <- "p0=0.2, p1=0.3"
 
 ```
 
+
 ```{r "simon_MA_combined_Tim", fig.height=4, fig.width=8, echo=FALSE, warning=T}
 ma.simon.results.comb.tim <- rbind(ma.simon.results.tim, ma.simon.results2.tim, ma.simon.results3.tim)
 #ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
@@ -270,20 +273,3 @@ ma.simon.plot.comb.tim <- ggplot(data=ma.simon.results.comb.tim, mapping=aes(x=t
 ma.simon.plot.comb.tim
 ```
 
-```{r "simon_MA_Tim", fig.height=4, fig.width=4, echo=FALSE, warning=T}
-library(ggplot2)
-ma.simon.plot.tim <- ggplot(data=ma.simon.results.tim, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
-  geom_point()+
-  labs(x="True response probability theta",
-       y="Bias (estimate - theta)",
-       title="Bias in meta-analysis",
-       subtitle="One Simon design (p0=0.5, p1=0.6), four non-ADs")+
-  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
-  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
-  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(ma.simon.results.tim$bias)) * c(-1.1, 1.1) )+
-  scale_x_continuous(breaks=theta.vec.0.5)+
-  theme(legend.position="bottom")
-ma.simon.plot.tim
-```
