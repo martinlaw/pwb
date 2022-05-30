@@ -150,15 +150,13 @@
 
 <span class="va">ma.simon.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">ma.simon.results2</span><span class="op">)</span>
 <span class="va">ma.simon.results2</span><span class="op">$</span><span class="va">p0p1</span> <span class="op">&lt;-</span> <span class="st">"p0=0.8, p1=0.9"</span></code></pre></div>
-<pre><code><span class="co">#&gt; Warning: Removed 2 row(s) containing missing values (geom_path).</span>
-<span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span></code></pre>
 <p><img src="figures/simon_MA_p08-1.png" width="384"></p>
 </div>
 <div class="section level3">
 <h3 id="p00-2">p0=0.2<a class="anchor" aria-label="anchor" href="#p00-2"></a>
 </h3>
 <p>Obtain a Simon design for p0=0.2, p1=0.3:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all.designs3</span> <span class="op">&lt;-</span> <span class="fu">clinfun</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/clinfun/man/ph2simon.html" class="external-link">ph2simon</a></span><span class="op">(</span>pu<span class="op">=</span><span class="fl">0.2</span>,
                                   pa<span class="op">=</span><span class="fl">0.3</span>,
                                   ep1<span class="op">=</span><span class="fl">0.05</span>,
@@ -168,7 +166,7 @@
 <span class="va">opt.index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">all.designs3</span><span class="op">$</span><span class="va">out</span><span class="op">[</span>, <span class="st">"EN(p0)"</span><span class="op">]</span><span class="op">)</span>
 <span class="va">simon.des3</span> <span class="op">&lt;-</span> <span class="va">all.designs3</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">opt.index</span>, <span class="op">]</span></code></pre></div>
 <p>Again, simulate meta-analyses of this Simon design and single-arm single-stage trials with the same maximum sample size <em>N</em> as the Simon design:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta.vec.low</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span><span class="op">)</span>
 <span class="va">ma.simon.results3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec.low</span><span class="op">)</span><span class="op">)</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">theta.vec.low</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
@@ -184,10 +182,16 @@
 <span class="co"># Biggest improvement in bias:</span>
 <span class="co">#max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))</span></code></pre></div>
 <p><img src="figures/simon_MA_p02-1.png" width="384"></p>
-<pre><code><span class="co">#&gt; Warning: Removed 2 rows containing missing values (geom_point).</span></code></pre>
 <p><img src="figures/simon_MA_combined-1.png" width="768"></p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="include-equal-weighting-for-all-studies-and-vary-study-sizes">Include equal weighting for all studies and vary study sizes<a class="anchor" aria-label="anchor" href="#include-equal-weighting-for-all-studies-and-vary-study-sizes"></a>
+</h2>
+<p><img src="figures/simon_MA_combined_Tim-1.png" width="768"></p>
+<p><img src="figures/simon_MA_Tim-1.png" width="384"></p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
