@@ -192,7 +192,7 @@ ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
-       title="Bias in meta-analysis (Simon design)")+
+       title="Bias in meta-analysis with shared study sample size (Simon design)")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   theme(legend.position="bottom")+
   ylim(max(abs(ma.simon.results.comb$bias)) * c(-1.1, 1.1) )+
@@ -255,14 +255,20 @@ ma.simon.results3.tim$p0p1 <- "p0=0.2, p1=0.3"
 
 
 ```{r "simon_MA_combined_Tim", fig.height=4, fig.width=8, echo=FALSE, warning=T}
-ma.simon.results.comb.tim <- rbind(ma.simon.results.tim, ma.simon.results2.tim, ma.simon.results3.tim)
+# Subset to most likely values:
+ma.simon.results.tim.subs <- ma.simon.results.tim[ma.simon.results.tim$theta > 0.35 & ma.simon.results.tim$theta < 0.75, ]
+ma.simon.results2.tim.subs <- ma.simon.results2.tim[ma.simon.results2.tim$theta > 0.55, ]
+ma.simon.results3.tim.subs <- ma.simon.results3.tim[ma.simon.results3.tim$theta < 0.45, ]
+
+class(ma.simon.results.tim$theta)
+ma.simon.results.comb.tim <- rbind(ma.simon.results.tim.subs, ma.simon.results2.tim.subs, ma.simon.results3.tim.subs)
 #ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
 ma.simon.plot.comb.tim <- ggplot(data=ma.simon.results.comb.tim, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
-       title="Bias in meta-analysis (Simon design)")+
+       title="Bias in meta-analysis with differing study size (Simon design): ")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
   theme(legend.position="bottom")+
   ylim(max(abs(ma.simon.results.comb.tim$bias)) * c(-1.1, 1.1) )+
