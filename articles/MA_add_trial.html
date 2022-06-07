@@ -139,36 +139,26 @@
 <h3 id="trial-design-with-some-precision-weighted-bias">Trial design with some precision weighted bias<a class="anchor" aria-label="anchor" href="#trial-design-with-some-precision-weighted-bias"></a>
 </h3>
 <p>We now do the converse: identify a trial with precision weighted bias but no unadjusted bias.</p>
-<p>We start by finding a Simon design with p<sub>0</sub>=0.8, p<sub>1</sub>=0.9, type-I error-rate 0.05, power 0.9:</p>
+<p>This is the case for the Simon design above when the true response probability is theta=0.3:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all.designs2</span> <span class="op">&lt;-</span> <span class="fu">clinfun</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/clinfun/man/ph2simon.html" class="external-link">ph2simon</a></span><span class="op">(</span>pu<span class="op">=</span><span class="fl">0.8</span>,
-                                 pa<span class="op">=</span><span class="fl">0.9</span>,
-                                 ep1<span class="op">=</span><span class="fl">0.05</span>,
-                                 ep2<span class="op">=</span><span class="fl">0.1</span>,
-                                 nmax<span class="op">=</span><span class="fl">150</span><span class="op">)</span>
-<span class="co"># Choose optimal Simon design:</span>
-<span class="va">opt.index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">all.designs2</span><span class="op">$</span><span class="va">out</span><span class="op">[</span>, <span class="st">"EN(p0)"</span><span class="op">]</span><span class="op">)</span>
-<span class="va">simon.des2</span> <span class="op">&lt;-</span> <span class="va">all.designs2</span><span class="op">$</span><span class="va">out</span><span class="op">[</span><span class="va">opt.index</span>, <span class="op">]</span></code></pre></div>
-<p>Find bias for true response probability theta=0.65:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Find bias for this design, for a single true response probability theta:</span>
-  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.65</span>
+  <span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">0.3</span>
   <span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span>
-  <span class="va">single.simon2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pwbSimon.html">pwbSimon</a></span><span class="op">(</span>theta<span class="op">=</span><span class="va">theta</span>,
-                                des<span class="op">=</span><span class="va">simon.des2</span>,
+  <span class="va">single.simon2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pwbSimon.html">pwbSimon</a></span><span class="op">(</span>theta<span class="op">=</span><span class="fl">0.3</span>,
+                                des<span class="op">=</span><span class="va">simon.des</span>,
                                 nsims<span class="op">=</span><span class="va">nsims</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span>
 <span class="co">#&gt;                              bias mean.SE  emp.SE</span>
-<span class="co">#&gt; All                      -0.00040 0.07092 0.07088</span>
-<span class="co">#&gt; All (precision-weighted)  0.00721 0.07026      NA</span></code></pre></div>
+<span class="co">#&gt; All                       0.00014 0.04468 0.04491</span>
+<span class="co">#&gt; All (precision-weighted) -0.00390 0.04450      NA</span></code></pre></div>
 <p>There is some unadjusted bias but the precision weighted bias is more than one order of magnitude greater.</p>
 <p>Again, simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design directly above.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ma.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simMeta.html">simMeta</a></span><span class="op">(</span>N<span class="op">=</span><span class="va">simon.des2</span><span class="op">[</span><span class="st">"n"</span><span class="op">]</span>, theta<span class="op">=</span><span class="fl">0.65</span>, n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="va">nsims</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ma.results2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simMeta.html">simMeta</a></span><span class="op">(</span>N<span class="op">=</span><span class="va">simon.des</span><span class="op">[</span><span class="st">"n"</span><span class="op">]</span>, theta<span class="op">=</span><span class="va">theta</span>, n.studies<span class="op">=</span><span class="fl">4</span>, nsims<span class="op">=</span><span class="va">nsims</span><span class="op">)</span>
 <span class="va">wtdmeans.ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsims</span><span class="op">)</span>
 <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsims</span><span class="op">)</span>    <span class="va">wtdmeans.ex2</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html" class="external-link">weighted.mean</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">ma.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span>, w<span class="op">=</span><span class="fl">1</span><span class="op">/</span><span class="va">ma.results2</span><span class="op">$</span><span class="va">se</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p>Now add replications of this second Simon design to a meta-analysis:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">combined.results2</span> <span class="op">&lt;-</span> <span class="va">ma.results2</span>
 <span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">theta.hat</span>, <span class="va">ma.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span>
 <span class="va">combined.results2</span><span class="op">$</span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">se</span>, <span class="va">ma.results2</span><span class="op">$</span><span class="va">se</span><span class="op">)</span>
@@ -180,12 +170,12 @@
 <span class="va">bias.ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wtdmeans.ex2</span><span class="op">-</span><span class="va">theta</span><span class="op">)</span>
 <span class="va">bias.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">-</span><span class="va">theta</span><span class="op">)</span>
 <span class="va">bias.ex2</span>
-<span class="co">#&gt; [1] 0.00181066</span>
+<span class="co">#&gt; [1] -0.001363598</span>
 <span class="va">bias.inc2</span>
-<span class="co">#&gt; [1] 0.002239122</span>
+<span class="co">#&gt; [1] -0.001617706</span>
 <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.inc2</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.ex2</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.0004284618</span></code></pre></div>
-<p>Bias increases only slightly, but we expect a larger increase.</p>
+<span class="co">#&gt; [1] 0.0002541073</span></code></pre></div>
+<p>Absolute bias increases only slightly, but we expect a larger increase.</p>
 </div>
   </main>
 </div>
