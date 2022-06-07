@@ -90,29 +90,14 @@ Bias increases by almost an order of magnitude but still remains very small.
 
 We now do the converse: identify a trial with precision weighted bias but no unadjusted bias.
 
-We start by finding a Simon design with p~0~=0.8, p~1~=0.9, type-I error-rate 0.05, power
-0.9:
-
-```{r}
-all.designs2 <- clinfun::ph2simon(pu=0.8,
-                                 pa=0.9,
-                                 ep1=0.05,
-                                 ep2=0.1,
-                                 nmax=150)
-# Choose optimal Simon design:
-opt.index <- which.min(all.designs2$out[, "EN(p0)"])
-simon.des2 <- all.designs2$out[opt.index, ]
-```
-
-
-Find bias for true response probability theta=0.65:
+This is the case for the Simon design above when the true response probability is theta=0.3:
 
 ```{r, find bias single 2 }
 # Find bias for this design, for a single true response probability theta:
-  theta <- 0.65
+  theta <- 0.3
   set.seed(16)
-  single.simon2 <- pwbSimon(theta=theta,
-                                des=simon.des2,
+  single.simon2 <- pwbSimon(theta=0.3,
+                                des=simon.des,
                                 nsims=nsims)
   round(single.simon2$ests[3:4, 2:4], 5)
 ```
@@ -122,7 +107,7 @@ There is some unadjusted bias but the precision weighted bias is more than one o
 Again, simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design directly above.
 
 ```{r}
-ma.results2 <- simMeta(N=simon.des2["n"], theta=0.65, n.studies=4, nsims=nsims)
+ma.results2 <- simMeta(N=simon.des["n"], theta=theta, n.studies=4, nsims=nsims)
 wtdmeans.ex2 <- rep(NA, nsims)
 for(i in 1:nsims)    wtdmeans.ex2[i] <- weighted.mean(x=ma.results2$theta.hat[i, ], w=1/ma.results2$se[i, ]^2)
 ```
@@ -144,4 +129,4 @@ bias.ex2
 bias.inc2
 abs(bias.inc2)-abs(bias.ex2)
 ```
-Bias increases only slightly, but we expect a larger increase.
+Absolute bias increases only slightly, but we expect a larger increase.
