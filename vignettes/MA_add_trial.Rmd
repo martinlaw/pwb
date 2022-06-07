@@ -19,7 +19,9 @@ library(pwb)
 library(ggplot2)
 ```
 
-We identify a trial design with substantial unadjusted bias and no precision weighted bias. We obtain bias for a meta-analysis before and after including this design. We expect no increase in (absolute) bias.
+### Trial design with no precision weighted bias
+
+We identify a trial design with substantial unadjusted bias and no precision weighted bias. We obtain bias for a meta-analysis before and after including this design in the meta-analysis. We expect no increase in (absolute) bias.
 
 
 Find a Simon design with p~0~=0.5, p~1~=0.6, type-I error-rate 0.05, power
@@ -37,52 +39,109 @@ simon.des <- all.designs$out[opt.index, ]
 ```
 
 
-Find bias for a true response probability theta=0.5:
+This design has some unadjusted bias and no precision weighted bias when true response probability theta=0.5:
 
 ```{r, find bias single }
-# Find bias for this design, for a single true response probability theta:
-  nsims <- 1e4
+  nsims <- 1e5
   theta <- 0.5
   set.seed(16)
   single.simon <- pwbSimon(theta=theta,
                                 des=simon.des,
                                 nsims=nsims)
-  round(single.simon$ests[, 1:5], 5)
-  round(single.simon$mc.error, 5)
+  round(single.simon$ests[3:4, 2:4], 5)
 ```
+
+There is unadjusted bias and no precision weighted bias.
+
+
+Now simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design.
 
 ```{r}
-# Simulate all other MA studies:
 ma.results <- simMeta(N=simon.des["n"], theta=0.5, n.studies=4, nsims=nsims)
-
-# Summary estimate and bias (excluding Simon design):
-  wtdmeans.ex <- rep(NA, nsims)
-  for(i in 1:nsims){
-    wtdmeans.ex[i] <- weighted.mean(x=ma.results$theta.hat[i, ], w=1/ma.results$se[i, ]^2)
-  }
-  bias.ex <- mean(wtdmeans.ex-theta)
+wtdmeans.ex <- rep(NA, nsims)
+for(i in 1:nsims) wtdmeans.ex[i] <- weighted.mean(x=ma.results$theta.hat[i, ], w=1/ma.results$se[i, ]^2)
 
 ```
-Now add replications of the above Simon design to the meta-analysis:
-
+Now add the replications of the Simon design to the meta-analysis and find summary estimates again:
 
 ```{r}
 combined.results <- ma.results
 combined.results$theta.hat <- cbind(single.simon$results$theta.hat, ma.results$theta.hat)
 combined.results$se <- cbind(single.simon$results$se, ma.results$se)
 
-# Summary estimate and bias (including Simon design):
-  wtdmeans.inc <- rep(NA, nsims)
-  for(i in 1:nsims){
-    wtdmeans.inc[i] <- weighted.mean(x=combined.results$theta.hat[i, ], w=1/combined.results$se[i, ]^2)
-  }
-  bias.inc <- mean(wtdmeans.inc-theta)
-  bias.ex
-  bias.inc
-  ### ^^^ looks like bias increases by almost an order of magnitude but still remains very small.
+wtdmeans.inc <- rep(NA, nsims)
+for(i in 1:nsims) wtdmeans.inc[i] <- weighted.mean(x=combined.results$theta.hat[i, ], w=1/combined.results$se[i, ]^2)
+```
+
+Now find the bias in the meta-analysis, excluding and including the Simon design:
+
+```{r}
+bias.ex <- mean(wtdmeans.ex-theta)
+bias.inc <- mean(wtdmeans.inc-theta)
+bias.ex
+bias.inc
+abs(bias.inc)-abs(bias.ex)
+```
+Bias increases by almost an order of magnitude but still remains very small.
+
+
+
+### Trial design with some precision weighted bias
+
+We now do the converse: identify a trial with precision weighted bias but no unadjusted bias.
+
+We start by finding a Simon design with p~0~=0.8, p~1~=0.9, type-I error-rate 0.05, power
+0.9:
+
+```{r}
+all.designs2 <- clinfun::ph2simon(pu=0.8,
+                                 pa=0.9,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=150)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs2$out[, "EN(p0)"])
+simon.des2 <- all.designs2$out[opt.index, ]
 ```
 
 
+Find bias for true response probability theta=0.65:
+
+```{r, find bias single 2 }
+# Find bias for this design, for a single true response probability theta:
+  theta <- 0.65
+  set.seed(16)
+  single.simon2 <- pwbSimon(theta=theta,
+                                des=simon.des2,
+                                nsims=nsims)
+  round(single.simon2$ests[3:4, 2:4], 5)
+```
+There is some unadjusted bias but the precision weighted bias is more than one order of magnitude greater.
 
 
-We then do the converse: identify a trial with 
+Again, simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design directly above.
+
+```{r}
+ma.results2 <- simMeta(N=simon.des2["n"], theta=0.65, n.studies=4, nsims=nsims)
+wtdmeans.ex2 <- rep(NA, nsims)
+for(i in 1:nsims)    wtdmeans.ex2[i] <- weighted.mean(x=ma.results2$theta.hat[i, ], w=1/ma.results2$se[i, ]^2)
+```
+
+Now add replications of this second Simon design to a meta-analysis:
+
+```{r}
+combined.results2 <- ma.results2
+combined.results2$theta.hat <- cbind(single.simon2$results$theta.hat, ma.results2$theta.hat)
+combined.results2$se <- cbind(single.simon2$results$se, ma.results2$se)
+
+# Summary estimate and bias (including Simon design):
+wtdmeans.inc2 <- rep(NA, nsims)
+for(i in 1:nsims) wtdmeans.inc2[i] <- weighted.mean(x=combined.results2$theta.hat[i, ], w=1/combined.results2$se[i, ]^2)
+
+bias.ex2 <- mean(wtdmeans.ex2-theta)
+bias.inc2 <- mean(wtdmeans.inc2-theta)
+bias.ex2
+bias.inc2
+abs(bias.inc2)-abs(bias.ex2)
+```
+Bias increases only slightly, but we expect a larger increase.
