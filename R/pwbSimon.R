@@ -55,14 +55,14 @@ pwbSimon <- function(theta, des, nsims=1e5){
 
 
   ##### Analyse results #####
-  early.stop.theta.bar <- mean(early.stop$theta.hat)
-  stop.at.N.theta.bar <- mean(stop.at.N$theta.hat)
-  all.theta.bar <- mean(results$theta.hat)
+  early.stop.theta.bar <- mean(early.stop$theta.hat.cor)
+  stop.at.N.theta.bar <- mean(stop.at.N$theta.hat.cor)
+  all.theta.bar <- mean(results$theta.hat.cor)
 
   # Empirical SE:
-  early.stop.emp.SE <- sqrt((1/(nrow(early.stop)-1)) * sum((early.stop$theta.hat-early.stop.theta.bar)^2))
-  stop.at.N.emp.SE <- sqrt((1/(nrow(stop.at.N)-1)) * sum((stop.at.N$theta.hat-stop.at.N.theta.bar)^2))
-  all.emp.SE <- sqrt((1/(nsims-1)) * sum((results$theta.hat-all.theta.bar)^2))
+  early.stop.emp.SE <- sqrt((1/(nrow(early.stop)-1)) * sum((early.stop$theta.hat.cor-early.stop.theta.bar)^2))
+  stop.at.N.emp.SE <- sqrt((1/(nrow(stop.at.N)-1)) * sum((stop.at.N$theta.hat.cor-stop.at.N.theta.bar)^2))
+  all.emp.SE <- sqrt((1/(nsims-1)) * sum((results$theta.hat.cor-all.theta.bar)^2))
   emp.SE <- c(early.stop.emp.SE,
               stop.at.N.emp.SE,
               all.emp.SE,
@@ -78,7 +78,7 @@ pwbSimon <- function(theta, des, nsims=1e5){
   theta.bar.vec <- c(early.stop.theta.bar,
                      stop.at.N.theta.bar,
                      all.theta.bar,
-                     weighted.mean(x=results$theta.hat, w=1/(results$se.cor)^2))
+                     weighted.mean(x=results$theta.hat.cor, w=1/(results$se.cor)^2))
   bias <- theta.bar.vec-theta
 
   trials <- c(nrow(early.stop),
