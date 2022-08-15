@@ -8,8 +8,8 @@
 <meta name="description" content="pwb">
 <title>RPW • pwb</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="RPW">
 <meta property="og:description" content="pwb">
@@ -68,7 +68,7 @@
 
 
 <script src="RPW_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>RPW</h1>
             
       
@@ -79,78 +79,78 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martinlaw.github.io/pwb/">pwb</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martinlaw.github.io/pwb/">pwb</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Setup</span>
-<span class="va">nsim</span> <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">6</span>
-<span class="va">N</span> <span class="op">=</span> <span class="fl">1000</span>
-<span class="va">p0</span> <span class="op">=</span> <span class="fl">0.25</span>
-<span class="va">p1</span> <span class="op">=</span> <span class="fl">0.5</span>
-<span class="va">theta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">p1</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">p0</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>
-<span class="va">theta_U</span> <span class="op">=</span> <span class="va">theta_D</span> <span class="op">=</span> <span class="va">theta_C</span> <span class="op">=</span> <span class="va">ID</span> <span class="op">=</span> <span class="va">IU</span> <span class="op">=</span> <span class="va">N1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsim</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Setup</span></span>
+<span><span class="va">nsim</span> <span class="op">=</span> <span class="fl">10</span><span class="op">^</span><span class="fl">6</span></span>
+<span><span class="va">N</span> <span class="op">=</span> <span class="fl">1000</span></span>
+<span><span class="va">p0</span> <span class="op">=</span> <span class="fl">0.25</span></span>
+<span><span class="va">p1</span> <span class="op">=</span> <span class="fl">0.5</span></span>
+<span><span class="va">theta</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">p1</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">p0</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="va">theta_U</span> <span class="op">=</span> <span class="va">theta_D</span> <span class="op">=</span> <span class="va">theta_C</span> <span class="op">=</span> <span class="va">ID</span> <span class="op">=</span> <span class="va">IU</span> <span class="op">=</span> <span class="va">N1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsim</span><span class="op">)</span></span></code></pre></div>
 <p>Simulate <em>nsims</em> two-arm RPW trials (not run):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Simulate trials:</span>
-<span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span>
-
-  <span class="va">trial</span> <span class="op">=</span> <span class="fu"><a href="../reference/randomiseRPW.html">randomiseRPW</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">p0</span>, <span class="va">p1</span><span class="op">)</span>
-
-  <span class="va">N0</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
-  <span class="va">X0</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
-
-  <span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
-  <span class="va">X1</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span>
-
-  <span class="va">theta_U</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">X1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span>
-  <span class="va">IU</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">-</span><span class="va">X1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">N0</span><span class="op">-</span><span class="va">X0</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span>
-
-  <span class="va">phat</span> <span class="op">=</span> <span class="op">(</span><span class="va">X1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span>
-
-  <span class="va">v</span> <span class="op">=</span> <span class="op">(</span><span class="fl">3</span> <span class="op">+</span> <span class="fl">4</span><span class="op">*</span><span class="op">(</span><span class="va">phat</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fl">4</span><span class="op">*</span><span class="op">(</span><span class="va">phat</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>
-
-  <span class="va">vT</span> <span class="op">=</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">phat</span><span class="op">)</span><span class="op">)</span>
-
-  <span class="va">ID</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">v</span><span class="op">/</span><span class="op">(</span><span class="va">N</span><span class="op">*</span><span class="va">vT</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">vT</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-
-  <span class="va">Fhat</span> <span class="op">=</span> <span class="va">ID</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">/</span><span class="va">IU</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>
-
-  <span class="va">theta_D</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">N0</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
-
-  <span class="va">theta_C</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="va">theta_U</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">Fhat</span><span class="op">*</span><span class="va">theta_D</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">Fhat</span><span class="op">)</span>
-
-<span class="op">}</span>
-
-
-<span class="va">IC</span> <span class="op">=</span> <span class="va">IU</span> <span class="op">-</span> <span class="va">ID</span>
-<span class="va">varC</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">IC</span>
-<span class="va">varU</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">IU</span>
-
-<span class="va">RPWsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>varC<span class="op">=</span><span class="va">varC</span>,
-                     varU<span class="op">=</span><span class="va">varU</span>,
-                     theta_C<span class="op">=</span><span class="va">theta_C</span>,
-                     theta_U<span class="op">=</span><span class="va">theta_U</span>,
-                     N1<span class="op">=</span><span class="va">N1</span>
-                     <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Simulate trials:</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span></span>
+<span></span>
+<span>  <span class="va">trial</span> <span class="op">=</span> <span class="fu"><a href="../reference/randomiseRPW.html">randomiseRPW</a></span><span class="op">(</span><span class="va">N</span>, <span class="va">p0</span>, <span class="va">p1</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">N0</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span>  <span class="va">X0</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
+<span>  <span class="va">X1</span> <span class="op">=</span> <span class="va">trial</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">theta_U</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">X1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span></span>
+<span>  <span class="va">IU</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">-</span><span class="va">X1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">N0</span><span class="op">-</span><span class="va">X0</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">phat</span> <span class="op">=</span> <span class="op">(</span><span class="va">X1</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">+</span> <span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span>
+<span></span>
+<span>  <span class="va">v</span> <span class="op">=</span> <span class="op">(</span><span class="fl">3</span> <span class="op">+</span> <span class="fl">4</span><span class="op">*</span><span class="op">(</span><span class="va">phat</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fl">4</span><span class="op">*</span><span class="op">(</span><span class="va">phat</span><span class="op">-</span><span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">vT</span> <span class="op">=</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">X0</span><span class="op">/</span><span class="va">N0</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">2</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">phat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">ID</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">v</span><span class="op">/</span><span class="op">(</span><span class="va">N</span><span class="op">*</span><span class="va">vT</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">vT</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">Fhat</span> <span class="op">=</span> <span class="va">ID</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">/</span><span class="va">IU</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
+<span></span>
+<span>  <span class="va">theta_D</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">N0</span><span class="op">/</span><span class="va">N1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">theta_C</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="op">(</span><span class="va">theta_U</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">-</span> <span class="va">Fhat</span><span class="op">*</span><span class="va">theta_D</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="va">Fhat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="va">IC</span> <span class="op">=</span> <span class="va">IU</span> <span class="op">-</span> <span class="va">ID</span></span>
+<span><span class="va">varC</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">IC</span></span>
+<span><span class="va">varU</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="va">IU</span></span>
+<span></span>
+<span><span class="va">RPWsim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>varC<span class="op">=</span><span class="va">varC</span>,</span>
+<span>                     varU<span class="op">=</span><span class="va">varU</span>,</span>
+<span>                     theta_C<span class="op">=</span><span class="va">theta_C</span>,</span>
+<span>                     theta_U<span class="op">=</span><span class="va">theta_U</span>,</span>
+<span>                     N1<span class="op">=</span><span class="va">N1</span></span>
+<span>                     <span class="op">)</span></span></code></pre></div>
 <p>Plot bias for each allocation prop:</p>
 <p><img src="RPW_files/figure-html/unnamed-chunk-2-1.png" width="576"></p>
-<pre><code><span class="co">#&gt; Warning: Removed 9891 rows containing non-finite values (stat_summary_bin).</span></code></pre>
+<pre><code><span><span class="co">#&gt; Warning: Removed 9891 rows containing non-finite values (stat_summary_bin).</span></span></code></pre>
 <p><img src="RPW_files/figure-html/unnamed-chunk-2-2.png" width="576"></p>
 <p>Results in tables: all results:</p>
-<pre><code><span class="co">#&gt;                                    bias         SE</span>
-<span class="co">#&gt; cond                      -0.0003317982 0.06252772</span>
-<span class="co">#&gt; uncond                    -0.0002605987 0.05002173</span>
-<span class="co">#&gt; precision weighted cond    0.0008696732 0.06239058</span>
-<span class="co">#&gt; precision weighted uncond  0.0006779951 0.04991318</span></code></pre>
+<pre><code><span><span class="co">#&gt;                                    bias         SE</span></span>
+<span><span class="co">#&gt; cond                      -0.0003317982 0.06252772</span></span>
+<span><span class="co">#&gt; uncond                    -0.0002605987 0.05002173</span></span>
+<span><span class="co">#&gt; precision weighted cond    0.0008696732 0.06239058</span></span>
+<span><span class="co">#&gt; precision weighted uncond  0.0006779951 0.04991318</span></span></code></pre>
 <p>What proportion of trials have an allocation ratio of less than / greater than 0.60?</p>
-<pre><code><span class="co">#&gt; [1] 509277 490723</span></code></pre>
+<pre><code><span><span class="co">#&gt; [1] 509277 490723</span></span></code></pre>
 <p>Results split by over/under 0.60:</p>
-<pre><code><span class="co">#&gt;                          bias         SE</span>
-<span class="co">#&gt; cond   (&lt;=0.60) -0.0004349983 0.06238776</span>
-<span class="co">#&gt; uncond (&lt;=0.60)  0.0232219223 0.04987065</span>
-<span class="co">#&gt; cond   (&gt;0.60)  -0.0002246962 0.06267297</span>
-<span class="co">#&gt; uncond (&gt;0.60)  -0.0246309824 0.05017852</span></code></pre>
+<pre><code><span><span class="co">#&gt;                          bias         SE</span></span>
+<span><span class="co">#&gt; cond   (&lt;=0.60) -0.0004349983 0.06238776</span></span>
+<span><span class="co">#&gt; uncond (&lt;=0.60)  0.0232219223 0.04987065</span></span>
+<span><span class="co">#&gt; cond   (&gt;0.60)  -0.0002246962 0.06267297</span></span>
+<span><span class="co">#&gt; uncond (&gt;0.60)  -0.0246309824 0.05017852</span></span></code></pre>
   </main>
 </div>
 
@@ -163,7 +163,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
