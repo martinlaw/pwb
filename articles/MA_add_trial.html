@@ -162,6 +162,7 @@
 <code class="sourceCode R"><span><span class="va">combined.results2</span> <span class="op">&lt;-</span> <span class="va">ma.results2</span></span>
 <span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">theta.hat</span>, <span class="va">ma.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span></span>
 <span><span class="va">combined.results2</span><span class="op">$</span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">se</span>, <span class="va">ma.results2</span><span class="op">$</span><span class="va">se</span><span class="op">)</span></span>
+<span><span class="co">#colnames(combined.results2$theta.hat)[1] &lt;- "Simon"</span></span>
 <span></span>
 <span><span class="co"># Summary estimate and bias (including Simon design):</span></span>
 <span><span class="va">wtdmeans.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">nsims</span><span class="op">)</span></span>
@@ -176,6 +177,19 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.inc2</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.ex2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.0002541073</span></span></code></pre></div>
 <p>Absolute bias increases only slightly, but we expect a larger increase.</p>
+<p>Find the average precision of the non-adaptive design studies and the Simon design:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">emp.SE</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">emp.SE</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/empSE.html">empSE</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">emp.SE</span>              </span>
+<span><span class="co">#&gt; [1] 0.03422900 0.01619005 0.02746436 0.03741870 0.03514427</span></span>
+<span><span class="va">precision</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">emp.SE</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">precision</span></span>
+<span><span class="co">#&gt; [1]  853.5160 3815.0812 1325.7483  714.2045  809.6380</span></span>
+<span><span class="va">prec.simon</span> <span class="op">&lt;-</span> <span class="va">precision</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<span><span class="va">prec.non.ad</span> <span class="op">&lt;-</span> <span class="va">precision</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
