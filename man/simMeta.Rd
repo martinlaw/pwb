@@ -7,7 +7,7 @@
 simMeta(N, theta, n.studies, nsims)
 }
 \arguments{
-\item{N}{sample size (shared for all trials)}
+\item{N}{sample size (shared for all trials if scalar)}
 
 \item{theta}{response rate (shared for all trials)}
 

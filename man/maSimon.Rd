@@ -4,7 +4,7 @@
 \alias{maSimon}
 \title{maSimon}
 \usage{
-maSimon(theta = 0.5, des, nsims = 1e+05, n.studies = 4)
+maSimon(theta = 0.5, des, N = NULL, nsims = 1e+05, n.studies = 4)
 }
 \arguments{
 \item{theta}{true response probablity}
