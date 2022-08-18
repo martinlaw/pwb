@@ -181,15 +181,18 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">emp.SE</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">emp.SE</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/empSE.html">empSE</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">emp.SE</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/empSE.html">empSE</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">[</span>, <span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="va">emp.SE</span>              </span>
-<span><span class="co">#&gt; [1] 0.03422900 0.01619005 0.02746436 0.03741870 0.03514427</span></span>
 <span><span class="va">precision</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">/</span><span class="op">(</span><span class="va">emp.SE</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">precision</span></span>
-<span><span class="co">#&gt; [1]  853.5160 3815.0812 1325.7483  714.2045  809.6380</span></span>
 <span><span class="va">prec.simon</span> <span class="op">&lt;-</span> <span class="va">precision</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span><span class="va">prec.non.ad</span> <span class="op">&lt;-</span> <span class="va">precision</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span></code></pre></div>
+<span><span class="va">ave.prec.non.ad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">precision</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">prec.simon</span></span>
+<span><span class="co">#&gt; [1] 495.8727</span></span>
+<span><span class="va">ave.prec.non.ad</span></span>
+<span><span class="co">#&gt; [1] 1109.634</span></span>
+<span><span class="va">prec.simon</span><span class="op">/</span><span class="va">ave.prec.non.ad</span></span>
+<span><span class="co">#&gt; [1] 0.4468794</span></span>
+<span><span class="co"># Precision for Simon design is `prec.simon`.</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
