@@ -145,6 +145,4 @@ ave.prec.non.ad <- mean(precision[-1])
 prec.simon
 ave.prec.non.ad
 prec.simon/ave.prec.non.ad
-# Precision for Simon design is `prec.simon`.
-
 ```
