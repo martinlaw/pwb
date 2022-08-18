@@ -137,12 +137,14 @@ Find the average precision of the non-adaptive design studies and the Simon desi
 ```{r precision}
 emp.SE <-numeric(length = ncol(combined.results2$theta.hat))
 for(i in 1:ncol(combined.results2$theta.hat)){
-  emp.SE[i] <- empSE(combined.results2$theta.hat[i, ])
+  emp.SE[i] <- empSE(combined.results2$theta.hat[, i])
 }
-emp.SE              
 precision <- 1/(emp.SE^2)
-precision
 prec.simon <- precision[1]
-prec.non.ad <- precision[-1]
-```
+ave.prec.non.ad <- mean(precision[-1])
+prec.simon
+ave.prec.non.ad
+prec.simon/ave.prec.non.ad
+# Precision for Simon design is `prec.simon`.
 
+```

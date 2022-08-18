@@ -1,13 +1,15 @@
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
 
-## ----setup---------------------------------------------------------------
+## ----setup--------------------------------------------------------------------
 library(pwb)
 
-## ---- simon--------------------------------------------------------------
+## ---- simon-------------------------------------------------------------------
 all.designs <- clinfun::ph2simon(pu=0.5,
                                  pa=0.6,
                                  ep1=0.05,
@@ -17,10 +19,211 @@ all.designs <- clinfun::ph2simon(pu=0.5,
 opt.index <- which.min(all.designs$out[, "EN(p0)"])
 simon.des <- all.designs$out[opt.index, ]
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
+set.seed(1453)
 ma.simon.results <- maSimon(theta=0.5,
                             des=simon.des,
-                            nsims=1e4,
+                            nsims=1e5,
                             n.studies=4)
 ma.simon.results
+
+## ---- theta varied------------------------------------------------------------
+theta.vec.0.5 <- seq(0.1, 0.9, 0.1)
+ma.simon.results0 <- vector("list", length(theta.vec.0.5))
+for(i in 1:length(theta.vec.0.5)){
+  ma.simon.results0[[i]] <- maSimon(theta=theta.vec.0.5[i],
+                                    des=simon.des,
+                                    nsims=1e5,
+                                    n.studies=4)
+  }
+
+ma.simon.results0 <- do.call(rbind, ma.simon.results0)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.results0$p0p1 <- "p0=0.5, p1=0.6"
+
+
+## ----"simon_MA_p05", fig.height=4, fig.width=4, echo=FALSE, warning=T---------
+library(ggplot2)
+ma.simon.plot0 <- ggplot(data=ma.simon.results0, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.5, p1=0.6), four non-ADs")+
+  geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results0$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.0.5)+
+  theme(legend.position="bottom")
+ma.simon.plot0
+
+## ---- simon high p------------------------------------------------------------
+all.designs2 <- clinfun::ph2simon(pu=0.8,
+                                 pa=0.9,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=150)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs2$out[, "EN(p0)"])
+simon.des2 <- all.designs2$out[opt.index, ]
+
+## ---- large theta-------------------------------------------------------------
+theta.vec <- seq(0.1, 0.9, 0.1)
+ma.simon.results2 <- vector("list", length(theta.vec))
+for(i in 1:length(theta.vec)){
+  ma.simon.results2[[i]] <- maSimon(theta=theta.vec[i],
+                                    des=simon.des2,
+                                    nsims=1e5,
+                                    n.studies=4)
+  }
+
+ma.simon.results2 <- do.call(rbind, ma.simon.results2)
+ma.simon.results2$p0p1 <- "p0=0.8, p1=0.9"
+
+## ----"simon_MA_p08", fig.height=4, fig.width=4, echo=FALSE, warning=T---------
+ma.simon.plot <- ggplot(data=ma.simon.results2, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.8, p1=0.9), four non-ADs")+
+  #annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2))+
+  geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results2$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec)+
+  theme(legend.position="bottom")
+ma.simon.plot
+
+## ---- simon low p-------------------------------------------------------------
+all.designs3 <- clinfun::ph2simon(pu=0.2,
+                                  pa=0.3,
+                                  ep1=0.05,
+                                  ep2=0.1,
+                                  nmax=200)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs3$out[, "EN(p0)"])
+simon.des3 <- all.designs3$out[opt.index, ]
+
+## ---- low theta---------------------------------------------------------------
+theta.vec.low <- seq(0.1, 0.9, 0.1)
+ma.simon.results3 <- vector("list", length(theta.vec.low))
+for(i in 1:length(theta.vec.low)){
+  ma.simon.results3[[i]] <- maSimon(theta=theta.vec.low[i],
+                                    des=simon.des3,
+                                    nsims=1e5,
+                                    n.studies=4)
+  }
+
+ma.simon.results3 <- do.call(rbind, ma.simon.results3)
+ma.simon.results3$p0p1 <- "p0=0.2, p1=0.3"
+
+# Biggest improvement in bias:
+#max(abs(ma.simon.results3$bias[ma.simon.results3$type=="All trials"])-abs(ma.simon.results3$bias[ma.simon.results3$type=="Exclude early stopped"]))
+
+## ----"simon_MA_p02", fig.height=4, fig.width=4, echo=FALSE, warning=T---------
+ma.simon.plot.low <- ggplot(data=ma.simon.results3, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis",
+       subtitle="One Simon design (p0=0.2, p1=0.3), four non-ADs")+
+  geom_vline(aes(xintercept=0.2), col="grey", linetype="dashed")+
+  geom_vline(aes(xintercept=0.3), col="grey", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(ma.simon.results3$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  theme(legend.position="bottom")
+ma.simon.plot.low
+
+## ----"simon_MA_combined", fig.height=4, fig.width=8, echo=FALSE, warning=T----
+ma.simon.results.comb <- rbind(ma.simon.results0, ma.simon.results2, ma.simon.results3)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis with shared study sample size (Simon design)")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.simon.results.comb$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  facet_wrap(~p0p1, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.simon.plot.comb
+
+## ----"different MA sizes", echo=FALSE-----------------------------------------
+ma.sample.sizes <- simon.des[names(simon.des)=="n"]*c(1, 2, 4, 10)
+ma.simon.results.tim <- vector("list", length(theta.vec.0.5))
+for(i in 1:length(theta.vec.0.5)){
+  ma.simon.results.tim[[i]] <- maSimon(theta=theta.vec.0.5[i],
+                                    des=simon.des,
+                                    N=ma.sample.sizes,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results.tim <- do.call(rbind, ma.simon.results.tim)
+#ma.simon.results.tim$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.results.tim$p0p1 <- "p0=0.5, p1=0.6"
+
+
+
+ma.sample.sizes2 <- simon.des[names(simon.des2)=="n"]*c(1, 2, 4, 10)
+ma.simon.results2.tim <- vector("list", length(theta.vec))
+for(i in 1:length(theta.vec)){
+  ma.simon.results2.tim[[i]] <- maSimon(theta=theta.vec[i],
+                                    des=simon.des2,
+                                    N=ma.sample.sizes2,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+ma.simon.results2.tim <- do.call(rbind, ma.simon.results2.tim)
+ma.simon.results2.tim$p0p1 <- "p0=0.8, p1=0.9"
+
+
+ma.sample.sizes3 <- simon.des[names(simon.des2)=="n"]*c(1, 2, 4, 10)
+ma.simon.results3.tim <- vector("list", length(theta.vec.low))
+for(i in 1:length(theta.vec.low)){
+  ma.simon.results3.tim[[i]] <- maSimon(theta=theta.vec.low[i],
+                                    des=simon.des3,
+                                    N=ma.sample.sizes3,
+                                    nsims=1e4,
+                                    n.studies=4)
+  }
+
+ma.simon.results3.tim <- do.call(rbind, ma.simon.results3.tim)
+ma.simon.results3.tim$p0p1 <- "p0=0.2, p1=0.3"
+
+
+## ----"simon_MA_combined_Tim", fig.height=4, fig.width=8, echo=FALSE, warning=T----
+# Subset to most likely values:
+ma.simon.results.tim.subs <- ma.simon.results.tim[ma.simon.results.tim$theta > 0.35 & ma.simon.results.tim$theta < 0.75, ]
+ma.simon.results2.tim.subs <- ma.simon.results2.tim[ma.simon.results2.tim$theta > 0.55, ]
+ma.simon.results3.tim.subs <- ma.simon.results3.tim[ma.simon.results3.tim$theta < 0.45, ]
+
+class(ma.simon.results.tim$theta)
+ma.simon.results.comb.tim <- rbind(ma.simon.results.tim.subs, ma.simon.results2.tim.subs, ma.simon.results3.tim.subs)
+#ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
+ma.simon.plot.comb.tim <- ggplot(data=ma.simon.results.comb.tim, mapping=aes(x=theta, y=bias, col=type))+
+  geom_line(alpha=0.4, size=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias (estimate - theta)",
+       title="Bias in meta-analysis with differing study size (Simon design): ")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  theme(legend.position="bottom")+
+  ylim(max(abs(ma.simon.results.comb.tim$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=theta.vec.low)+
+  facet_wrap(~p0p1, 
+             scales = "free_x")#,
+             #labeller=labeller(p0p1=letters[1:3]))
+ma.simon.plot.comb.tim
 

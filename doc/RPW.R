@@ -1,14 +1,14 @@
-## ---- include = FALSE----------------------------------------------------
+## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----setup---------------------------------------------------------------
+## ----setup--------------------------------------------------------------------
 library(pwb)
 library(ggplot2)
 
-## ---- set up sim---------------------------------------------------------
+## ---- set up sim--------------------------------------------------------------
 # Setup
 nsim = 10^6
 N = 1000
@@ -18,7 +18,7 @@ theta = log(1-p1)-log(1-p0)
 set.seed(7)
 theta_U = theta_D = theta_C = ID = IU = N1 = rep(NA, nsim)
 
-## ---- simulate, eval=FALSE-----------------------------------------------
+## ---- simulate, eval=FALSE----------------------------------------------------
 #  # Simulate trials:
 #  for(i in 1:nsim){
 #  
@@ -61,9 +61,9 @@ theta_U = theta_D = theta_C = ID = IU = N1 = rep(NA, nsim)
 #                       N1=N1
 #                       )
 
-## ---- fig.height=4, fig.width=6, echo=FALSE------------------------------
+## ---- fig.height=4, fig.width=6, echo=FALSE-----------------------------------
 # Load simulated data (to save time):
-data("RPWsim.rda", package = "pwb")
+data(RPWsim, package = "pwb")
 
 cond_bias = data.frame(allocation = RPWsim$N1/N,
                        uncond = (RPWsim$theta_U - theta)/theta,
@@ -81,7 +81,7 @@ ggplot(cond_bias, aes(x=allocation, y=100*cond)) +
   xlab('Allocation proportion') + ylab('Conditional bias (%)')
 
 
-## ---- tables, echo=FALSE-------------------------------------------------
+## ---- tables, echo=FALSE------------------------------------------------------
 
 ### Tables
 
@@ -105,12 +105,12 @@ rownames(full.results) <- c("cond",
                             "precision weighted uncond")
 full.results
 
-## ---- allocation, echo=FALSE---------------------------------------------
+## ---- allocation, echo=FALSE--------------------------------------------------
 under60 = (RPWsim$N1/N <= 0.60)
 over60 = (RPWsim$N1/N > 0.60)
 c(sum(under60), sum(over60))
 
-## ---- tables 2, echo=FALSE-----------------------------------------------
+## ---- tables 2, echo=FALSE----------------------------------------------------
 
 split.results <- rbind(
   c(mean(RPWsim$theta_C[under60]) - theta,
