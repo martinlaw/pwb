@@ -174,18 +174,18 @@
 <span><span class="va">bias.ex2</span></span>
 <span><span class="co">#&gt; [1] -0.001363598</span></span>
 <span><span class="co"># MSCE:</span></span>
-<span><span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.ex2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4.791798e-05</span></span>
+<span><span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.ex2</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
+<span><span class="co">#&gt; [1] 4.791798</span></span>
 <span></span>
 <span><span class="co"># Bias including:</span></span>
 <span><span class="va">bias.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">-</span><span class="va">theta</span><span class="op">)</span></span>
 <span><span class="va">bias.inc2</span></span>
 <span><span class="co">#&gt; [1] -0.001617706</span></span>
 <span><span class="co"># MCSE:</span></span>
-<span><span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4.550449e-05</span></span>
+<span><span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
+<span><span class="co">#&gt; [1] 4.550449</span></span>
 <span></span>
-<span><span class="co"># Abs difference:</span></span>
+<span><span class="co"># Absolute bias, difference:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.inc2</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.ex2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.0002541073</span></span></code></pre></div>
 <p>Absolute bias increases only slightly, but we expect a larger increase.</p>
