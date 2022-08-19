@@ -131,12 +131,13 @@ Obtain bias excluding/including Simon:
 bias.ex2 <- mean(wtdmeans.ex2-theta)
 bias.ex2
 # MSCE:
-
+MCSEbias(wtdmeans.ex2)
 
 # Bias including:
 bias.inc2 <- mean(wtdmeans.inc2-theta)
 bias.inc2
 # MCSE:
+MCSEbias(wtdmeans.inc2)
 
 # Abs difference:
 abs(bias.inc2)-abs(bias.ex2)
