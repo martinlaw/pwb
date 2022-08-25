@@ -77,14 +77,38 @@ Now find the bias in the meta-analysis, excluding and including the Simon design
 
 ```{r}
 bias.ex <- mean(wtdmeans.ex-theta)
-bias.inc <- mean(wtdmeans.inc-theta)
 bias.ex
+unwtd.bias.ex <- mean(rowMeans(ma.results$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.ex
+
+bias.inc <- mean(wtdmeans.inc-theta)
 bias.inc
+unwtd.bias.inc <- mean(rowMeans(combined.results$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.inc
+
 abs(bias.inc)-abs(bias.ex)
+
+# MCSE:
+mcse.ex <- MCSEbias(ma.results$theta.hat)*1e5
+mcse.ex
+mcse.inc <- MCSEbias(combined.results$theta.hat)*1e5
+mcse.inc
+
 ```
 Bias increases by almost an order of magnitude but still remains very small.
 
-
+```{r precision}
+emp.SE <- apply(combined.results$theta.hat, 2, empSE) # emp SE of each column
+precision <- 1/(emp.SE^2)
+prec.simon <- precision[1]
+ave.prec.non.ad <- mean(precision[-1])
+# Precision of Simon:
+prec.simon
+# Mean precision of non-adaptive design studies:
+ave.prec.non.ad
+# Fraction of Simon vs mean of non-adaptive:
+prec.frac <- prec.simon/ave.prec.non.ad
+```
 
 ### Trial design with some precision weighted bias
 
@@ -111,6 +135,7 @@ Again, simulate all other meta-analysis studies and find summary estimate for ea
 ma.results2 <- simMeta(N=simon.des["n"], theta=theta, n.studies=4, nsims=nsims)
 wtdmeans.ex2 <- rep(NA, nsims)
 for(i in 1:nsims)    wtdmeans.ex2[i] <- weighted.mean(x=ma.results2$theta.hat[i, ], w=1/ma.results2$se[i, ]^2)
+
 ```
 
 Now add replications of this second Simon design to a meta-analysis:
@@ -130,14 +155,20 @@ Obtain bias excluding/including Simon:
 # Bias excluding:
 bias.ex2 <- mean(wtdmeans.ex2-theta)
 bias.ex2
+unwtd.bias.ex2 <- mean(rowMeans(ma.results2$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.ex2
 # MSCE:
-MCSEbias(wtdmeans.ex2)*1e5
+mcse.ex2 <- MCSEbias(ma.results2$theta.hat)*1e5
+mcse.ex2
 
 # Bias including:
 bias.inc2 <- mean(wtdmeans.inc2-theta)
 bias.inc2
+unwtd.bias.inc2 <- mean(rowMeans(combined.results2$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.inc2
 # MCSE:
-MCSEbias(wtdmeans.inc2)*1e5
+mcse.inc2 <- MCSEbias(combined.results2$theta.hat)*1e5
+mcse.inc2
 
 # Absolute bias, difference:
 abs(bias.inc2)-abs(bias.ex2)
@@ -146,19 +177,25 @@ Absolute bias increases only slightly, but we expect a larger increase.
 
 Find the average precision of the non-adaptive design studies and the Simon design:
 
-```{r precision}
-emp.SE <- apply(combined.results2$theta.hat, 2, empSE) # emp SE of each column
-precision <- 1/(emp.SE^2)
-prec.simon <- precision[1]
-ave.prec.non.ad <- mean(precision[-1])
+```{r precision 2}
+emp.SE2 <- apply(combined.results2$theta.hat, 2, empSE) # emp SE of each column
+precision2 <- 1/(emp.SE2^2)
+prec.simon2 <- precision2[1]
+ave.prec.non.ad2 <- mean(precision2[-1])
 # Precision of Simon:
-prec.simon
+prec.simon2
 # Mean precision of non-adaptive design studies:
-ave.prec.non.ad
+ave.prec.non.ad2
 # Fraction of Simon vs mean of non-adaptive:
-prec.simon/ave.prec.non.ad
+prec.frac2 <- prec.simon2/ave.prec.non.ad2
 ```
 
 Average precision of Simon as a fraction of the non-adaptive studies is `r round(prec.simon/ave.prec.non.ad, 2)`.
 
+```{r}
+unwtd.bias.vec <- c(unwtd.bias.ex, unwtd.bias.inc, unwtd.bias.ex2, unwtd.bias.inc2)
+bias.vec <- c(bias.ex, bias.inc, bias.ex2, bias.inc2)
+mcse.vec <- c(mcse.ex, mcse.inc, mcse.ex2, mcse.inc2)
+prec.frac <- c(NA, )
+```
 
