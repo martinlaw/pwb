@@ -93,7 +93,7 @@ unwtd.bias.inc
 abs(bias.inc)-abs(bias.ex)
 
 # MCSE:
-mcse.ex <- MCSEbias(ma.results$theta.hat)*1e5
+mcse.ex <- pwb::MCSEbias(ma.results$theta.hat)*1e5
 mcse.ex
 mcse.inc <- MCSEbias(combined.results$theta.hat)*1e5
 mcse.inc
