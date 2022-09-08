@@ -3,9 +3,10 @@
 #' Finds Monte Carlo standard error of bias for a vector of estimates.
 #'
 #' @param theta.hat vector estimated response rates
-#' @return Monte Carlo standard error of bias
-#' @export
 #'
+#' @return Monte Carlo standard error of bias
+#'
+#' @export
 MCSEbias <- function(theta.hat){
   nsim <- length(theta.hat)
   theta.bar <- mean(theta.hat)
