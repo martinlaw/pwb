@@ -1,6 +1,10 @@
 ---
 title: 'Meta-analysis: general'
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MA_general}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r 'setup', include=FALSE}

@@ -2,7 +2,11 @@
 title: "two_arm_two_stage_full"
 author: "Martin"
 date: "25/02/2022"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{two_arm_two_stage_full}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}

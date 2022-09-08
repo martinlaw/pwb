@@ -3,6 +3,10 @@ title: 'MA: Bias when adding trial'
 author: "Martin Law"
 date: '2022-06-06'
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MA_add_trial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -196,6 +200,6 @@ Average precision of Simon as a fraction of the non-adaptive studies is `r round
 unwtd.bias.vec <- c(unwtd.bias.ex, unwtd.bias.inc, unwtd.bias.ex2, unwtd.bias.inc2)
 bias.vec <- c(bias.ex, bias.inc, bias.ex2, bias.inc2)
 mcse.vec <- c(mcse.ex, mcse.inc, mcse.ex2, mcse.inc2)
-prec.frac <- c(NA, )
+#prec.frac <- c(NA, )
 ```
 
