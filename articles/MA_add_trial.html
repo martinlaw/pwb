@@ -108,7 +108,8 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                             bias mean.SE  emp.SE</span></span>
 <span><span class="co">#&gt; All                      -0.0095 0.04376 0.03946</span></span>
-<span><span class="co">#&gt; All (precision-weighted)  0.0000 0.04066      NA</span></span></code></pre></div>
+<span><span class="co">#&gt; All (precision-weighted)  0.0000 0.04066      NA</span></span>
+<span>  <span class="va">mcse.simon</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span></span></code></pre></div>
 <p>There is unadjusted bias and no precision weighted bias.</p>
 <p>Now simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -143,12 +144,12 @@
 <span><span class="co">#&gt; [1] 0.0001410919</span></span>
 <span></span>
 <span><span class="co"># MCSE:</span></span>
-<span><span class="va">mcse.ex</span> <span class="op">&lt;-</span> <span class="fu">pwb</span><span class="fu">::</span><span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">ma.results</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
+<span><span class="va">mcse.ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.ex</span><span class="op">)</span></span>
 <span><span class="va">mcse.ex</span></span>
-<span><span class="co">#&gt; [1] 5.166525</span></span>
-<span><span class="va">mcse.inc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">combined.results</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
+<span><span class="co">#&gt; [1] 5.196651e-05</span></span>
+<span><span class="va">mcse.inc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.inc</span><span class="op">)</span></span>
 <span><span class="va">mcse.inc</span></span>
-<span><span class="co">#&gt; [1] 4.858279</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 4.836795e-05</span></span></code></pre></div>
 <p>Bias increases by almost an order of magnitude but still remains very small.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">emp.SE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">combined.results</span><span class="op">$</span><span class="va">theta.hat</span>, <span class="fl">2</span>, <span class="va">empSE</span><span class="op">)</span> <span class="co"># emp SE of each column</span></span>
@@ -180,7 +181,8 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                              bias mean.SE  emp.SE</span></span>
 <span><span class="co">#&gt; All                       0.00014 0.04468 0.04491</span></span>
-<span><span class="co">#&gt; All (precision-weighted) -0.00390 0.04450      NA</span></span></code></pre></div>
+<span><span class="co">#&gt; All (precision-weighted) -0.00390 0.04450      NA</span></span>
+<span>  <span class="va">mcse.simon2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">single.simon2</span><span class="op">$</span><span class="va">results</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span></span></code></pre></div>
 <p>There is some unadjusted bias but the precision weighted bias is more than one order of magnitude greater.</p>
 <p>Again, simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design directly above.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -206,10 +208,7 @@
 <span><span class="va">unwtd.bias.ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">ma.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="va">theta</span> <span class="co"># Bias using simple mean of estimates</span></span>
 <span><span class="va">unwtd.bias.ex2</span></span>
 <span><span class="co">#&gt; [1] -5.763948e-05</span></span>
-<span><span class="co"># MSCE:</span></span>
-<span><span class="va">mcse.ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">ma.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
-<span><span class="va">mcse.ex2</span></span>
-<span><span class="co">#&gt; [1] 4.746569</span></span>
+<span></span>
 <span></span>
 <span><span class="co"># Bias including:</span></span>
 <span><span class="va">bias.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">-</span><span class="va">theta</span><span class="op">)</span></span>
@@ -218,14 +217,18 @@
 <span><span class="va">unwtd.bias.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="va">theta</span> <span class="co"># Bias using simple mean of estimates</span></span>
 <span><span class="va">unwtd.bias.inc2</span></span>
 <span><span class="co">#&gt; [1] -1.876543e-05</span></span>
-<span><span class="co"># MCSE:</span></span>
-<span><span class="va">mcse.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">combined.results2</span><span class="op">$</span><span class="va">theta.hat</span><span class="op">)</span><span class="op">*</span><span class="fl">1e5</span></span>
-<span><span class="va">mcse.inc2</span></span>
-<span><span class="co">#&gt; [1] 4.741918</span></span>
 <span></span>
 <span><span class="co"># Absolute bias, difference:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.inc2</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">bias.ex2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.0002541073</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.0002541073</span></span>
+<span></span>
+<span><span class="co"># MCSE:</span></span>
+<span><span class="va">mcse.ex2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.ex2</span><span class="op">)</span></span>
+<span><span class="va">mcse.ex2</span></span>
+<span><span class="co">#&gt; [1] 4.791798e-05</span></span>
+<span><span class="va">mcse.inc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MCSEbias.html">MCSEbias</a></span><span class="op">(</span><span class="va">wtdmeans.inc2</span><span class="op">)</span></span>
+<span><span class="va">mcse.inc2</span></span>
+<span><span class="co">#&gt; [1] 4.550449e-05</span></span></code></pre></div>
 <p>Absolute bias increases only slightly, but we expect a larger increase.</p>
 <p>Find the average precision of the non-adaptive design studies and the Simon design:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
@@ -244,10 +247,29 @@
 <span><span class="va">prec.frac2</span> <span class="op">&lt;-</span> <span class="va">prec.simon2</span><span class="op">/</span><span class="va">ave.prec.non.ad2</span></span></code></pre></div>
 <p>Average precision of Simon as a fraction of the non-adaptive studies is 0.69.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">unwtd.bias.vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">unwtd.bias.ex</span>, <span class="va">unwtd.bias.inc</span>, <span class="va">unwtd.bias.ex2</span>, <span class="va">unwtd.bias.inc2</span><span class="op">)</span></span>
-<span><span class="va">bias.vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bias.ex</span>, <span class="va">bias.inc</span>, <span class="va">bias.ex2</span>, <span class="va">bias.inc2</span><span class="op">)</span></span>
-<span><span class="va">mcse.vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mcse.ex</span>, <span class="va">mcse.inc</span>, <span class="va">mcse.ex2</span>, <span class="va">mcse.inc2</span><span class="op">)</span></span>
-<span><span class="co">#prec.frac &lt;- c(NA, )</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">simon.unwtd.bias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All"</span>, <span class="st">"bias"</span><span class="op">]</span>, <span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All"</span>, <span class="st">"bias"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">simon.pw.bias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All (precision-weighted)"</span>, <span class="st">"bias"</span><span class="op">]</span>, <span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All (precision-weighted)"</span>, <span class="st">"bias"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">ma.bias.ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bias.ex</span>, <span class="va">bias.ex2</span><span class="op">)</span></span>
+<span><span class="va">ma.bias.inc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bias.inc</span>, <span class="va">bias.inc2</span><span class="op">)</span></span>
+<span><span class="co">#ma.unwtd.bias.ex &lt;- c(unwtd.bias.ex, unwtd.bias.ex2)</span></span>
+<span><span class="co">#ma.unwtd.bias.inc &lt;- c(unwtd.bias.inc, unwtd.bias.inc2) </span></span>
+<span><span class="va">ma.mcse.ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mcse.ex</span>, <span class="va">mcse.ex2</span><span class="op">)</span></span>
+<span><span class="va">ma.mcse.inc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mcse.inc</span>, <span class="va">mcse.inc2</span><span class="op">)</span></span>
+<span><span class="va">simon.mcse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">mcse.simon</span>, <span class="va">mcse.simon2</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">simon.unwtd.bias</span>,</span>
+<span>                      <span class="va">simon.mcse</span>,</span>
+<span>                      <span class="va">simon.pw.bias</span>,</span>
+<span>                      <span class="va">ma.bias.ex</span>,</span>
+<span>                      <span class="va">ma.bias.inc</span>,</span>
+<span>                      <span class="va">ma.mcse.ex</span>,</span>
+<span>                      <span class="va">ma.mcse.inc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">results</span><span class="op">*</span><span class="fl">1e5</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   simon.unwtd.bias simon.mcse simon.pw.bias ma.bias.ex ma.bias.inc ma.mcse.ex</span></span>
+<span><span class="co">#&gt; 1           -949.6       12.5           0.5        2.8       -16.9        5.2</span></span>
+<span><span class="co">#&gt; 2             13.7       14.2        -389.9     -136.4      -161.8        4.8</span></span>
+<span><span class="co">#&gt;   ma.mcse.inc</span></span>
+<span><span class="co">#&gt; 1         4.8</span></span>
+<span><span class="co">#&gt; 2         4.6</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
