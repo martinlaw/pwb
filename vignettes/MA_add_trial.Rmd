@@ -53,6 +53,7 @@ This design has some unadjusted bias and no precision weighted bias when true re
                                 des=simon.des,
                                 nsims=nsims)
   round(single.simon$ests[3:4, 2:4], 5)
+  mcse.simon <- MCSEbias(single.simon$results$theta.hat)
 ```
 
 There is unadjusted bias and no precision weighted bias.
@@ -93,9 +94,9 @@ unwtd.bias.inc
 abs(bias.inc)-abs(bias.ex)
 
 # MCSE:
-mcse.ex <- pwb::MCSEbias(ma.results$theta.hat)*1e5
+mcse.ex <- MCSEbias(wtdmeans.ex)
 mcse.ex
-mcse.inc <- MCSEbias(combined.results$theta.hat)*1e5
+mcse.inc <- MCSEbias(wtdmeans.inc)
 mcse.inc
 
 ```
@@ -128,6 +129,7 @@ This is the case for the Simon design above when the true response probability i
                                 des=simon.des,
                                 nsims=nsims)
   round(single.simon2$ests[3:4, 2:4], 5)
+  mcse.simon2 <- MCSEbias(single.simon2$results$theta.hat)
 ```
 There is some unadjusted bias but the precision weighted bias is more than one order of magnitude greater.
 
@@ -161,21 +163,22 @@ bias.ex2 <- mean(wtdmeans.ex2-theta)
 bias.ex2
 unwtd.bias.ex2 <- mean(rowMeans(ma.results2$theta.hat)) - theta # Bias using simple mean of estimates
 unwtd.bias.ex2
-# MSCE:
-mcse.ex2 <- MCSEbias(ma.results2$theta.hat)*1e5
-mcse.ex2
+
 
 # Bias including:
 bias.inc2 <- mean(wtdmeans.inc2-theta)
 bias.inc2
 unwtd.bias.inc2 <- mean(rowMeans(combined.results2$theta.hat)) - theta # Bias using simple mean of estimates
 unwtd.bias.inc2
-# MCSE:
-mcse.inc2 <- MCSEbias(combined.results2$theta.hat)*1e5
-mcse.inc2
 
 # Absolute bias, difference:
 abs(bias.inc2)-abs(bias.ex2)
+
+# MCSE:
+mcse.ex2 <- MCSEbias(wtdmeans.ex2)
+mcse.ex2
+mcse.inc2 <- MCSEbias(wtdmeans.inc2)
+mcse.inc2
 ```
 Absolute bias increases only slightly, but we expect a larger increase.
 
@@ -197,9 +200,22 @@ prec.frac2 <- prec.simon2/ave.prec.non.ad2
 Average precision of Simon as a fraction of the non-adaptive studies is `r round(prec.simon/ave.prec.non.ad, 2)`.
 
 ```{r}
-unwtd.bias.vec <- c(unwtd.bias.ex, unwtd.bias.inc, unwtd.bias.ex2, unwtd.bias.inc2)
-bias.vec <- c(bias.ex, bias.inc, bias.ex2, bias.inc2)
-mcse.vec <- c(mcse.ex, mcse.inc, mcse.ex2, mcse.inc2)
-#prec.frac <- c(NA, )
+simon.unwtd.bias <- c(single.simon$ests["All", "bias"], single.simon2$ests["All", "bias"])
+simon.pw.bias <- c(single.simon$ests["All (precision-weighted)", "bias"], single.simon2$ests["All (precision-weighted)", "bias"])
+ma.bias.ex <- c(bias.ex, bias.ex2)
+ma.bias.inc <- c(bias.inc, bias.inc2)
+#ma.unwtd.bias.ex <- c(unwtd.bias.ex, unwtd.bias.ex2)
+#ma.unwtd.bias.inc <- c(unwtd.bias.inc, unwtd.bias.inc2) 
+ma.mcse.ex <- c(mcse.ex, mcse.ex2)
+ma.mcse.inc <- c(mcse.inc, mcse.inc2)
+simon.mcse <- c(mcse.simon, mcse.simon2)
+results <- data.frame(simon.unwtd.bias,
+                      simon.mcse,
+                      simon.pw.bias,
+                      ma.bias.ex,
+                      ma.bias.inc,
+                      ma.mcse.ex,
+                      ma.mcse.inc)
+round(results*1e5, 1)
 ```
 
