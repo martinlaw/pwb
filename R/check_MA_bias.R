@@ -15,3 +15,12 @@ p07 <- simMeta(N=200, theta=0.7, n.studies=4, nsims=nsims)
 wtdmeans.07 <- rep(NA, nsims)
 for(i in 1:nsims)    wtdmeans.07[i] <- weighted.mean(x=p07$theta.hat[i, ], w=1/p07$se[i, ]^2)
 mean(wtdmeans.07 - 0.7)
+
+
+MCSE <- function(theta.hat){
+  nsim <- length(theta.hat)
+  theta.bar <- mean(theta.hat)
+  est <- sqrt(sum((theta.hat-theta.bar)^2)/((nsim-1)*nsim))
+  est
+}
+
