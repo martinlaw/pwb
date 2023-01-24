@@ -17,10 +17,31 @@ for(i in 1:nsims)    wtdmeans.07[i] <- weighted.mean(x=p07$theta.hat[i, ], w=1/p
 mean(wtdmeans.07 - 0.7)
 
 
-MCSE <- function(theta.hat){
-  nsim <- length(theta.hat)
-  theta.bar <- mean(theta.hat)
-  est <- sqrt(sum((theta.hat-theta.bar)^2)/((nsim-1)*nsim))
-  est
-}
+
+all.designs <- clinfun::ph2simon(pu=0.5,
+                                 pa=0.6,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=500)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs$out[, "EN(p0)"])
+simon.des <- all.designs$out[opt.index, ]
+
+theta <- 0.3
+set.seed(16)
+single.simon2 <- pwbSimon(theta=0.3,
+                          des=simon.des,
+                          nsims=nsims)
+round(single.simon2$ests[3:4, 2:4], 5)
+#>                              bias mean.SE  emp.SE
+#> All                       0.00014 0.04468 0.04491
+#> All (precision-weighted) -0.00390 0.04450      NA
+mcse.simon2 <- MCSEbias(single.simon2$results$theta.hat)
+mcse.simon2 * 1e5
+MCSE(single.simon2$results$theta.hat - theta)
+mean(single.simon2$results$se)
+
+head(single.simon2)
+
+
 

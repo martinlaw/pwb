@@ -95,9 +95,9 @@ abs(bias.inc)-abs(bias.ex)
 
 # MCSE:
 mcse.ex <- MCSEbias(wtdmeans.ex)
-mcse.ex
+mcse.ex * 1e5
 mcse.inc <- MCSEbias(wtdmeans.inc)
-mcse.inc
+mcse.inc * 1e5
 
 ```
 Bias increases by almost an order of magnitude but still remains very small.
@@ -176,9 +176,9 @@ abs(bias.inc2)-abs(bias.ex2)
 
 # MCSE:
 mcse.ex2 <- MCSEbias(wtdmeans.ex2)
-mcse.ex2
+mcse.ex2 * 1e5
 mcse.inc2 <- MCSEbias(wtdmeans.inc2)
-mcse.inc2
+mcse.inc2 * 1e5
 ```
 Absolute bias increases only slightly, but we expect a larger increase.
 
