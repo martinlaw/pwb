@@ -68,7 +68,7 @@ pwbSimon <- function(theta, des, nsims=1e5){
               all.emp.SE,
               NA)
 
-  # SE:
+  # SE :
   mean.SE <- c(mean(early.stop$se.cor),
                mean(stop.at.N$se.cor),
                mean(results$se.cor),
