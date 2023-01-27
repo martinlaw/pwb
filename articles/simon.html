@@ -8,10 +8,10 @@
 <meta name="description" content="pwb">
 <title>Simon design: simulation study • pwb</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simon design: simulation study">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simon design: simulation study">
 <meta property="og:description" content="pwb">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -67,7 +67,8 @@
 
 
 
-<script src="simon_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Simon design: simulation study</h1>
             
@@ -85,23 +86,29 @@
 <h3 id="ademp">ADEMP<a class="anchor" aria-label="anchor" href="#ademp"></a>
 </h3>
 <ul>
-<li>Aim: Compare conditional, unconditional, precision-weighted and UMVUE bias in a Simon design</li>
+<li>Aim: Compare conditional, unconditional, precision-weighted and
+UMVUE bias in a Simon design</li>
 <li>Data-generating mechanism:
 <ul>
 <li>Binary outcome with a series of response rates (0.1, 0.9, 0.1)</li>
-<li>Type-I error-rate 0.05 when response rate p<sub>0</sub>=0.5 and power 0.90 when response rate p<sub>1</sub>=0.6</li>
-<li>Corresponding design: N=233, n<sub>1</sub>=104. Trial failure if number of responses less than or equal to 54 at interim or less than or equal to 128 at end.</li>
+<li>Type-I error-rate 0.05 when response rate p<sub>0</sub>=0.5 and
+power 0.90 when response rate p<sub>1</sub>=0.6</li>
+<li>Corresponding design: N=233, n<sub>1</sub>=104. Trial failure if
+number of responses less than or equal to 54 at interim or less than or
+equal to 128 at end.</li>
 </ul>
 </li>
 <li>Estimand: response rate</li>
 <li>Method of analysis: point estimate, SE</li>
-<li>Performance measures: Conditional, unconditional, precision-weighted and UMVUE bias</li>
+<li>Performance measures: Conditional, unconditional, precision-weighted
+and UMVUE bias</li>
 <li>Number of simulations: 1e5</li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://martinlaw.github.io/pwb/">pwb</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
-<p>Find a Simon design with p<sub>0</sub>=0.5, p<sub>1</sub>=0.6, type-I error-rate 0.05, power 0.9:</p>
+<p>Find a Simon design with p<sub>0</sub>=0.5, p<sub>1</sub>=0.6, type-I
+error-rate 0.05, power 0.9:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all.designs</span> <span class="op">&lt;-</span> <span class="fu">clinfun</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/clinfun/man/ph2simon.html" class="external-link">ph2simon</a></span><span class="op">(</span>pu<span class="op">=</span><span class="fl">0.5</span>,</span>
 <span>                                 pa<span class="op">=</span><span class="fl">0.6</span>,</span>
@@ -145,7 +152,9 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">all.simon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">summary.data</span><span class="op">)</span></span></code></pre></div>
-<p>We are also interested in the UMVUE, so find this and add to the above results, using the R package <em>singlearm</em> by Michael Grayling:</p>
+<p>We are also interested in the UMVUE, so find this and add to the
+above results, using the R package <em>singlearm</em> by Michael
+Grayling:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">##### UMVUE for Simon design #####</span></span>
@@ -170,7 +179,8 @@
 <span><span class="va">umvue</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">"UMVUE"</span></span>
 <span></span>
 <span><span class="va">all.simon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">all.simon</span>, <span class="va">umvue</span><span class="op">)</span></span></code></pre></div>
-<p>The function <em>showTable</em> will show a table of results for a single theta:</p>
+<p>The function <em>showTable</em> will show a table of results for a
+single theta:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/showTable.html">showTable</a></span><span class="op">(</span>bias.df<span class="op">=</span><span class="va">all.simon</span>, theta<span class="op">=</span><span class="fl">0.4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                             nsims    bias mean.SE emp.SE theta</span></span>
@@ -179,9 +189,12 @@
 <span><span class="co">#&gt; All (unadjusted)           100000 -0.0002  0.0477 0.0472   0.4</span></span>
 <span><span class="co">#&gt; All (precision-weighted)   100000 -0.0017  0.0476     NA   0.4</span></span>
 <span><span class="co">#&gt; UMVUE                          NA  0.0000      NA     NA   0.4</span></span></code></pre></div>
-<p>How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:</p>
-<pre><code><span><span class="co">#&gt; Warning: Removed 5 row(s) containing missing values (geom_path).</span></span>
-<span><span class="co">#&gt; Warning: Removed 5 rows containing missing values (geom_point).</span></span></code></pre>
+<p>How does bias compare when the true response probability is varied?
+Find results for a vector of true response probabilities:</p>
+<pre><code><span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; Warning: Removed 5 rows containing missing values (`geom_line()`).</span></span>
+<span><span class="co">#&gt; Warning: Removed 5 rows containing missing values (`geom_point()`).</span></span></code></pre>
 <p><img src="figures/simon-1.png" width="384"></p>
 <pre><code><span><span class="co">#&gt;   theta MC error: bias MC error: SE</span></span>
 <span><span class="co">#&gt; 1   0.1        0.00009      0.00007</span></span>
@@ -193,23 +206,29 @@
 <span><span class="co">#&gt; 7   0.7        0.00009      0.00007</span></span>
 <span><span class="co">#&gt; 8   0.8        0.00008      0.00006</span></span>
 <span><span class="co">#&gt; 9   0.9        0.00006      0.00004</span></span></code></pre>
-<p>Plot the same results, but removing the subsets “stopped early” or “stopped at N”:</p>
+<p>Plot the same results, but removing the subsets “stopped early” or
+“stopped at N”:</p>
 <p><img src="figures/simon_subset-1.png" width="384"></p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="simulate-trials-again-using-values-of-p0-and-p1-that-are-not-close-to-0-5">Simulate trials again, using values of p<sub>0</sub> and p<sub>1</sub> that are not close to 0.5<a class="anchor" aria-label="anchor" href="#simulate-trials-again-using-values-of-p0-and-p1-that-are-not-close-to-0-5"></a>
+<h2 id="simulate-trials-again-using-values-of-p0-and-p1-that-are-not-close-to-0-5">Simulate trials again, using values of p<sub>0</sub> and
+p<sub>1</sub> that are not close to 0.5<a class="anchor" aria-label="anchor" href="#simulate-trials-again-using-values-of-p0-and-p1-that-are-not-close-to-0-5"></a>
 </h2>
 <div class="section level3">
 <h3 id="ademp-1">ADEMP<a class="anchor" aria-label="anchor" href="#ademp-1"></a>
 </h3>
 <ul>
-<li>Aim: Compare unconditional and precision-weighted bias in a Simon design (again)</li>
+<li>Aim: Compare unconditional and precision-weighted bias in a Simon
+design (again)</li>
 <li>Data-generating mechanism:
 <ul>
 <li>Binary outcome with a series of response rates (0.5, 0.9, 0.05)</li>
-<li>Type-I error-rate 0.05 when response rate p<sub>0</sub>=0.8 and power 0.90 when response rate p<sub>1</sub>=0.9</li>
-<li>Corresponding design: N=127, n<sub>1</sub>=44. Trial failure if number of responses less than or equal to 36 at interim or less than or equal to 108 at end.</li>
+<li>Type-I error-rate 0.05 when response rate p<sub>0</sub>=0.8 and
+power 0.90 when response rate p<sub>1</sub>=0.9</li>
+<li>Corresponding design: N=127, n<sub>1</sub>=44. Trial failure if
+number of responses less than or equal to 36 at interim or less than or
+equal to 108 at end.</li>
 </ul>
 </li>
 <li>Estimand: response rate</li>
@@ -261,7 +280,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>
