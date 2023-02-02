@@ -113,7 +113,9 @@ prec.simon
 ave.prec.non.ad
 # Fraction of Simon vs mean of non-adaptive:
 prec.frac <- prec.simon/ave.prec.non.ad
+prec.frac
 ```
+For simulation study 1, average precision of Simon as a fraction of the non-adaptive studies is `r round(prec.frac, 2)`.
 
 ### Trial design with some precision weighted bias
 
@@ -195,11 +197,15 @@ prec.simon2
 ave.prec.non.ad2
 # Fraction of Simon vs mean of non-adaptive:
 prec.frac2 <- prec.simon2/ave.prec.non.ad2
+prec.frac2
 ```
 
-Average precision of Simon as a fraction of the non-adaptive studies is `r round(prec.simon/ave.prec.non.ad, 2)`.
+For simulation study 2, average precision of Simon as a fraction of the non-adaptive studies is `r round(prec.frac2, 2)`.
 
-```{r}
+### Summary of biases and MCSEs
+
+
+```{r summary, results='asis'}
 simon.unwtd.bias <- c(single.simon$ests["All", "bias"], single.simon2$ests["All", "bias"])
 simon.pw.bias <- c(single.simon$ests["All (precision-weighted)", "bias"], single.simon2$ests["All (precision-weighted)", "bias"])
 ma.bias.ex <- c(bias.ex, bias.ex2)
@@ -216,6 +222,7 @@ results <- data.frame(simon.unwtd.bias,
                       ma.bias.inc,
                       ma.mcse.ex,
                       ma.mcse.inc)
-round(results*1e5, 1)
+tab <- xtable::xtable(x=results*1e5, digits=1, align="rrrrrrrr", caption="Summary of results *1e5")
+print(tab, type="html")
 ```
 
