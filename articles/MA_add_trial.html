@@ -175,7 +175,12 @@ small.</p>
 <span><span class="va">ave.prec.non.ad</span></span>
 <span><span class="co">#&gt; [1] 936.5774</span></span>
 <span><span class="co"># Fraction of Simon vs mean of non-adaptive:</span></span>
-<span><span class="va">prec.frac</span> <span class="op">&lt;-</span> <span class="va">prec.simon</span><span class="op">/</span><span class="va">ave.prec.non.ad</span></span></code></pre></div>
+<span><span class="va">prec.frac</span> <span class="op">&lt;-</span> <span class="va">prec.simon</span><span class="op">/</span><span class="va">ave.prec.non.ad</span></span>
+<span><span class="va">prec.frac</span></span>
+<span><span class="co">#&gt;           </span></span>
+<span><span class="co">#&gt; 0.6856127</span></span></code></pre></div>
+<p>For simulation study 1, average precision of Simon as a fraction of
+the non-adaptive studies is 0.69.</p>
 </div>
 <div class="section level3">
 <h3 id="trial-design-with-some-precision-weighted-bias">Trial design with some precision weighted bias<a class="anchor" aria-label="anchor" href="#trial-design-with-some-precision-weighted-bias"></a>
@@ -263,9 +268,16 @@ Simon design:</p>
 <span><span class="va">ave.prec.non.ad2</span></span>
 <span><span class="co">#&gt; [1] 1109.634</span></span>
 <span><span class="co"># Fraction of Simon vs mean of non-adaptive:</span></span>
-<span><span class="va">prec.frac2</span> <span class="op">&lt;-</span> <span class="va">prec.simon2</span><span class="op">/</span><span class="va">ave.prec.non.ad2</span></span></code></pre></div>
-<p>Average precision of Simon as a fraction of the non-adaptive studies
-is 0.69.</p>
+<span><span class="va">prec.frac2</span> <span class="op">&lt;-</span> <span class="va">prec.simon2</span><span class="op">/</span><span class="va">ave.prec.non.ad2</span></span>
+<span><span class="va">prec.frac2</span></span>
+<span><span class="co">#&gt;           </span></span>
+<span><span class="co">#&gt; 0.4468794</span></span></code></pre></div>
+<p>For simulation study 2, average precision of Simon as a fraction of
+the non-adaptive studies is 0.45.</p>
+</div>
+<div class="section level3">
+<h3 id="summary-of-biases-and-mcses">Summary of biases and MCSEs<a class="anchor" aria-label="anchor" href="#summary-of-biases-and-mcses"></a>
+</h3>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simon.unwtd.bias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All"</span>, <span class="st">"bias"</span><span class="op">]</span>, <span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All"</span>, <span class="st">"bias"</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">simon.pw.bias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">single.simon</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All (precision-weighted)"</span>, <span class="st">"bias"</span><span class="op">]</span>, <span class="va">single.simon2</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span><span class="st">"All (precision-weighted)"</span>, <span class="st">"bias"</span><span class="op">]</span><span class="op">)</span></span>
@@ -283,13 +295,92 @@ is 0.69.</p>
 <span>                      <span class="va">ma.bias.inc</span>,</span>
 <span>                      <span class="va">ma.mcse.ex</span>,</span>
 <span>                      <span class="va">ma.mcse.inc</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">results</span><span class="op">*</span><span class="fl">1e5</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   simon.unwtd.bias simon.mcse simon.pw.bias ma.bias.ex ma.bias.inc ma.mcse.ex</span></span>
-<span><span class="co">#&gt; 1           -949.6       12.5           0.5        2.8       -16.9        5.2</span></span>
-<span><span class="co">#&gt; 2             13.7       14.2        -389.9     -136.4      -161.8        4.8</span></span>
-<span><span class="co">#&gt;   ma.mcse.inc</span></span>
-<span><span class="co">#&gt; 1         4.8</span></span>
-<span><span class="co">#&gt; 2         4.6</span></span></code></pre></div>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu">xtable</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/xtable/man/xtable.html" class="external-link">xtable</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">results</span><span class="op">*</span><span class="fl">1e5</span>, digits<span class="op">=</span><span class="fl">1</span>, align<span class="op">=</span><span class="st">"rrrrrrrr"</span>, caption<span class="op">=</span><span class="st">"Summary of results *1e5"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tab</span>, type<span class="op">=</span><span class="st">"html"</span><span class="op">)</span></span></code></pre></div>
+<!-- html table generated in R 4.2.2 by xtable 1.8-4 package -->
+<!-- Thu Feb  2 18:11:58 2023 -->
+<table border="1" class="table">
+<caption align="bottom">
+Summary of results *1e5
+</caption>
+<tr>
+<th>
+</th>
+<th>
+simon.unwtd.bias
+</th>
+<th>
+simon.mcse
+</th>
+<th>
+simon.pw.bias
+</th>
+<th>
+ma.bias.ex
+</th>
+<th>
+ma.bias.inc
+</th>
+<th>
+ma.mcse.ex
+</th>
+<th>
+ma.mcse.inc
+</th>
+</tr>
+<tr>
+<td align="right">
+1
+</td>
+<td align="right">
+-949.6
+</td>
+<td align="right">
+12.5
+</td>
+<td align="right">
+0.5
+</td>
+<td align="right">
+2.8
+</td>
+<td align="right">
+-16.9
+</td>
+<td align="right">
+5.2
+</td>
+<td align="right">
+4.8
+</td>
+</tr>
+<tr>
+<td align="right">
+2
+</td>
+<td align="right">
+13.7
+</td>
+<td align="right">
+14.2
+</td>
+<td align="right">
+-389.9
+</td>
+<td align="right">
+-136.4
+</td>
+<td align="right">
+-161.8
+</td>
+<td align="right">
+4.8
+</td>
+<td align="right">
+4.6
+</td>
+</tr>
+</table>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
