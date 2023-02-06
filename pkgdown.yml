@@ -9,10 +9,11 @@ articles:
   MA_simon: MA_simon.html
   Non-adaptive_designs: Non-adaptive_designs.html
   RPW: RPW.html
+  conditional_bias: conditional_bias.html
   simon: simon.html
   two_arm_two_stage_example: two_arm_two_stage_example.html
   two_arm_two_stage_full: two_arm_two_stage_full.html
-last_built: 2023-02-02T18:09Z
+last_built: 2023-02-06T17:39Z
 urls:
   reference: https://martinlaw.github.io/pwb/reference
   article: https://martinlaw.github.io/pwb/articles

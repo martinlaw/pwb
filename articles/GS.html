@@ -48,6 +48,7 @@
     <a class="dropdown-item" href="../articles/MA_simon.html">Meta-analysis: Simon design</a>
     <a class="dropdown-item" href="../articles/Non-adaptive_designs.html">Non-adaptive designs</a>
     <a class="dropdown-item" href="../articles/RPW.html">RPW</a>
+    <a class="dropdown-item" href="../articles/conditional_bias.html">conditional_bias</a>
     <a class="dropdown-item" href="../articles/simon.html">Simon design: simulation study</a>
     <a class="dropdown-item" href="../articles/two_arm_two_stage_example.html">Two-arm two-stage: example</a>
     <a class="dropdown-item" href="../articles/two_arm_two_stage_full.html">two_arm_two_stage_full</a>
@@ -95,10 +96,10 @@ futility:</p>
 <span>                     nsims<span class="op">=</span><span class="va">nsims</span><span class="op">)</span></span>
 <span>  <span class="va">single.GS</span><span class="op">$</span><span class="va">ests</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt;                          nsims    bias mean.SE emp.SE theta</span></span>
-<span><span class="co">#&gt; Stopped early            39377 -0.0452  0.0455 0.0273   0.5</span></span>
-<span><span class="co">#&gt; Complete                 60623  0.0246  0.0421 0.0300   0.5</span></span>
-<span><span class="co">#&gt; All                     100000 -0.0028  0.0435 0.0447   0.5</span></span>
-<span><span class="co">#&gt; All (precision-weghted) 100000 -0.0002  0.0433     NA   0.5</span></span>
+<span><span class="co">#&gt; Stopped early            39311 -0.0452  0.0455 0.0276   0.5</span></span>
+<span><span class="co">#&gt; Complete                 60689  0.0248  0.0421 0.0300   0.5</span></span>
+<span><span class="co">#&gt; All                     100000 -0.0027  0.0435 0.0449   0.5</span></span>
+<span><span class="co">#&gt; All (precision-weghted) 100000  0.0000  0.0433     NA   0.5</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">single.GS</span><span class="op">$</span><span class="va">mc.error</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.00014 0.00010</span></span></code></pre></div>
 <p>How does bias compare when the true response probability is varied?
