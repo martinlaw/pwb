@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(pwb)
 library(ggplot2)
+library(kableExtra)
 ```
 
 ### Trial design with no precision weighted bias
@@ -216,13 +217,31 @@ ma.mcse.ex <- c(mcse.ex, mcse.ex2)
 ma.mcse.inc <- c(mcse.inc, mcse.inc2)
 simon.mcse <- c(mcse.simon, mcse.simon2)
 results <- data.frame(simon.unwtd.bias,
-                      simon.mcse,
                       simon.pw.bias,
+                      simon.mcse,
                       ma.bias.ex,
                       ma.bias.inc,
                       ma.mcse.ex,
                       ma.mcse.inc)
-tab <- xtable::xtable(x=results*1e5, digits=1, align="rrrrrrrr", caption="Summary of results *1e5")
+results <- results*1e5
+results <- cbind(theta=c("0.5", "0.3"), results)
+tab <- xtable::xtable(x=results, digits=1, align="rrrrrrrrr", caption="Summary of results *1e5")
 print(tab, type="html")
 ```
+
+```{r save table, echo=FALSE}
+ktab <- kbl(results,
+            format="latex", 
+            digits = 1, 
+            align="rrrrrrrrr",
+            caption="Summary of results (multiplied by 100,000)",
+            booktabs = T,
+            col.names = c("$\\theta$", "Uncond. bias", "PWB", "MCSE", "Bias exc.", "Bias inc.", "MCSE exc.", "MCSE inc."),
+            label="ma_add_trial")
+ktab <- add_header_above(ktab, header = c(" ", "Simon"=3, "Meta-analysis"=4))
+ktab <- kable_styling(ktab, latex_options = c("hold_position", "scale_down"))
+save_kable(ktab, file="latex_output/simstudy12kbl.tex")
+```
+
+
 
