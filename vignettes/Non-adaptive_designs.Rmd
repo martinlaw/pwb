@@ -18,17 +18,17 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-library(pwb)
+#library(pwb)
 library(ggplot2)
 ```
 
-Depending on the type of adaptation and the observed data, the progress of an adaptive design may not differ from a non-adaptive design. As such, it may be worthwhile to examine precision weighted bias in the context of non-adaptive designs. We simulate _nsims=1e5_ binary outcome single-stage designs with sample size _N=100_ for a series of response probabilities theta (0.1, 0.9, 0.1), then record the unadjusted and precision weighted bias:
+Depending on the type of adaptation and the observed data, the progress of an adaptive design may not differ from a non-adaptive design. As such, it may be worthwhile to examine precision weighted bias in the context of non-adaptive designs. We simulate _nsims=1e5_ binary outcome single-stage designs with sample size _N=100_ for a series of response probabilities theta (0.1, 0.9, 0.1), then record the unconditional and precision weighted bias:
 
 ```{r}
 # Simulate single-stage design:
 nsims <- 1e5
 N <- 100
-theta.vec <- seq(0.1, 0.9, 0.1)
+theta.vec <- seq(0.2, 0.8, 0.1)
 unadjusted <- pwbias <- numeric(length(theta.vec))
 se.list <- vector("list", length(theta.vec))
 
@@ -43,19 +43,27 @@ for (i in 1:length(theta.vec)) {
 
 dat <- data.frame(theta=rep(theta.vec, times=2),
                   bias=c(unadjusted, pwbias),
-                  type=rep(c("unadjusted", "precision weighted"), each=length(theta.vec)))
+                  type=rep(c("Unconditional", "Precision weighted"), each=length(theta.vec)))
 
 se.df <- data.frame(se=unlist(se.list),
                     theta=rep(as.character(theta.vec), each=nsims))
 ```
 
-```{r "non-AD_bias_N=100", echo=FALSE, fig.height=5, fig.width=5}
+```{r "non-AD_bias_N=100", echo=FALSE, fig.height=5, fig.width=6.5}
+    theme_update(axis.text=element_text(size=14),
+          axis.title=element_text(size=16),
+          legend.text=element_text(size=14),
+          legend.title=element_text(size=14),
+          plot.title=element_text(size=18))
 ggplot(data=dat, mapping=aes(x=theta, y=bias, col=type))+
   geom_line()+
   labs(title="Bias for single-arm, single-stage trial with N=100")+
     scale_x_continuous(breaks=theta.vec)+
     scale_y_continuous(limits = range(dat$bias, na.rm=T))+
-  theme(legend.position="bottom")
+    theme(legend.position="bottom", legend.title=element_text())+
+  ylab("Bias")+
+  xlab(expression(theta))+
+  guides(col=guide_legend(title="Bias"))
 ```
 
 
@@ -63,7 +71,7 @@ ggplot(data=dat, mapping=aes(x=theta, y=bias, col=type))+
 This effect decreases as _N_ increases. For example, when _N=1000_:
 
 
-```{r "non-AD_bias_N=1000", echo=FALSE, fig.height=5, fig.width=5}
+```{r "non-AD_bias_N=1000", echo=FALSE, fig.height=5, fig.width=7}
 N <- 1000
 unadjusted <- pwbias <- numeric(length(theta.vec))
 
@@ -77,22 +85,28 @@ for (i in 1:length(theta.vec)) {
 
 dat1000 <- data.frame(theta=rep(theta.vec, times=2),
                   bias=c(unadjusted, pwbias),
-                  type=rep(c("unadjusted", "precision weighted"), each=length(theta.vec)))
+                  type=rep(c("Unconditional", "Precision weighted"), each=length(theta.vec)))
 
 ggplot(data=dat1000, mapping=aes(x=theta, y=bias, col=type))+
   geom_line()+
   labs(title="Bias for single-arm, single-stage trial with N=1000")+
     scale_x_continuous(breaks=theta.vec)+
     scale_y_continuous(limits = range(dat$bias, na.rm=T))+
-  theme(legend.position="bottom")
+  theme(legend.position="bottom")+
+  ylab("Bias")+
+  xlab(expression(theta))+
+  guides(col=guide_legend(title="Bias"))
 
 ```
 
 
 Here is the distribution of standard errors for the _N=100_ data:
-```{r "non-AD_SE", echo=FALSE, fig.height=4, fig.width=6}
+```{r "non-AD_SE", echo=FALSE, fig.height=4, fig.width=6.5}
 ggplot(data=se.df, mapping=aes(x=theta, y=se))+
-  geom_boxplot()
+  geom_boxplot()+
+  xlab(expression(theta))+
+  ylab("SE")+
+  labs(title="SE of single-arm, single-stage design with N=100")
 ```
 
-The farther theta is from 0.5, the greater the variation in SE. This increased variation means increased variation in weight, with more extreme (i.e. close to 0 or 1) values of theta hat receiving the most weight when calculating precision weighted bias. When theta is close to 0.5, there is low variation in SE, and weights will be similar (and then the weighted mean will be close to the mean).
+The further theta is from 0.5, the greater the variation in SE. This increased variation means increased variation in weight, with more extreme (i.e. close to 0 or 1) values of theta hat receiving the most weight when calculating precision weighted bias. When theta is close to 0.5, there is low variation in SE, and weights will be similar (and then the weighted mean will be close to the mean).
