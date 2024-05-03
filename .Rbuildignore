@@ -9,3 +9,5 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+
+R/check_MA_bias.R

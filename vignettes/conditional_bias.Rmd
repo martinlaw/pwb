@@ -1,0 +1,40 @@
+---
+title: "conditional_bias"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{conditional_bias}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(pwb)
+```
+
+```{r}
+nsims <- 100000
+N <- 1000
+dat <- matrix(data=rnorm(N*nsims, 0), nrow=N, ncol=nsims)
+
+theta.hat <-    apply(dat, 2, mean) # theta hat for all obsns
+theta.hat.s1 <- apply(dat[1:(N/2), ], 2, mean) # theta hat for S1 data
+theta.hat.s2 <- apply(dat[((N/2)+1):N, ], 2, mean) # theta hat for S2 data
+
+early.stopped <- theta.hat.s1 < 0 # index of early-stopped trials
+
+theta.hat.s1.early.stop <- theta.hat.s1[early.stopped] # theta hat, S1 data, early stopped
+mean(theta.hat.s1.early.stop)
+theta.hat.s1.continue <- theta.hat.s1[!early.stopped] # theta hat, S1 data, continued
+mean(theta.hat.s1.continue)
+theta.hat.s2.continue <- theta.hat.s2[!early.stopped] # theta hat, S2 data, continued
+mean(theta.hat.s2.continue)
+mean(theta.hat[!early.stopped])
+```
+

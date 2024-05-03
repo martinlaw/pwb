@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+librarian::shelf(mjg211/singlearm, cran_repo = 'https://cran.r-project.org')
 library(pwb)
 ```
 
@@ -67,7 +68,7 @@ ma.simon.results0$p0p1 <- "p0=0.5, p1=0.6"
 ```{r "simon_MA_p05", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 library(ggplot2)
 ma.simon.plot0 <- ggplot(data=ma.simon.results0, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
@@ -117,7 +118,7 @@ ma.simon.results2$p0p1 <- "p0=0.8, p1=0.9"
 
 ```{r "simon_MA_p08", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 ma.simon.plot <- ggplot(data=ma.simon.results2, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
@@ -169,7 +170,7 @@ ma.simon.results3$p0p1 <- "p0=0.2, p1=0.3"
 
 ```{r "simon_MA_p02", fig.height=4, fig.width=4, echo=FALSE, warning=T}
 ma.simon.plot.low <- ggplot(data=ma.simon.results3, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
@@ -188,7 +189,7 @@ ma.simon.plot.low
 ma.simon.results.comb <- rbind(ma.simon.results0, ma.simon.results2, ma.simon.results3)
 #ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
 ma.simon.plot.comb <- ggplot(data=ma.simon.results.comb, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
@@ -264,7 +265,7 @@ class(ma.simon.results.tim$theta)
 ma.simon.results.comb.tim <- rbind(ma.simon.results.tim.subs, ma.simon.results2.tim.subs, ma.simon.results3.tim.subs)
 #ma.simon.results0$p0p1 <- bquote(p[0]==0.5~","~p[1]==0.6)
 ma.simon.plot.comb.tim <- ggplot(data=ma.simon.results.comb.tim, mapping=aes(x=theta, y=bias, col=type))+
-  geom_line(alpha=0.4, size=1)+
+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias (estimate - theta)",
