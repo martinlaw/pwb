@@ -49,11 +49,11 @@ se.df <- data.frame(se=unlist(se.list),
                     theta=rep(as.character(theta.vec), each=nsims))
 ```
 
-```{r "non-AD_bias_N=100", echo=FALSE, fig.height=5, fig.width=6.5}
-    theme_update(axis.text=element_text(size=14),
-          axis.title=element_text(size=16),
-          legend.text=element_text(size=14),
-          legend.title=element_text(size=14),
+```{r "non-AD_bias_N=100", echo=FALSE, fig.height=5, fig.width=6.75}
+    theme_update(axis.text=element_text(size=16),
+          axis.title=element_text(size=18),
+          legend.text=element_text(size=16),
+          legend.title=element_text(size=16),
           plot.title=element_text(size=18))
 ggplot(data=dat, mapping=aes(x=theta, y=bias, col=type))+
   geom_line()+
@@ -71,7 +71,7 @@ ggplot(data=dat, mapping=aes(x=theta, y=bias, col=type))+
 This effect decreases as _N_ increases. For example, when _N=1000_:
 
 
-```{r "non-AD_bias_N=1000", echo=FALSE, fig.height=5, fig.width=7}
+```{r "non-AD_bias_N=1000", echo=FALSE, fig.height=5, fig.width=6.75}
 N <- 1000
 unadjusted <- pwbias <- numeric(length(theta.vec))
 
