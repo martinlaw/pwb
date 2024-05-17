@@ -225,20 +225,23 @@ ma.mcse.inc <- c(mcse.inc, mcse.inc2)
 simon.mcse <- c(mcse.simon, mcse.simon2)
 abs.change.bias <- abs(abs(ma.bias.ex) - abs(ma.bias.inc))
 fraction <- 100*abs.change.bias/abs(simon.unwtd.bias)
+fraction.pwb <- 100*abs.change.bias/abs(simon.pw.bias)
 
 results <- data.frame(simon.unwtd.bias,
                       simon.pw.bias,
                       simon.mcse,
-                      ma.bias.ex,
-                      ma.bias.inc,
+                      abs.change.bias,
                       fraction,
+                      fraction.pwb,
                       ma.mcse.ex,
                       ma.mcse.inc)
 results <- results*1e5
 results$fraction <- results$fraction/1e5
+results$fraction.pwb <- results$fraction.pwb/1e5
 results <- cbind(theta=c("0.5", "0.3"), results)
+results$fraction.pwb <- c("--", as.character(round(results$fraction.pwb[2], 0)))
 tab <- xtable::xtable(x=results, digits=1, align="rrrrrrrrrr", caption="Summary of results *1e5")
-print(tab, type="html")
+
 ```
 
 ```{r save table, echo=FALSE}
@@ -246,15 +249,17 @@ ktab <- kbl(results,
             format="latex", 
             digits = 0, 
             align="rrrrrrrrrr",
-            caption="Summary of results (multiplied by 100,000). \\%Simon is absolute increase in meta-analysis bias as percentage of unconditional bias of Simon design.",
+            caption="Summary of results (multiplied by 100,000).",
             booktabs = T,
-            col.names = c("$\\theta$", "Uncond.", "PWB", "", "Exc.", "Inc.", "%Simon",  "Exc.", "Inc."),
-            label="ma_add_trial")
-ktab <- add_header_above(ktab, header = c(" "=1, "Bias"=2, "MCSE"=1, "Bias exc./inc. Simon"=3, "MCSE"=2))
+            col.names = c("$\\theta$", "Uncond.", "PWB", "", "$\\Delta$", "\\%Simon", "\\%SimonPWB", "Exc.", "Inc."),
+            label="ma_add_trial",
+            escape=FALSE)
+ktab <- add_header_above(ktab, header = c(" "=1, "Bias"=2, "MCSE"=1, "Change in bias"=3, "MCSE"=2))
 ktab <- add_header_above(ktab, header = c(" ", "Simon"=3, "Meta-analysis"=5))
 ktab <- kable_styling(ktab, latex_options = c("hold_position", "scale_down"))
 print(getwd())
 save_kable(ktab, file="simstudy12kbl.tex")
+kable(ktab, format="html")
 ```
 
 
