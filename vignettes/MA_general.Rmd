@@ -53,8 +53,8 @@ ggplot(data=bias.df, mapping=aes(x=theta, y=bias))+
  geom_line()+
  geom_point()+
  # geom_ribbon(aes(x=theta, ymin=lower, ymax=upper), fill="red", alpha=0.1)+
-  labs(x="True response probability theta",
-       y="Bias (precision weighted estimate - theta)",
+  labs(x=expression(paste("True response probability (", theta, ")")),
+       y=expression(paste("Bias (", hat(theta)-theta, ")")),
       title="Bias in meta-analysis studies",
        subtitle="Five non-adaptive single-arm trials, N=100")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
