@@ -1,18 +1,18 @@
 \begin{table}[!h]
 \centering
-\caption{\label{tab:summary.bias}Detailed bias and MCSE results for meta-analysis (multiplied by 100,000) and $W_S$Simon, where $W_S$ is the weight of the Simon design in the meta-analysis given $\sum W_i=1$. ``Precision'' is ratio of mean precision of Simon design and mean precision of remaining studies.}
+\caption{\label{tab:summary.bias}Detailed bias and MCSE results for meta-analysis (multiplied by 100,000) and $W_S$bias, where $W_S$ is the weight of the Simon design in the meta-analysis given $\sum W_i=1$. ``Precision'' is the mean precision of Simon design as a factor of the overall mean precision of remaining studies.}
 \centering
 \resizebox{\ifdim\width>\linewidth\linewidth\else\width\fi}{!}{
-\begin{tabular}[t]{rrrrrrrrrrr}
+\begin{tabular}[t]{lrrrrrrrrrrrr}
 \toprule
-\multicolumn{5}{c}{Meta-analysis} & \multicolumn{6}{c}{Simon} \\
-\cmidrule(l{3pt}r{3pt}){1-5} \cmidrule(l{3pt}r{3pt}){6-11}
-\multicolumn{2}{c}{Excluding} & \multicolumn{2}{c}{Including} & \multicolumn{1}{c}{ } & \multicolumn{2}{c}{$\vert \Delta \vert$/bias} & \multicolumn{1}{c}{ } & \multicolumn{2}{c}{$W_S$Simon} & \multicolumn{1}{c}{ } \\
-\cmidrule(l{3pt}r{3pt}){1-2} \cmidrule(l{3pt}r{3pt}){3-4} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){9-10}
-Bias & MCSE & Bias & MCSE & $\Delta$ & Uncond. & PWB & $W_S$ & Uncond. & PWB & Precision\\
+\multicolumn{6}{c}{Meta-analysis} & \multicolumn{6}{c}{Simon} \\
+\cmidrule(l{3pt}r{3pt}){1-6} \cmidrule(l{3pt}r{3pt}){7-12}
+\multicolumn{2}{c}{Excluding} & \multicolumn{2}{c}{Including} & \multicolumn{2}{c}{ } & \multicolumn{2}{c}{$\vert \Delta_{inc} \vert - \vert \Delta_{exc} \vert  \vert$/$\vert \text{bias}$} & \multicolumn{1}{c}{ } & \multicolumn{2}{c}{$W_S$bias} & \multicolumn{1}{c}{ } \\
+\cmidrule(l{3pt}r{3pt}){1-2} \cmidrule(l{3pt}r{3pt}){3-4} \cmidrule(l{3pt}r{3pt}){7-8} \cmidrule(l{3pt}r{3pt}){10-11}
+  & Bias & MCSE & Bias & MCSE & $\Delta$ & $\vert \Delta_{inc} \vert - \vert \Delta_{exc} \vert$ & Uncond. & PWB & $W_S$ & Uncond. & PWB & Precision\\
 \midrule
-2.8 & 5.2 & -16.9 & 4.8 & -19.7 & 0.02 & 39.63 & 0.15 & -138.9 & 0.1 & 0.69\\
--136.4 & 4.8 & -161.8 & 4.6 & -25.4 & 1.86 & 0.07 & 0.10 & 1.4 & -39.2 & 0.45\\
+\boldsymbol{$\\theta=0.5$} & 2.8 & 5.2 & -16.9 & 4.8 & -19.7 & 14.1 & 0.01 & 28.44 & 0.15 & -138.9 & 0.1 & 0.69\\
+\boldsymbol{$\\theta=0.3$} & -136.4 & 4.8 & -161.8 & 4.6 & -25.4 & 25.4 & 1.86 & 0.07 & 0.10 & 1.4 & -39.2 & 0.45\\
 \bottomrule
 \end{tabular}}
 \end{table}

@@ -159,8 +159,8 @@ simon.sub.df <- all.simon[all.simon$type %in% c("All (unadjusted)", "All (precis
 simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=type))+  geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
-       y="Bias (estimate - theta)",
-       title="Bias in Simon design",
+       y="Bias",
+       title="Bias in Simon design (p0=0.5, p1=0.6)",
        subtitle="Includes proportion of trials stopped early")+
   annotate("text", x=theta.vec, y=-0.011, label=round(stop.early.count,2))+
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
@@ -227,14 +227,15 @@ all.simon2 <- do.call(rbind, summary.data2)
 simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
 #simon.sub.df2$type <- factor(simon.sub.df2$type)
 #levels(simon.sub.df2$type)
+odd <- seq(from=1, to=length(theta.vec2), by=2)
 simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
-       y="Bias (estimate - theta)",
+       y="Bias",
        title="Bias in Simon design (p0=0.8, p1=0.9)",
        subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec2, y=-0.015, label=round(stop.early.count2,2), size=2)+
+  annotate("text", x=theta.vec2[odd], y=-0.025, label=round(stop.early.count2[odd],2))+
   geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+

@@ -357,7 +357,7 @@ smaller.kbl <- kbl(smaller.table,
                       format="latex", 
                       digits = 1, 
                       align="rrr",
-                      caption="Detailed bias and MCSE results for individual studies (multiplied by 100,000).",
+                      caption="Bias and MCSE for individual studies (multiplied by 100,000).",
                       booktabs = T,
                       col.names = c(" ", "Unconditional", "PWB", "MCSE"),
                       label="individual.bias",
@@ -374,41 +374,48 @@ save_kable(smaller.kbl, file="bias_individual_studies.tex")
 w.simon.uncond <- c(simon.frac*simon.unwtd.bias[1], simon.frac2*simon.unwtd.bias[2])
 w.simon.pwb <- c(simon.frac*simon.pw.bias[1], simon.frac2*simon.pw.bias[2])
 change <- ma.bias.inc-ma.bias.ex
-fraction <- abs(change)/abs(simon.unwtd.bias)
-fraction.pwb <- abs(change)/abs(simon.pw.bias)
+abs.change <- abs(ma.bias.inc) - abs(ma.bias.ex)
+fraction.OLD <- abs(change)/abs(simon.unwtd.bias)
+fraction.pwb.OLD <- abs(change)/abs(simon.pw.bias)
+fraction <- abs.change/abs(simon.unwtd.bias)
+fraction.pwb <- abs.change/abs(simon.pw.bias)
 
 bias.wide <- data.frame(1e5*ma.bias.ex, 
                         1e5*ma.mcse.ex,
                         1e5*ma.bias.inc,
                         1e5*ma.mcse.inc,
-                        1e5*(ma.bias.inc-ma.bias.ex),
-                        fraction, fraction.pwb, 
+                        1e5*change,
+                        1e5*abs.change,
+                        fraction,
+                        fraction.pwb, 
                         W=c(simon.frac, simon.frac2), 
                         1e5*w.simon.uncond, 
                         1e5*w.simon.pwb,
                         prec=c(prec.frac, prec.frac2))
 
 #rownames(bias.wide) <- c("\\boldsymbol{$\\\\theta=0.5$}", "\\boldsymbol{$\\\\theta=0.3$}")
+bias.wide <- cbind(c(0.5, 0.3), bias.wide)
 
 summary.kbl <- kbl(bias.wide,
                       format="latex", 
-                      digits = c(1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2), 
+                      digits = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2), 
                       align="r",
-                      caption="Detailed bias and MCSE results for meta-analysis (multiplied by 100,000) and $W_S$Simon, where $W_S$ is the weight of the Simon design in the meta-analysis given $\\sum W_i=1$. ``Precision'' is ratio of mean precision of Simon design and mean precision of remaining studies.",
+                      caption="Detailed bias and MCSE results for meta-analysis (multiplied by 100,000) and $W_S$bias, where $W_S$ is the weight of the Simon design in the meta-analysis given $\\sum W_i=1$. ``Precision'' is the mean precision of Simon design as a factor of the overall mean precision of remaining studies.",
                       booktabs = T,
-                      col.names = c("Bias", "MCSE", "Bias", "MCSE", "$\\Delta$", "Uncond.", "PWB", "$W_S$", "Uncond.", "PWB", "Precision"),
+                      col.names = c("\\boldsymbol{$\\theta$}", "Bias", "MCSE", "Bias", "MCSE", "$\\Delta$", "$\\vert \\Delta_{inc} \\vert - \\vert \\Delta_{exc} \\vert$",  "Uncond.", "PWB", "$W_S$", "Uncond.", "PWB", "Precision"),
                       label="summary.bias",
                       escape=FALSE)
 summary.kbl <- add_header_above(summary.kbl,
-                                header=c("Excluding" = 2,
+                                header=c(" "=1,
+                                         "Excluding" = 2,
                                          "Including" = 2,
+                                         " "=2,
+                                         "$\\\\vert \\\\Delta_{inc} \\\\vert - \\\\vert \\\\Delta_{exc} \\\\vert$/$\\\\vert \\\\text{bias}$"=2,
                                          " "=1,
-                                         "$\\\\vert \\\\Delta \\\\vert$/bias"=2,
-                                         " "=1,
-                                         "$W_S$Simon"=2,
+                                         "$W_S$bias"=2,
                                          " "=1),
                                 escape = FALSE)
-summary.kbl <- add_header_above(summary.kbl, c("Meta-analysis" = 5, "Simon" = 6))
+summary.kbl <- add_header_above(summary.kbl, c(" "=1, "Meta-analysis" = 6, "Simon" = 6))
 summary.kbl <- kable_styling(summary.kbl, latex_options = c("hold_position", "scale_down"))
 summary.kbl
 save_kable(summary.kbl, file="bias_metas.tex")
