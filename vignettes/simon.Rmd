@@ -33,6 +33,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(pwb)
 library(ggplot2)
+library(ggrepel)
 ```
 
 Find a Simon design with p~0~=0.5, p~1~=0.6, type-I error-rate 0.05, power
@@ -51,10 +52,10 @@ simon.des <- all.designs$out[opt.index, ]
 
 
 Find bias for a single true response probability theta:
-```{r, find bias single }
+```{r, find bias single, cache=F}
 # Find bias for this design, for a single true response probability theta:
-  nsims <- 1e5
-  set.seed(16)
+  nsims <- 1e3
+  set.seed(19052025)
   single.simon <- pwbSimon(theta=0.5,
                                 des=simon.des,
                                 nsims=nsims)
@@ -65,7 +66,7 @@ Find bias for a single true response probability theta:
 
 Find bias for a vector of true response rates:
 
-```{r, find bias vector}
+```{r, find bias vector, cache=F}
 ##### Obtain bias for range of true response probabilities ####
 theta.vec <- seq(0.1, 0.9, 0.1) # Vector of true response probabilities
 summary.data <- raw.data <- mc.error <- vector("list", length(theta.vec))
@@ -86,7 +87,7 @@ all.simon <- do.call(rbind, summary.data)
 
 We are also interested in the UMVUE, so find this and add to the above results, using the R package _singlearm_ by Michael Grayling:
 
-```{r, umvue, results="hide", message=F, warning=F}
+```{r, umvue, results="hide", message=F, warning=F, cache=F}
 
 ##### UMVUE for Simon design #####
 d2 <- singlearm::des_gs(J=2,
@@ -110,6 +111,14 @@ umvue$bias <- est$perf$`Bias(hat(pi)|pi)`
 umvue$type <- "UMVUE"
 
 all.simon <- rbind(all.simon, umvue)
+all.simon <- all.simon[order(all.simon$theta), ]
+all.simon$stop.early.count <- NA
+all.simon$stop.early.count[all.simon$type=="All (unadjusted)"] <- stop.early.count
+# remove 1's and 0's:
+all.simon$stop.early.count2 <- all.simon$stop.early.count 
+all.simon$stop.early.count2[all.simon$type=="All (unadjusted)" & (all.simon$stop.early.count2<0.01 | all.simon$stop.early.count2>0.99)] <- NA
+all.simon$stop.early.count2 <- sprintf("%.2f", all.simon$stop.early.count2)
+all.simon$stop.early.count2[all.simon$stop.early.count2=="NA"] <- ""
 ```
 
 The function _showTable_ will show a table of results for a single theta:
@@ -119,7 +128,7 @@ showTable(bias.df=all.simon, theta=0.4)
 
 How does bias compare when the true response probability is varied? Find results for a vector of true response probabilities:
 
-```{r "simon", echo=FALSE, fig.height=4, fig.width=4, warning=TRUE}
+```{r "simon", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
 
 #### Plot bias for all theta values ####
 simon.colours <- setNames(c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"),
@@ -153,21 +162,27 @@ round(mc.error.df, 5)
 Plot the same results, but removing the subsets "stopped early" or "stopped at N":
 
 
-```{r "simon_subset", echo=FALSE, fig.height=4, fig.width=4, warning=TRUE}
+```{r "simon_subset", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
 simon.sub.df <- all.simon[all.simon$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
+simon.sub.df$type <- factor(simon.sub.df$type)
+levels(simon.sub.df$type) <- c("Precision-weighted", "Unweighted")
+# stop.early.print <- seq(from=1, to=length(theta.vec), by=2)
+# stop.early.print2 <- setdiff((1:length(theta.vec)), stop.early.print)
 simon.plot.sub <- ggplot(data=simon.sub.df, mapping=aes(x=theta, y=bias, col=type))+  geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias",
-       title="Bias in Simon design (p0=0.5, p1=0.6)",
-       subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec, y=-0.011, label=round(stop.early.count,2))+
+        title=bquote("Bias in Simon design ("*theta[0]==0.5*", "~theta[1]==0.6*")"),
+       subtitle="Includes proportion of trials stopped early (selected)")+
+  # annotate("text", x=theta.vec[stop.early.print], y=-0.011, label=round(stop.early.count[stop.early.print],2))+
+  #   annotate("text", x=theta.vec[stop.early.print2], y=-0.012, label=round(stop.early.count[stop.early.print2],2))+
+  geom_text_repel(mapping=aes(label=stop.early.count2), colour="black", size=3, seed=1)+
   geom_vline(aes(xintercept=0.5), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.6), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
-  scale_x_continuous(breaks=theta.vec)+
+ # ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
+  scale_x_continuous(breaks=seq(0.1,0.9,0.05))+
  # scale_color_manual(values=simon.colours)+
   theme(legend.position="bottom")
 simon.plot.sub
@@ -202,9 +217,9 @@ simon.des2 <- all.designs2$out[opt.index, ]
 
 
 Show results for response rates (0.10, 0.90, 0.05): 
-```{r, echo=FALSE}
+```{r, echo=FALSE, cache=F}
 ##### Obtain bias for range of true response probabilities ####
-theta.vec2 <- seq(0.1, 0.9, 0.05) # Vector of true response probabilities
+theta.vec2 <- seq(0.1, 0.9, 0.025) # Vector of true response probabilities
 summary.data2 <- raw.data2 <- mc.error2 <- vector("list", length(theta.vec2))
 stop.early.count2 <- rep(NA, length(theta.vec2))
 
@@ -222,25 +237,38 @@ all.simon2 <- do.call(rbind, summary.data2)
 ```
 
 
-```{r "simon2_subset", fig.height=4, fig.width=4, echo=FALSE, warning=T}
+```{r "simon2_subset", fig.height=6, fig.width=8, echo=FALSE, warning=T}
 #### Plot bias -- no subsetting of "stopped early" or "stopped at N" ####
 simon.sub.df2 <- all.simon2[all.simon2$type %in% c("All (unadjusted)", "All (precision-weighted)"), ]
-#simon.sub.df2$type <- factor(simon.sub.df2$type)
-#levels(simon.sub.df2$type)
-odd <- seq(from=1, to=length(theta.vec2), by=2)
+simon.sub.df2$type <- factor(simon.sub.df2$type)
+levels(simon.sub.df2$type) <- c("Precision-weighted", "Unweighted")
+
+simon.sub.df2$stop.early.count <- NA
+simon.sub.df2$stop.early.count[simon.sub.df2$type=="Unweighted"] <- stop.early.count2
+# remove 1's and 0's:
+simon.sub.df2$stop.early.count2 <- simon.sub.df2$stop.early.count 
+simon.sub.df2$stop.early.count2[simon.sub.df2$type=="Unweighted" & (simon.sub.df2$stop.early.count2<0.01 | simon.sub.df2$stop.early.count2>0.99)] <- NA
+simon.sub.df2$stop.early.count2 <- sprintf("%.2f", simon.sub.df2$stop.early.count2)
+simon.sub.df2$stop.early.count2[simon.sub.df2$stop.early.count2=="NA"] <- ""
+
+
+#stop.early.print <- seq(from=1, to=length(theta.vec2), by=4)
 simon.plot.sub2 <- ggplot(data=simon.sub.df2, mapping=aes(x=theta, y=bias, col=type))+
   geom_line(alpha=0.4, size=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias",
-       title="Bias in Simon design (p0=0.8, p1=0.9)",
-       subtitle="Includes proportion of trials stopped early")+
-  annotate("text", x=theta.vec2[odd], y=-0.025, label=round(stop.early.count2[odd],2))+
+       # title="Bias in Simon design (p0=0.8, p1=0.9)",
+       title=bquote("Bias in Simon design ("*theta[0]==0.8*", "~theta[1]==0.9*")"),
+       subtitle="Includes proportion of trials stopped early (selected)")+
+  # annotate("text", x=theta.vec2[stop.early.print], y=-0,
+  #          label=round(stop.early.count2[stop.early.print],2))+
+  geom_text_repel(mapping=aes(label=stop.early.count2), colour="black", size=3, seed=1)+
   geom_vline(aes(xintercept=0.8), col="grey", linetype="dashed")+
   geom_vline(aes(xintercept=0.9), col="grey", linetype="dashed")+
   geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
-  ylim(max(abs(simon.sub.df2$bias)) * c(-1.1, 1.1) )+
-  scale_x_continuous(breaks=seq(0.1, 0.9, 0.1))+
+#  ylim(max(abs(simon.sub.df2$bias)) * c(-1.1, 1.1) )+
+  scale_x_continuous(breaks=seq(0.1, 0.9, 0.05))+
   #scale_color_manual(values=simon.colours)+
   theme(legend.position="bottom")
 simon.plot.sub2

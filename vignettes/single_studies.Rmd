@@ -1,0 +1,176 @@
+---
+title: 'Single studies: Fixed, Simon'
+author: "Martin Law"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/")
+```
+
+
+
+```{r setup}
+library(pwb)
+library(ggplot2)
+library(ggrepel)
+library(here)
+source(here("R", "pwbSimonPlusNonAD.R"))
+set.seed(19052025)
+nsims <- 1e5
+```
+
+
+## Simulate Simon design with theta0=0.5
+### ADEMP
+
+- Aim: Compare conditional, unconditional, precision-weighted and UMVUE bias in a Simon design
+- Data-generating mechanism: 
+    * Binary outcome with a series of response rates (0.1, 0.9, 0.1)
+    * Type-I error-rate 0.05 when response rate p~0~=0.5 and power 0.90 when response rate p~1~=0.6 
+    * Corresponding design: N=233, n~1~=104. Trial failure if number of responses less than or equal to 54 at interim or less than or equal to 128 at end.
+- Estimand: response rate
+- Method of analysis: point estimate, SE
+- Performance measures: Conditional, unconditional, precision-weighted and UMVUE bias
+- Number of simulations: `r nsims`
+
+Find a Simon design with p~0~=0.5, p~1~=0.6, type-I error-rate 0.05, power
+0.9:
+
+```{r find_design}
+all.designs <- clinfun::ph2simon(pu=0.5,
+                                 pa=0.6,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=300)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs$out[, "EN(p0)"])
+simon.des <- all.designs$out[opt.index, ]
+```
+
+
+
+Find bias for a vector of true response rates:
+```{r, find bias vector, cache=F}
+##### Obtain bias for range of true response probabilities ####
+theta.vec <- seq(0.1, 0.9, 0.05) # Vector of true response probabilities
+summary.data <- raw.data <- mc.error <- vector("list", length(theta.vec))
+
+for(i in 1:length(theta.vec)){
+  one.run <- pwbSimonPlusNonAD(theta=theta.vec[i],
+                           des=simon.des,
+                           nsims=nsims)
+  raw.data[[i]] <- one.run$results
+  summary.data[[i]] <- one.run$ests
+  mc.error[[i]] <- one.run$mc.error
+}
+single <- do.call(rbind, summary.data)
+```
+
+
+```{r}
+# Plot or print proportion of early-stopped trials, excluding extremes:
+single$early.stop.subset <- ifelse(single$early.stop>0.01 & single$early.stop<0.99 & single$Design=="Simon" & single$Bias=="Unconditional", yes=single$early.stop, no=NA)
+
+single$early.stop.subset <- ifelse(!is.na(single$early.stop.subset), yes=sprintf("%.2f", single$early.stop.subset), no="")
+```
+
+Plot results
+```{r "single_studies", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
+single.plot <- ggplot(data=single, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=0.4, linewidth=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias",
+        title=bquote("Bias in single studies ("*theta[0]==0.5*", "~theta[1]==0.6*")"),
+       subtitle="Includes proportion of trials stopped early (selected)")+
+  geom_text_repel(mapping=aes(label=early.stop.subset), colour="black", size=5, seed=1)+
+  geom_vline(aes(xintercept=0.5), col="grey40", linetype="dashed")+
+#  geom_vline(aes(xintercept=0.6), col="grey40", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey40", linetype="dashed")+
+ # ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
+  scale_x_continuous(breaks=seq(0.1,0.9,0.1))+
+ # scale_color_manual(values=simon.colours)+
+  theme(legend.position="bottom",
+        legend.box="vertical")+ 
+  theme(text=element_text(size=20))
+single.plot
+
+ggsave(filename="single_studies.eps",
+       plot=single.plot,
+       device=cairo_ps,
+       path=here("vignettes", "figures"))
+```
+
+
+## Simulate trials again, using values of p~0~ and p~1~ that are not close to 0.5
+
+```{r "simon_high_p"}
+all.designs2 <- clinfun::ph2simon(pu=0.8,
+                                 pa=0.9,
+                                 ep1=0.05,
+                                 ep2=0.1,
+                                 nmax=150)
+# Choose optimal Simon design:
+opt.index <- which.min(all.designs2$out[, "EN(p0)"])
+simon.des2 <- all.designs2$out[opt.index, ]
+```
+
+
+
+Find bias for a vector of true response rates:
+```{r "find bias vector 2", cache=F}
+theta.vec <- seq(0.1, 0.9, 0.05) # Vector of true response probabilities
+summary.data <- raw.data <- mc.error <- vector("list", length(theta.vec))
+
+for(i in 1:length(theta.vec)){
+  one.run <- pwbSimonPlusNonAD(theta=theta.vec[i],
+                           des=simon.des2,
+                           nsims=nsims)
+  raw.data[[i]] <- one.run$results
+  summary.data[[i]] <- one.run$ests
+  mc.error[[i]] <- one.run$mc.error
+}
+single <- do.call(rbind, summary.data)
+```
+
+
+
+```{r}
+# Plot or print proportion of early-stopped trials, excluding extremes:
+single$early.stop.subset <- ifelse(single$early.stop>0.01 & single$early.stop<0.99 & single$Design=="Simon" & single$Bias=="Unconditional", yes=single$early.stop, no=NA)
+
+single$early.stop.subset <- ifelse(!is.na(single$early.stop.subset), yes=sprintf("%.2f", single$early.stop.subset), no="")
+```
+
+
+Plot results
+```{r "single_studies2", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
+single.plot2 <- ggplot(data=single, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=0.4, linewidth=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias",
+        title=bquote("Bias in single studies ("*theta[0]==0.8*", "~theta[1]==0.9*")"),
+       subtitle="Includes proportion of trials stopped early (selected)")+
+  geom_text_repel(mapping=aes(label=early.stop.subset), colour="black", size=5, seed=1)+
+  geom_vline(aes(xintercept=0.8), col="grey40", linetype="dashed")+
+#  geom_vline(aes(xintercept=0.6), col="grey40", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey40", linetype="dashed")+
+ # ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
+  scale_x_continuous(breaks=seq(0.1,0.9,0.1))+
+ # scale_color_manual(values=simon.colours)+
+  theme(legend.position="bottom",
+        legend.box="vertical")+ 
+  theme(text=element_text(size=20))
+single.plot2
+
+ggsave(filename="single_studies2.eps",
+       plot=single.plot2,
+       device=cairo_ps,
+       path=here("vignettes", "figures"))
+```
