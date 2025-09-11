@@ -204,8 +204,12 @@ unwtd.bias.inc2
 
 
 single.simon2$results$test.wt <- 1
-single.simon2$results$test.wt[single.simon2$results$early.stop==T] <- 0.955 
-bias.inc2.test <- weighted.mean(x=wtdmeans.inc2, w=single.simon2$results$test.wt)-0.3
+N <- 127
+n1 <- 44
+K <- 10
+early.stop.wt <- (((9)*N)+n1)/(10*N) # Sample size of MA when early stop / no early stop 
+single.simon2$results$test.wt[single.simon2$results$early.stop==T] <- early.stop.wt 
+bias.inc2.test <- weighted.mean(x=wtdmeans.inc2, w=single.simon2$results$test.wt)-theta
 # Identical, as we expect (as all stop early, therefore all weights are equal)
 
 mcse.ex2 <- MCSEbias(wtdmeans.ex2)
