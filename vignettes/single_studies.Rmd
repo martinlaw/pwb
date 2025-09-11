@@ -82,7 +82,7 @@ single$early.stop.subset <- ifelse(!is.na(single$early.stop.subset), yes=sprintf
 ```
 
 Plot results
-```{r "single_studies", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
+```{r "single_studies", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE, eval=FALSE}
 single.plot <- ggplot(data=single, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=0.4, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
@@ -125,33 +125,32 @@ simon.des2 <- all.designs2$out[opt.index, ]
 
 Find bias for a vector of true response rates:
 ```{r "find bias vector 2", cache=F}
-theta.vec <- seq(0.1, 0.9, 0.05) # Vector of true response probabilities
-summary.data <- raw.data <- mc.error <- vector("list", length(theta.vec))
+summary.data2 <- raw.data2 <- mc.error2 <- vector("list", length(theta.vec))
 
 for(i in 1:length(theta.vec)){
-  one.run <- pwbSimonPlusNonAD(theta=theta.vec[i],
-                           des=simon.des2,
-                           nsims=nsims)
-  raw.data[[i]] <- one.run$results
-  summary.data[[i]] <- one.run$ests
-  mc.error[[i]] <- one.run$mc.error
+  one.run2 <- pwbSimonPlusNonAD(theta=theta.vec[i],
+                                des=simon.des2,
+                                nsims=nsims)
+  raw.data2[[i]] <- one.run2$results
+  summary.data2[[i]] <- one.run2$ests
+  mc.error2[[i]] <- one.run2$mc.error
 }
-single <- do.call(rbind, summary.data)
+single2 <- do.call(rbind, summary.data2)
 ```
 
 
 
 ```{r}
 # Plot or print proportion of early-stopped trials, excluding extremes:
-single$early.stop.subset <- ifelse(single$early.stop>0.01 & single$early.stop<0.99 & single$Design=="Simon" & single$Bias=="Unconditional", yes=single$early.stop, no=NA)
+single2$early.stop.subset <- ifelse(single2$early.stop>0.01 & single2$early.stop<0.99 & single2$Design=="Simon" & single2$Bias=="Unconditional", yes=single2$early.stop, no=NA)
 
-single$early.stop.subset <- ifelse(!is.na(single$early.stop.subset), yes=sprintf("%.2f", single$early.stop.subset), no="")
+single2$early.stop.subset <- ifelse(!is.na(single2$early.stop.subset), yes=sprintf("%.2f", single2$early.stop.subset), no="")
 ```
 
 
 Plot results
-```{r "single_studies2", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE}
-single.plot2 <- ggplot(data=single, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=0.4, linewidth=1)+
+```{r "single_studies2", echo=FALSE, fig.height=6, fig.width=8, warning=TRUE, eval=FALSE}
+single.plot2 <- ggplot(data=single, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=1, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias",
@@ -174,3 +173,40 @@ ggsave(filename="single_studies2.eps",
        device=cairo_ps,
        path=here("vignettes", "figures"))
 ```
+
+
+Put figures together to save space:
+
+```{r}
+single$theta0 <- 0.5
+single2$theta0 <- 0.8
+both <- rbind(single, single2)
+
+vlines <- data.frame(theta0=c("0.5", "0.8"), line=c(0.5, 0.8))
+
+both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=1, linewidth=1)+
+  geom_point()+
+  labs(x="True response probability theta",
+       y="Bias",
+        title=bquote("Bias in single studies"))+#,
+    #   subtitle="Includes proportion of trials stopped early (selected)")+
+  geom_text_repel(mapping=aes(label=early.stop.subset), colour="black", size=4, seed=1)+
+#  geom_vline(aes(xintercept=0.6), col="grey40", linetype="dashed")+
+  geom_hline(aes(yintercept=0), col="grey40", linetype="dashed")+
+ # ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
+  scale_x_continuous(breaks=seq(0.1,0.9,0.1))+
+ # scale_color_manual(values=simon.colours)+
+  # theme(legend.position="bottom", legend.box="vertical")+ 
+  theme(legend.position="bottom")+ 
+  theme(text=element_text(size=14))+
+  facet_grid(.~theta0)+
+  geom_vline(data=vlines, aes(xintercept=line),col="grey40",linetype="dashed")
+
+both.plot
+
+ggsave(filename="single_studies_both.eps",
+       plot=both.plot,
+       device=cairo_ps,
+       path=here("vignettes", "figures"))
+```
+

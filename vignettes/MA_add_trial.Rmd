@@ -20,7 +20,7 @@ options(knitr.kable.NA = '---')
 ```
 
 ```{r setup}
-librarian::shelf(martinlaw/pwb, ggplot2, kableExtra, flextable)
+librarian::shelf(martinlaw/pwb, ggplot2, kableExtra, flextable, here)
 ```
 
 ### Trial design with no precision weighted bias
@@ -62,7 +62,7 @@ There is unadjusted bias and no precision weighted bias.
 Now simulate all other meta-analysis studies and find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design.
 
 ```{r MA}
-ma.results <- simMeta(N=simon.des["n"], theta=0.5, n.studies=4, nsims=nsims)
+ma.results <- simMeta(N=simon.des["n"], theta=0.5, n.studies=9, nsims=nsims)
 wtdmeans.ex <- rep(NA, nsims)
 for(i in 1:nsims) wtdmeans.ex[i] <- weighted.mean(x=ma.results$theta.hat[i, ], w=1/ma.results$se[i, ]^2)
 
@@ -83,15 +83,19 @@ Now find the bias in the meta-analysis, excluding and including the Simon design
 ```{r}
 bias.ex <- mean(wtdmeans.ex-theta)
 bias.ex
-unwtd.bias.ex <- mean(rowMeans(ma.results$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.ex <- mean(rowMeans(ma.results$theta.hat)) - theta # Bias using simple mean of estimates (i.e. without correct weighting)
 unwtd.bias.ex
 
 bias.inc <- mean(wtdmeans.inc-theta)
 bias.inc
-unwtd.bias.inc <- mean(rowMeans(combined.results$theta.hat)) - theta # Bias using simple mean of estimates
+unwtd.bias.inc <- mean(rowMeans(combined.results$theta.hat)) - theta # Bias using simple mean of estimates (i.e. without correct weighting)
 unwtd.bias.inc
 
-abs(bias.inc)-abs(bias.ex)
+single.simon$results$test.wt <- 1
+early.stop.wt <- ((9*233)+104)/(10*233) # Sample size of MA when early stop / no early stop 
+single.simon$results$test.wt[single.simon$results$early.stop==T] <- early.stop.wt
+bias.inc.test <- weighted.mean(x=wtdmeans.inc, w=single.simon$results$test.wt)-theta
+
 
 # MCSE:
 mcse.ex <- MCSEbias(wtdmeans.ex)
@@ -165,7 +169,7 @@ Again, simulate all other meta-analysis studies and find summary estimate for ea
 
 ```{r}
 # Summary estimates (excluding Simon design):
-ma.results2 <- simMeta(N=simon.des["n"], theta=theta, n.studies=4, nsims=nsims)
+ma.results2 <- simMeta(N=simon.des["n"], theta=theta, n.studies=9, nsims=nsims)
 wtdmeans.ex2 <- rep(NA, nsims)
 for(i in 1:nsims)    wtdmeans.ex2[i] <- weighted.mean(x=ma.results2$theta.hat[i, ], w=1/ma.results2$se[i, ]^2)
 
@@ -198,8 +202,11 @@ bias.inc2
 unwtd.bias.inc2 <- mean(rowMeans(combined.results2$theta.hat)) - theta # Bias using simple mean of estimates
 unwtd.bias.inc2
 
-# Absolute bias, difference:
-abs(bias.inc2)-abs(bias.ex2)
+
+single.simon2$results$test.wt <- 1
+single.simon2$results$test.wt[single.simon2$results$early.stop==T] <- 0.955 
+bias.inc2.test <- weighted.mean(x=wtdmeans.inc2, w=single.simon2$results$test.wt)-0.3
+# Identical, as we expect (as all stop early, therefore all weights are equal)
 
 mcse.ex2 <- MCSEbias(wtdmeans.ex2)
 mcse.ex2 * 1e5
@@ -291,7 +298,7 @@ ktab <- add_header_above(ktab, header = c(" "=1, "Bias"=2, "MCSE"=1, "Change in 
 ktab <- add_header_above(ktab, header = c(" ", "Simon"=3, "Meta-analysis"=5))
 ktab <- kable_styling(ktab, latex_options = c("hold_position", "scale_down"))
 print(getwd())
-#save_kable(ktab, file="simstudy12kbl.tex")
+#save_kable(ktab, file=here("latex_output", "simstudy12kbl.tex"))
 kable(ktab, format="html")
 ```
 
@@ -312,8 +319,8 @@ new.table <- data.frame(all.bias.uncond,
                         all.pwb,
                         all.MCSE)
 new.table <- new.table*1e5
-studies <- c("Study 1", "Study 2", "Study 3", "Study 4", "MA (exc.)", "Simon", "$W_i$", "$W_i$*Simon", "$p$", "$p$*Simon", "MA (inc.)",
-             "Study 1", "Study 2", "Study 3", "Study 4", "MA (exc.)", "Simon", "$W_i$", "$W_i$*Simon", "$p$", "$p$*Simon", "MA (inc.)")
+studies <- c(paste("Study", 1:9), "MA (exc.)", "Simon", "$W_i$", "$W_i$*Simon", "$p$", "$p$*Simon", "MA (inc.)",
+             paste("Study", 1:9), "MA (exc.)", "Simon", "$W_i$", "$W_i$*Simon", "$p$", "$p$*Simon", "MA (inc.)")
 new.table <- cbind(studies, new.table)
 names(new.table) <- c("Studies", "Unconditional", "PWB", "MCSE")
 head(new.table, 8)
@@ -339,86 +346,138 @@ new.table.kbl2 <- pack_rows(new.table.kbl2, "\\boldsymbol{$\\\\theta=0.3$}", 12,
 new.table.kbl2 <- add_header_above(new.table.kbl2, c(" " = 1, "Bias" = 2, " " = 1))
 new.table.kbl2 <- kable_styling(new.table.kbl2, latex_options = c("hold_position", "scale_down"))
 new.table.kbl2
-#save_kable(new.table.kbl2, file="simstudy12_table2.tex")
+#save_kable(new.table.kbl2, file=here("latex_output", "simstudy12_table2.tex"))
 ```
+
 
 ```{r smaller table}
-bias.studies.uncond <- c(bias.nonAD, simon.unwtd.bias[1], bias.nonAD2, simon.unwtd.bias[2])
-bias.studies.pwb <- c(pwb.nonAD, simon.pw.bias[1], pwb.nonAD2, simon.pw.bias[2])
-studies.MCSE <- c(mcse.nonAD, simon.mcse[1], mcse.nonAD2, simon.mcse[2])
+bias.studies.uncond <- c(bias.nonAD, mean(bias.nonAD), simon.unwtd.bias[1], bias.nonAD2, mean(bias.nonAD2), simon.unwtd.bias[2])
+bias.studies.pwb <- c(pwb.nonAD, mean(pwb.nonAD), simon.pw.bias[1], pwb.nonAD2, mean(pwb.nonAD2), simon.pw.bias[2])
+studies.MCSE <- c(mcse.nonAD, NA, simon.mcse[1], mcse.nonAD2, NA, simon.mcse[2])
 
 smaller.table <- data.frame(bias.studies.uncond, bias.studies.pwb, studies.MCSE)
-smaller.table <- smaller.table*1e5
+smaller.table <- smaller.table*100 # Ian's suggestion of "%" -- ask him to clarify.
 
-studies.coln <- rep(c("Study 1", "Study 2", "Study 3", "Study 4", "Simon"), times=2)
-smaller.table <- cbind(studies.coln, smaller.table)
+simon.meanN.1 <- mean(single.simon$results$n)
+simon.meanN.2 <- mean(single.simon2$results$n)
+
+sample.size <- c(rep(233, 9), NA, simon.meanN.1, rep(233, 9), NA, simon.meanN.2)
+
+studies.coln <- rep(c(paste("Study", 1:9), "Mean 1-9", "Simon"), times=2)
+smaller.table <- cbind(studies.coln, smaller.table, sample.size)
+
+saveRDS(smaller.table, file=here("talks", "MA_long_table.rds"))
 
 smaller.kbl <- kbl(smaller.table,
-                      format="latex", 
-                      digits = 1, 
-                      align="rrr",
-                      caption="Bias and MCSE for individual studies (multiplied by 100,000).",
+                      format="html", 
+                      digits = c(2,2,2,2,0), 
+                      align="rrrr",
+                      caption="Bias, MCSE and mean sample size for individual studies (multiplied by 100).",
                       booktabs = T,
-                      col.names = c(" ", "Unconditional", "PWB", "MCSE"),
+                      col.names = c(" ", "Unweighted", "PWB", "MCSE", "Mean N"),
                       label="individual.bias",
                       escape=FALSE)
-smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.5$}", 1, 5, escape = FALSE, bold = FALSE)
-smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.3$}", 6, 10, escape = FALSE, bold = FALSE)
-smaller.kbl <- add_header_above(smaller.kbl, c(" " = 1, "Bias" = 2, " " = 1))
-smaller.kbl <- kable_styling(smaller.kbl, latex_options = c("hold_position", "scale_down"))
-smaller.kbl
-save_kable(smaller.kbl, file="bias_individual_studies.tex")
+smaller.kbl_html <- pack_rows(smaller.kbl, "$\\theta=0.5$", 1, 11, bold = TRUE)
+smaller.kbl_html <- pack_rows(smaller.kbl_html, "$\\theta=0.3$", 12, 22, bold = TRUE)
+smaller.kbl_html <- add_header_above(smaller.kbl_html, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
+save_kable(smaller.kbl_html, file=here("talks", "bias_individual_studies_100_unw.png"))
+
+
+# smaller.kbl <- kbl(smaller.kbl, format = "latex")
+# smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.5$}", 1, 11, escape = FALSE, bold = FALSE)
+# smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.3$}", 12, 22, escape = FALSE, bold = FALSE)
+# smaller.kbl <- add_header_above(smaller.kbl, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
+# smaller.kbl <- kable_styling(smaller.kbl, latex_options = c("hold_position", "scale_down"))
+# save_kable(smaller.kbl, file=here("latex_output", "bias_individual_studies_100_unw.tex"))
+
+
+
 ```
 
+
+
+
 ```{r bias in meta-analysis}
-w.simon.uncond <- c(simon.frac*simon.unwtd.bias[1], simon.frac2*simon.unwtd.bias[2])
-w.simon.pwb <- c(simon.frac*simon.pw.bias[1], simon.frac2*simon.pw.bias[2])
 change <- ma.bias.inc-ma.bias.ex
-abs.change <- abs(ma.bias.inc) - abs(ma.bias.ex)
-fraction.OLD <- abs(change)/abs(simon.unwtd.bias)
-fraction.pwb.OLD <- abs(change)/abs(simon.pw.bias)
-fraction <- abs.change/abs(simon.unwtd.bias)
-fraction.pwb <- abs.change/abs(simon.pw.bias)
+ma.bias.inc.new <- c(bias.inc.test, bias.inc2.test)
+change.new <- ma.bias.inc.new-ma.bias.ex
+Ws <- c(simon.frac, simon.frac2)
+#w.simon.uncond <- Ws*simon.unwtd.bias
+#w.simon.pwb <- Ws*simon.pw.bias
+pred.change <- Ws*(simon.pw.bias-ma.bias.ex)
+#abs.change <- abs(ma.bias.inc) - abs(ma.bias.ex)
+#fraction.OLD <- abs(change)/abs(simon.unwtd.bias)
+#fraction.pwb.OLD <- abs(change)/abs(simon.pw.bias)
+#fraction <- abs.change/abs(simon.unwtd.bias)
+#fraction.pwb <- abs.change/abs(simon.pw.bias)
 
 bias.wide <- data.frame(1e5*ma.bias.ex, 
                         1e5*ma.mcse.ex,
                         1e5*ma.bias.inc,
                         1e5*ma.mcse.inc,
                         1e5*change,
-                        1e5*abs.change,
-                        fraction,
-                        fraction.pwb, 
-                        W=c(simon.frac, simon.frac2), 
-                        1e5*w.simon.uncond, 
-                        1e5*w.simon.pwb,
+                        1e5*ma.bias.inc.new,
+                        1e5*change.new,
+                        #1e5*abs.change,
+                        #fraction,
+                        #fraction.pwb, 
+                        Ws, 
+                        1e5*pred.change,
+                        #1e5*w.simon.uncond, 
+                        #1e5*w.simon.pwb,
                         prec=c(prec.frac, prec.frac2))
 
 #rownames(bias.wide) <- c("\\boldsymbol{$\\\\theta=0.5$}", "\\boldsymbol{$\\\\theta=0.3$}")
 bias.wide <- cbind(c(0.5, 0.3), bias.wide)
+```
 
+```{r}
+kbl(bias.wide)
+```
+
+
+```{r bias in meta-analysis print}
 summary.kbl <- kbl(bias.wide,
                       format="latex", 
-                      digits = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 2), 
+                      digits = c(1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2), 
                       align="r",
-                      caption="Detailed bias and MCSE results for meta-analysis (multiplied by 100,000) and $W_S*$bias, where $W_S$ is the weight of the Simon design in the meta-analysis given that the sum of the weights equals 1, i.e., $\\sum W_i=1$. ``Precision'' is the mean precision of Simon design as a factor of the overall mean precision of remaining studies. We define $\\Delta$ as the difference in bias of the meta-analyses (including minus excluding the study), and define $\\vert \\Delta_{inc} \\vert - \\vert \\Delta_{exc} \\vert$ as the difference in the absolute bias values.",
+                      caption="Detailed bias and MCSE results for meta-analysis (multiplied by 100,000), where $W_S$ is the weight of the Simon design in the meta-analysis given that the sum of the weights equals 1, i.e., $\\sum W_i=1$. ``Precision'' is the mean precision of Simon design as a factor of the overall mean precision of remaining studies. We define $\\Delta$ as the difference in bias of the meta-analyses (including minus excluding the study)", #, and define $\\vert \\Delta_{inc} \\vert - \\vert \\Delta_{exc} \\vert$ as the difference in the absolute bias values.
                       booktabs = T,
-                      col.names = c("\\boldsymbol{$\\theta$}", "Bias", "MCSE", "Bias", "MCSE", "$\\Delta$", "$\\vert \\Delta_{inc} \\vert - \\vert \\Delta_{exc} \\vert$",  "Uncond.", "PWB", "$W_S$", "Uncond.", "PWB", "Precision"),
+                      col.names = c("\\boldsymbol{$\\theta$}", "Bias", "MCSE", "Bias", "MCSE", "$\\Delta$","$\\text{Bias}_{new}$","$\\Delta_{new}$", "$W_S$", "$\\text{Predicted }\\Delta$ ", "Precision"), # Rm'd "$\\vert \\Delta_{inc} \\vert - \\vert \\Delta_{exc} \\vert$",  "Uncond.", "PWB", 
                       label="summary.bias",
                       escape=FALSE)
 summary.kbl <- add_header_above(summary.kbl,
                                 header=c(" "=1,
                                          "Excluding" = 2,
                                          "Including" = 2,
-                                         " "=2,
-                                         "$\\\\vert \\\\Delta_{inc} \\\\vert - \\\\vert \\\\Delta_{exc} \\\\vert$/$\\\\vert \\\\text{bias}$"=2,
                                          " "=1,
-                                         "$W_S*$bias"=2,
+                                         "Including (new)" = 2,
+                                         #"$\\\\vert \\\\Delta_{inc} \\\\vert - \\\\vert \\\\Delta_{exc} \\\\vert$/$\\\\vert \\\\text{bias}$"=2,
+                                         " "=1,
+                                         "$W_S(\\\\text{PWB}_{Simon} - \\\\text{Bias}_{exc})$"=1,
                                          " "=1),
                                 escape = FALSE)
-summary.kbl <- add_header_above(summary.kbl, c(" "=1, "Meta-analysis" = 6, "Simon" = 6))
+summary.kbl <- add_header_above(summary.kbl, c(" "=1, "Meta-analysis" = 7, "Simon" = 3))
 summary.kbl <- kable_styling(summary.kbl, latex_options = c("hold_position", "scale_down"))
-summary.kbl
-save_kable(summary.kbl, file="bias_metas.tex")
-
+save_kable(summary.kbl, file=here("latex_output", "bias_metas_new2.tex"))
 ```
+
+
+
+```{r bias in meta-analysis print talk}
+
+bias.wide <- data.frame(c(mean(pwb.nonAD), mean(pwb.nonAD2))*100,
+                        ma.bias.ex*100, 
+                        ma.mcse.ex*100,
+                        ma.bias.inc*100,
+                        ma.mcse.inc*100,
+                        change*100,
+                        Ws, 
+                        pred.change*100,
+                        prec=c(prec.frac, prec.frac2))
+bias.wide <- cbind(c(0.5, 0.3), bias.wide)
+saveRDS(bias.wide, file=here("talks", "MA_wide_table.rds"))
+```
+
+
 

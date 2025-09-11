@@ -8,7 +8,6 @@
 #' @param nsims number of meta-analyses to simulate
 #' @return A list of two vectors of length N: response rate theta hat and SE
 #' @export
-#'
 simMeta <- function(N, theta, n.studies, nsims){
 
   if(length(N)!=1 & length(N)!=n.studies) stop("N must be length 1 (shared sample size) or length equal to n.studies")
