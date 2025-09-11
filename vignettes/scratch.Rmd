@@ -1,0 +1,52 @@
+---
+title: "scratch"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{scratch}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(pwb)
+```
+
+```{r}
+nsims <- 1e5
+ma.results2 <- simMeta(N=233, theta=0.8, n.studies=4, nsims=nsims)
+wtdmeans.ex2 <- rep(NA, nsims)
+for(i in 1:nsims)    wtdmeans.ex2[i] <- weighted.mean(x=ma.results2$theta.hat[i, ], w=1/ma.results2$se[i, ]^2)
+mean(wtdmeans.ex2)-0.8
+
+
+nsims <- 1e5
+theta.vec <- seq(from=0.1, to=0.9, by=0.1)
+bias.vec <- numeric(length(theta.vec))
+
+for(i in 1:length(theta.vec)){
+  ma <- simMeta(N=233, theta=theta.vec[i], n.studies=4, nsims=nsims)
+  wtd.means <- rep(NA, nsims)
+  for(j in 1:nsims)    wtd.means[j] <- weighted.mean(x=ma$theta.hat[j, ], w=1/ma$se[j, ]^2)
+  bias.vec[i] <- mean(wtd.means)-theta.vec[i]
+}
+plot(x=theta.vec, y=bias.vec, xlab="theta", ylab="Bias (estimate - theta)", xlim=c(0.05, 0.95), ylim=c(-0.005, 0.005), xaxt="n", main = "Meta-analysis, n.studies=4, Ni=233")
+abline(h=0, lty=2)
+axis(1, at = seq(0.1, 0.9, by = 0.1))
+
+mean(bias.vec)
+
+
+require(xtable)
+df <- data.frame(col1=rnorm(10),col2=runif(10,1,3))
+mdat <- matrix(c(rep(0,3), 0, 5, 0, rep(0, (7*3)), 0, 5, 0),
+               nrow = 10, ncol=3, byrow=TRUE)
+xtable(df,digits=mdat)
+```
+
