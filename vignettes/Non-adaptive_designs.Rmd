@@ -30,7 +30,8 @@ nsims <- 1e5
 N <- 100
 theta.vec <- seq(0.2, 0.8, 0.1)
 unadjusted <- pwbias <- numeric(length(theta.vec))
-se.list <- vector("list", length(theta.vec))
+se.list <- theta.hat.list <- vector("list", length(theta.vec))
+
 
 for (i in 1:length(theta.vec)) {
   responses <- rbinom(nsims, N, theta.vec[i])
@@ -38,6 +39,7 @@ for (i in 1:length(theta.vec)) {
   unadjusted[i] <- mean(theta.hat-theta.vec[i])
   se <- sqrt(theta.hat*(1-theta.hat)/N)
   pwbias[i] <- weighted.mean(x=theta.hat-theta.vec[i], w=1/se^2)
+  theta.hat.list[[i]] <- theta.hat
   se.list[[i]] <- se
 }
 
@@ -45,9 +47,24 @@ dat <- data.frame(theta=rep(theta.vec, times=2),
                   bias=c(unadjusted, pwbias),
                   type=rep(c("Unconditional", "Precision weighted"), each=length(theta.vec)))
 
-se.df <- data.frame(se=unlist(se.list),
+se.df <- data.frame(theta.hat=unlist(theta.hat.list),
+                    se=unlist(se.list),
                     theta=rep(as.character(theta.vec), each=nsims))
 ```
+
+```{r}
+# par(mfrow=c(3,3))
+# for(i in 1:length(theta.vec)){
+#   plot(x=theta.hat.list[[i]], y=se.list[[i]])
+# }
+# par(mfrow=c(3,3))
+se.df.parsim <- se.df[!duplicated(se.df),]
+nrow(se.df.parsim)
+ggplot(se.df.parsim, aes(x=theta.hat, y=se, shape=theta))+
+  geom_point()
+```
+
+
 
 ```{r "non-AD_bias_N=100", echo=FALSE, fig.height=5, fig.width=6.75}
     theme_update(axis.text=element_text(size=16),
@@ -110,3 +127,13 @@ ggplot(data=se.df, mapping=aes(x=theta, y=se))+
 ```
 
 The further theta is from 0.5, the greater the variation in SE. This increased variation means increased variation in weight, with more extreme (i.e. close to 0 or 1) values of theta hat receiving the most weight when calculating precision weighted bias. When theta is close to 0.5, there is low variation in SE, and weights will be similar (and then the weighted mean will be close to the mean).
+
+```{r}
+head(se.df)
+```
+
+```{r}
+theta.02 <- se.df[se.df$theta==0.2, ]
+plot(x=theta.02$theta.hat, y=theta.02$se)
+```
+

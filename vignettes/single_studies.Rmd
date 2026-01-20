@@ -184,7 +184,7 @@ both <- rbind(single, single2)
 
 vlines <- data.frame(theta0=c("0.5", "0.8"), line=c(0.5, 0.8))
 
-both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Bias, linetype=Design))+  geom_line(alpha=1, linewidth=1)+
+both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Design, linetype=Bias))+  geom_line(alpha=1, linewidth=1)+
   geom_point()+
   labs(x="True response probability theta",
        y="Bias",
@@ -200,13 +200,17 @@ both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Bias, linetype=D
   theme(legend.position="bottom")+ 
   theme(text=element_text(size=14))+
   facet_grid(.~theta0)+
-  geom_vline(data=vlines, aes(xintercept=line),col="grey40",linetype="dashed")
+  geom_vline(data=vlines, aes(xintercept=line),col="grey40",linetype="dashed")+
+  guides(color=guide_legend(order=1),
+         linetype=guide_legend(order=2))
 
 both.plot
 
 ggsave(filename="single_studies_both.eps",
        plot=both.plot,
        device=cairo_ps,
+       width = 8,
+       height = 5,
        path=here("vignettes", "figures"))
 ```
 

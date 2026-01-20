@@ -16,8 +16,9 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-librarian::shelf(martinlaw/pwb, ggplot2, kableExtra, flextable, here, webshot2)
-set.seed(11092025)
+librarian::shelf(ggplot2, kableExtra, flextable, here, webshot2, devtools)
+load_all()
+set.seed(16)
 ```
 
 
@@ -322,7 +323,7 @@ new.table.kbl2 <- pack_rows(new.table.kbl2, "\\boldsymbol{$\\\\theta=0.3$}", 12,
 new.table.kbl2 <- add_header_above(new.table.kbl2, c(" " = 1, "Bias" = 2, " " = 1))
 new.table.kbl2 <- kable_styling(new.table.kbl2, latex_options = c("hold_position", "scale_down"))
 #new.table.kbl2
-#save_kable(new.table.kbl2, file=here("latex_output", "simstudy12_table2.tex"))
+save_kable(new.table.kbl2, file=here("latex_output", "simstudy12_table2.tex"))
 ```
 
 
@@ -331,7 +332,10 @@ bias.studies.uncond <- c(bias.nonAD, mean(bias.nonAD), simon.unwtd.bias[1], bias
 bias.studies.pwb <- c(pwb.nonAD, mean(pwb.nonAD), simon.pw.bias[1], pwb.nonAD2, mean(pwb.nonAD2), simon.pw.bias[2])
 studies.MCSE <- c(mcse.nonAD, NA, simon.mcse[1], mcse.nonAD2, NA, simon.mcse[2])
 
-smaller.table <- data.frame(bias.studies.uncond, bias.studies.pwb, studies.MCSE)
+smaller.table <- data.frame(bias.studies.uncond,
+                            bias.studies.pwb,
+                            studies.MCSE)
+
 smaller.table <- smaller.table*scaling # Ian's suggestion of "%" -- ask him to clarify.
 
 simon.meanN.1 <- mean(single.simon$results$n)
@@ -347,9 +351,9 @@ saveRDS(smaller.table, file=here("talks", "MA_long_table_100.rds"))
 
 smaller.kbl <- kbl(smaller.table,
                       format="latex", 
-                      digits = c(2,2,2,2,0), 
+                      digits = c(3,3,3,3,0), 
                       align="rrrr",
-                      caption="Bias, MCSE and mean sample size for individual studies (multiplied by 100).",
+                      caption="Bias, MCSE (both multiplied by 100) and mean sample size for individual studies, meta-analyses of K=100 studies.",
                       booktabs = T,
                       col.names = c(" ", "Unweighted", "PWB", "MCSE", "Mean N"),
                       label="individual.bias",
@@ -365,7 +369,7 @@ smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.5$}", 1, 101, e
 smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.3$}", 102, 202, escape = FALSE, bold = FALSE)
 smaller.kbl <- add_header_above(smaller.kbl, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
 smaller.kbl <- kable_styling(smaller.kbl, latex_options = c("hold_position", "scale_down"))
-#save_kable(smaller.kbl, file=here("latex_output", "bias_individual_studies_100_unw_K100.tex"))
+save_kable(smaller.kbl, file=here("latex_output", "bias_individual_studies_100_unw_K100.tex"))
 smaller.kbl
 ```
 

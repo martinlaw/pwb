@@ -57,7 +57,7 @@ round(single.simon2$ests[3:4, 2:4], 5)
 #> All                       0.00014 0.04468 0.04491
 #> All (precision-weighted) -0.00390 0.04450      NA
 mcse.simon2 <- MCSEbias(single.simon2$results$theta.hat)
-mcse.simon2 * 1e5
+head(mcse.simon2 * 1e5)
 #MCSE(single.simon2$results$theta.hat - theta)
 mean(single.simon2$results$se)
 

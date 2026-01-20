@@ -2,13 +2,10 @@
 addSimonToMeta <- function(nsims=1e3,
                            K=5,
                            theta,
-                           N,
-                           n1,
                            theta0,
                            theta1,
-                           alpha,
-                           power,
-                           scaling=100){
+                           alpha=0.05,
+                           power=0.90){
 
 # Find Simon design:
   all.designs <- clinfun::ph2simon(pu=theta0,
@@ -29,12 +26,13 @@ addSimonToMeta <- function(nsims=1e3,
                            nsims=nsims)
   simon.unwtd.bias <- single.simon$ests["All", "bias"]
   simon.pw.bias <- single.simon$ests["All (precision-weighted)", "bias"]
+  print(simon.pw.bias)
   simon.mcse <- MCSEbias(single.simon$results$theta.hat)
 
 # Simulate all other studies, find summary estimate for each replication. These studies all have sample size equal to the maximum sample size of the Simon design.
   ma.results <- simMeta(N=N,
                         theta=theta,
-                        n.studies=K,
+                        n.studies=K-1,
                         nsims=nsims)
   wtdmeans.ex <- rep(NA, nsims)
   for(i in 1:nsims) wtdmeans.ex[i] <- weighted.mean(x=ma.results$theta.hat[i, ], w=1/ma.results$se[i, ]^2)
@@ -67,6 +65,7 @@ addSimonToMeta <- function(nsims=1e3,
   for(i in 1:ncol(ma.results$theta.hat)){
     pwb.nonAD[i] <- weighted.mean(x=ma.results$theta.hat[, i], w=1/ma.results$se[,i]^2) - theta
   }
+  mean.pwb.nonAD <- mean(pwb.nonAD)
   mcse.nonAD <- apply(ma.results$theta.hat, 2, MCSEbias)
 
 # Precision
@@ -79,29 +78,41 @@ addSimonToMeta <- function(nsims=1e3,
 # Fraction of Simon vs mean of non-adaptive:
   prec.frac <- prec.simon/ave.prec.non.ad
 
-
 # Results: Long table
-bias.studies.uncond <- c(bias.nonAD, mean(bias.nonAD), simon.unwtd.bias)
+bias.studies.unw <- c(bias.nonAD, mean(bias.nonAD), simon.unwtd.bias)
 bias.studies.pwb <- c(pwb.nonAD, mean(pwb.nonAD), simon.pw.bias)
 studies.MCSE <- c(mcse.nonAD, NA, simon.mcse)
-
-studies.coln <- rep(c(paste("Study", 1:(K-1)), paste0("Mean 1-", K-1), "Simon"))
+studies.rown <- rep(c(paste("Study", 1:(K-1)), paste0("Mean 1-", K-1), "Simon"))
 sample.size <- c(rep(N, K-1), NA, mean(single.simon$results$n))
-smaller.table <- cbind(studies.coln,
-                       bias.studies.uncond,
-                       bias.studies.pwb,
-                       studies.MCSE,
-                       sample.size)
-
-# Still to do "table 3" aka "bias.wide"
-# Still to return all results, as list.
-# XXX Need to specially Return any of the below? Or will they be in Table 3 only?
-# results <- data.frame(ma.bias.ex=bias.ex,
-#                       ma.bias.inc=bias.inc,
-#                       ma.unwtd.bias.ex=unwtd.bias.ex,
-#                       ma.unwtd.bias.inc=unwtd.bias.inc,
-#                       ma.mcse.ex=mcse.ex,
-#                       ma.mcse.inc=mcse.inc,
-#                       simon.pw.bias.wtd=simon.pw.bias*simon.frac)
-
+#browser()
+smaller.table <- data.frame(unw=bias.studies.unw,
+                            pwb=bias.studies.pwb,
+                            mcse=studies.MCSE,
+                            Nbar=sample.size,
+                            row.names=studies.rown)
+wide.results <- data.frame(theta=theta,
+                           mean.pwb=mean.pwb.nonAD,
+                           bias.ex=bias.ex,
+                           mcse.ex=mcse.ex,
+                           bias.inc=bias.inc,
+                           mcse.inc=mcse.inc,
+                           change=bias.inc-bias.ex,
+                           W=simon.frac,
+                           simon.pw.bias=simon.pw.bias,
+                           pred.change=simon.frac*(simon.pw.bias-bias.ex))
+# Results: output
+results <- list(full.ma=smaller.table,
+                wide=wide.results,
+                theta=theta,
+                mean.pwb=mean.pwb.nonAD,
+                bias.ex=bias.ex,
+                mcse.ex=mcse.ex,
+                bias.inc=bias.inc,
+                mcse.inc=mcse.inc,
+                change=bias.inc-bias.ex,
+                W=simon.frac,
+                simon.pw.bias=simon.pw.bias,
+                pred.change=simon.frac*(simon.pw.bias-bias.ex),
+                prec.frac=prec.frac)
+return(results)
 }

@@ -372,27 +372,28 @@ smaller.table <- cbind(studies.coln, smaller.table, sample.size)
 
 saveRDS(smaller.table, file=here("talks", "MA_long_table.rds"))
 
+# FOR TALKS/HTML (remember to change format="html"):
 smaller.kbl <- kbl(smaller.table,
-                      format="html", 
-                      digits = c(2,2,2,2,0), 
+                      format="latex", 
+                      digits = c(3,3,3,3,0), 
                       align="rrrr",
-                      caption="Bias, MCSE and mean sample size for individual studies (multiplied by 100).",
+                      caption="Bias, MCSE (both multiplied by 100) and mean sample size for individual studies, meta-analyses of K=10 studies.",
                       booktabs = T,
                       col.names = c(" ", "Unweighted", "PWB", "MCSE", "Mean N"),
                       label="individual.bias",
                       escape=FALSE)
-smaller.kbl_html <- pack_rows(smaller.kbl, "$\\theta=0.5$", 1, 11, bold = TRUE)
-smaller.kbl_html <- pack_rows(smaller.kbl_html, "$\\theta=0.3$", 12, 22, bold = TRUE)
-smaller.kbl_html <- add_header_above(smaller.kbl_html, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
-save_kable(smaller.kbl_html, file=here("talks", "bias_individual_studies_100_unw.png"))
+# FOR TALKS/HTML (remember to change format="html"):
+# smaller.kbl_html <- pack_rows(smaller.kbl, "$\\theta=0.5$", 1, 11, bold = TRUE)
+# smaller.kbl_html <- pack_rows(smaller.kbl_html, "$\\theta=0.3$", 12, 22, bold = TRUE)
+# smaller.kbl_html <- add_header_above(smaller.kbl_html, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
+# save_kable(smaller.kbl_html, file=here("talks", "bias_individual_studies_100_unw.png"))
 
-
-# smaller.kbl <- kbl(smaller.kbl, format = "latex")
-# smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.5$}", 1, 11, escape = FALSE, bold = FALSE)
-# smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.3$}", 12, 22, escape = FALSE, bold = FALSE)
-# smaller.kbl <- add_header_above(smaller.kbl, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
-# smaller.kbl <- kable_styling(smaller.kbl, latex_options = c("hold_position", "scale_down"))
-# save_kable(smaller.kbl, file=here("latex_output", "bias_individual_studies_100_unw.tex"))
+#smaller.kbl <- kbl(smaller.kbl, format = "latex")
+smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.5$}", 1, 11, escape = FALSE, bold = FALSE)
+smaller.kbl <- pack_rows(smaller.kbl, "\\boldsymbol{$\\\\theta=0.3$}", 12, 22, escape = FALSE, bold = FALSE)
+smaller.kbl <- add_header_above(smaller.kbl, c(" " = 1, "Bias" = 2, " " = 1, " " = 1))
+smaller.kbl <- kable_styling(smaller.kbl, latex_options = c("hold_position", "scale_down"))
+save_kable(smaller.kbl, file=here("latex_output", "bias_individual_studies_100_unw_K10.tex"))
 
 
 
