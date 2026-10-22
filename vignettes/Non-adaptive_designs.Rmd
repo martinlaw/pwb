@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 #library(pwb)
 library(ggplot2)
+library(here)
 ```
 
 Depending on the type of adaptation and the observed data, the progress of an adaptive design may not differ from a non-adaptive design. As such, it may be worthwhile to examine precision weighted bias in the context of non-adaptive designs. We simulate _nsims=1e5_ binary outcome single-stage designs with sample size _N=100_ for a series of response probabilities theta (0.1, 0.9, 0.1), then record the unconditional and precision weighted bias:
@@ -118,12 +119,28 @@ ggplot(data=dat1000, mapping=aes(x=theta, y=bias, col=type))+
 
 
 Here is the distribution of standard errors for the _N=100_ data:
-```{r "non-AD_SE", echo=FALSE, fig.height=4, fig.width=6.5}
-ggplot(data=se.df, mapping=aes(x=theta, y=se))+
-  geom_boxplot()+
+```{r "non-AD_SE", echo=FALSE, fig.width=6.5, fig.height=4}
+lwd <- 0.75
+SEs <- ggplot(data=se.df, mapping=aes(x=theta, y=se))+
+  theme_bw(base_size = 14)+
+  theme(axis.text=element_text(size=18),
+        axis.title=element_text(size=22))+
+  geom_boxplot(whisker.linewidth = lwd,
+               staple.linewidth = lwd,
+               median.linewidth = lwd,
+               box.linewidth = lwd,
+               fill="grey",
+               colour="black")+
   xlab(expression(theta))+
   ylab("SE")+
   labs(title="SE of single-arm, single-stage design with N=100")
+SEs
+ggsave(filename="non-AD_SE.eps",
+       plot=SEs,
+       device=cairo_ps,
+       width = 6.5,
+       height = 4,
+       path=here("vignettes", "figures"))
 ```
 
 The further theta is from 0.5, the greater the variation in SE. This increased variation means increased variation in weight, with more extreme (i.e. close to 0 or 1) values of theta hat receiving the most weight when calculating precision weighted bias. When theta is close to 0.5, there is low variation in SE, and weights will be similar (and then the weighted mean will be close to the mean).

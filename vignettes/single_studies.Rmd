@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-library(pwb)
 library(ggplot2)
 library(ggrepel)
 library(here)
@@ -71,6 +70,14 @@ for(i in 1:length(theta.vec)){
   mc.error[[i]] <- one.run$mc.error
 }
 single <- do.call(rbind, summary.data)
+```
+
+Summary of MC error across all values of theta: 
+```{r}
+mc.error <- do.call(rbind, mc.error)
+par(mfrow=c(1,4))
+apply(mc.error, 2, boxplot, ylim=range(mc.error))
+par(mfrow=c(1,1))
 ```
 
 
@@ -139,6 +146,14 @@ single2 <- do.call(rbind, summary.data2)
 ```
 
 
+Summary of MC error across all values of theta: 
+```{r}
+mc.error2 <- do.call(rbind, mc.error2)
+par(mfrow=c(1,4))
+apply(mc.error2, 2, boxplot, ylim=range(mc.error2))
+par(mfrow=c(1,1))
+```
+
 
 ```{r}
 # Plot or print proportion of early-stopped trials, excluding extremes:
@@ -181,36 +196,44 @@ Put figures together to save space:
 single$theta0 <- 0.5
 single2$theta0 <- 0.8
 both <- rbind(single, single2)
+both$theta0.text <- as.character(both$theta0)
+both$theta0.text <- ifelse(both$theta0.text=="0.5", yes='theta[0]*"=0.5, "*theta[1]*"=0.6"', no='theta[0]*"=0.8, "*theta[1]*"=0.9"')
 
-vlines <- data.frame(theta0=c("0.5", "0.8"), line=c(0.5, 0.8))
+vlines <- data.frame(theta0.text=c('theta[0]*"=0.5, "*theta[1]*"=0.6"', 'theta[0]*"=0.8, "*theta[1]*"=0.9"'), line=c(0.5, 0.8))
 
-both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Design, linetype=Bias))+  geom_line(alpha=1, linewidth=1)+
-  geom_point()+
-  labs(x="True response probability theta",
-       y="Bias",
-        title=bquote("Bias in single studies"))+#,
-    #   subtitle="Includes proportion of trials stopped early (selected)")+
-  geom_text_repel(mapping=aes(label=early.stop.subset), colour="black", size=4, seed=1)+
-#  geom_vline(aes(xintercept=0.6), col="grey40", linetype="dashed")+
-  geom_hline(aes(yintercept=0), col="grey40", linetype="dashed")+
- # ylim(max(abs(simon.sub.df$bias)) * c(-1.2, 1.2) )+
+both.plot <- ggplot(data=both, mapping=aes(x=theta, y=bias, col=Design, linetype=Bias, label=early.stop.subset))+
+  geom_line(alpha=1, linewidth=1.25)+
+  geom_point(size=2)+
   scale_x_continuous(breaks=seq(0.1,0.9,0.1))+
- # scale_color_manual(values=simon.colours)+
-  # theme(legend.position="bottom", legend.box="vertical")+ 
-  theme(legend.position="bottom")+ 
-  theme(text=element_text(size=14))+
-  facet_grid(.~theta0)+
+  labs(x=expression(theta),
+       y="Bias",
+        title=bquote("Bias in single studies"))+
+  geom_text_repel(data=both[both$early.stop.subset!="",],
+                  mapping=aes(label=early.stop.subset),
+                  colour="black",
+                  size=5,
+                  seed=1,
+                  direction="x",
+                  nudge_x=c(-0.05, -0.05, 0.05, 0.05, -0.05, -0.05, -0.05, 0.05, 0),
+                  nudge_y=c(rep(0,8), 0.00125))+
+  geom_hline(aes(yintercept=0), col="grey40", linetype="dashed")+
+  theme_bw()+
+  theme(text=element_text(size=20))+
+  theme(legend.position="bottom", legend.box="vertical",
+        legend.key.spacing.y = unit(0, "pt"),
+        legend.spacing.y = unit(0, "pt"),
+        legend.box.spacing = unit(0, "pt"))+ 
+  facet_grid(.~theta0.text, labeller=label_parsed)+
   geom_vline(data=vlines, aes(xintercept=line),col="grey40",linetype="dashed")+
   guides(color=guide_legend(order=1),
          linetype=guide_legend(order=2))
-
 both.plot
 
 ggsave(filename="single_studies_both.eps",
        plot=both.plot,
        device=cairo_ps,
        width = 8,
-       height = 5,
+       height = 5.5,
        path=here("vignettes", "figures"))
 ```
 
