@@ -2,7 +2,11 @@
 title: 'Single studies: Fixed, Simon'
 author: "Martin Law"
 date: "`r Sys.Date()`"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{single_studies}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -22,7 +26,7 @@ library(ggrepel)
 library(here)
 source(here("R", "pwbSimonPlusNonAD.R"))
 set.seed(19052025)
-nsims <- 1e5
+nsims <- 1e4
 ```
 
 
@@ -73,15 +77,15 @@ single <- do.call(rbind, summary.data)
 ```
 
 Summary of MC error across all values of theta: 
-```{r}
+```{r mc-error, fig.dim=c(8,8)}
 mc.error <- do.call(rbind, mc.error)
-par(mfrow=c(1,4))
+par(mfrow=c(2,2))
 apply(mc.error, 2, boxplot, ylim=range(mc.error))
 par(mfrow=c(1,1))
 ```
 
 
-```{r}
+```{r propns}
 # Plot or print proportion of early-stopped trials, excluding extremes:
 single$early.stop.subset <- ifelse(single$early.stop>0.01 & single$early.stop<0.99 & single$Design=="Simon" & single$Bias=="Unconditional", yes=single$early.stop, no=NA)
 
@@ -147,15 +151,15 @@ single2 <- do.call(rbind, summary.data2)
 
 
 Summary of MC error across all values of theta: 
-```{r}
+```{r mc-error-x, fig.dim=c(8,8)}
 mc.error2 <- do.call(rbind, mc.error2)
-par(mfrow=c(1,4))
+par(mfrow=c(2,2))
 apply(mc.error2, 2, boxplot, ylim=range(mc.error2))
 par(mfrow=c(1,1))
 ```
 
 
-```{r}
+```{r propns2}
 # Plot or print proportion of early-stopped trials, excluding extremes:
 single2$early.stop.subset <- ifelse(single2$early.stop>0.01 & single2$early.stop<0.99 & single2$Design=="Simon" & single2$Bias=="Unconditional", yes=single2$early.stop, no=NA)
 
@@ -192,7 +196,7 @@ ggsave(filename="single_studies2.eps",
 
 Put figures together to save space:
 
-```{r}
+```{r figs_together, fig.dim=c(8,8)}
 single$theta0 <- 0.5
 single2$theta0 <- 0.8
 both <- rbind(single, single2)

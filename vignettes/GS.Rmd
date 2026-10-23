@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(pwb)
 library(ggplot2)
+library(curtailment)
 ```
 
 Find single-arm group sequential design with p0=0.5, p1=0.6, type-I error-rate 0.1, power
