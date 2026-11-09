@@ -11,6 +11,8 @@ maSimon(theta = 0.5, des, N = NULL, nsims = 1e+05, n.studies = 4)
 
 \item{des}{a realisation of a Simon design, formatted as per output of clinfun::ph2simon}
 
+\item{N}{max sample size (if NULL (default), max sample size of Simon design is used)}
+
 \item{nsims}{number of simulations (default 1e5)}
 
 \item{n.studies}{number of non-adaptive studies in meta-analysis}

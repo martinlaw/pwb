@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Non-adaptive_designs}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2, here}
 ---
 
 ```{r, include = FALSE}
@@ -18,7 +19,7 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-#library(pwb)
+library(pwb)
 library(ggplot2)
 library(here)
 ```

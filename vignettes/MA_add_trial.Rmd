@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{MA_add_trial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2, kableExtra, flextable, here}
 ---
 
 ```{r, include = FALSE}
@@ -20,7 +21,7 @@ options(knitr.kable.NA = '---')
 ```
 
 ```{r setup}
-librarian::shelf(martinlaw/pwb, ggplot2, kableExtra, flextable, here)
+library("pwb", "ggplot2", "kableExtra", "flextable", "here")
 ```
 
 ### Trial design with no precision weighted bias

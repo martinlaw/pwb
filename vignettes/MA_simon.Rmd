@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{MA_simon}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{singlearm}
 ---
 
 ```{r, include = FALSE}
@@ -17,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-librarian::shelf(mjg211/singlearm, cran_repo = 'https://cran.r-project.org')
+library(singlearm)
 library(pwb)
 ```
 

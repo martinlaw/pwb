@@ -1,0 +1,31 @@
+---
+title: "PWB - David chat"
+author: "Martin"
+date: "2026-10-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Pre-meeting thoughts
+
+To obtain PWB, need to weight each simulated RD by its SE.
+Therefore need each SE.
+SE needs pt and pc, therefore not sufficient to simulate just Z or just a RD.
+1: Does that mean we need a different data generating mechanism from the one used in the point estimation paper?
+
+2: When simulating risk difference delta=0.14, what should be used as the true pt and pc?
+By simulating risk difference directly, DR doesn't need to specify this. Is SE independent of pt and pc? I would not have thought so.
+
+3: Timing of interim: DR uses Fisher information. If we need to generate pt and pc, we need a sample size and defined N for the interim analysis, we need to "translate" the Fisher information into the sample size and interim timepoints. Is this as simple as just using what was used in the MUSEC trial? N=400 total, N=200 per arm, interim analysis at trial midpoint.
+
+# Meeting with DR
+
+ - DR agrees that it is necessary to use a different data-generating mechanism, and so there's no problem justifying this;
+ - The DGM will involve 
+   - simulating events (not Z values or MLEs/risk differences;
+   - simulating using true response probabilities on trt and control -- using the observed probabilities from the real trial;
+   - Having the interim analysis after N=200 results, i.e. halfway through -- again, this is in line with the real trial, rather than using the Fisher information as DR et al. did in the simulation study.
+   

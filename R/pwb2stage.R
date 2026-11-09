@@ -13,12 +13,14 @@
 
 
 
-pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
+pwb2stage <- function(N, theta0, theta1, nsims){
 
-  RD_interim = RD_final = SE_interim = SE_final = pval = rep(NA, nsims)
+  RD_interim = RD_final = SE_interim = SE_final = z = rep(NA, nsims)
 
-  #results <- vector("list", nsims)
-
+  results <- vector("list", nsims)
+  original = gsDesign(k=2, test.type = 1, beta = 0.2, sfu='OF', n.fix = 400)
+  e1 = original$upper$bound[1]
+  #f1 = -Inf
 
   for(i in 1:nsims){
     # Stage 1:
@@ -35,7 +37,8 @@ pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
 
     SE_interim[i] = sqrt(EE*EN/(EE+EN)^3 + CE*CN/(CE+CN)^3)
 
-    pval[i] = pnorm(RD_interim[i]/SE_interim[i])
+    #pval[i] = pnorm(RD_interim[i]/SE_interim[i])
+    z[i] <- RD_interim[i]/SE_interim[i]
 
     # Stage 2:
     Y0 = rbinom(N/4, 1, theta0)
@@ -51,65 +54,62 @@ pwb2stage <- function(N=2428, theta0=0.2, theta1=0.15, nsims=1e4){
 
     SE_final[i] = sqrt(EE*EN/(EE+EN)^3 + CE*CN/(CE+CN)^3)
 
-    #results[[i]] <- c(sum(X0), sum(X1), sum(X0+Y0), sum(X1+Y1))
+    results[[i]] <- c(sum(X0), sum(X1), sum(X0+Y0), sum(X1+Y1))
 
   }
+  #stop_early = (pval <= 0.001)
+  #continue = (pval > 0.001)
+  stop_early <- z>e1
+  continue <- z<=e1 # Note: No futility stopping
 
-  stop_early = (pval <= 0.001)
-  continue = (pval > 0.001)
-
-  #results <- do.call(rbind, results)
+  results <- do.call(rbind, results)
   results <- data.frame(early.stop=stop_early,
                         RD=RD_final,
                         SE=SE_final)
-
   results$RD[stop_early] <- RD_interim[stop_early]
   results$SE[stop_early] <- SE_interim[stop_early]
-
   #names(results) <- c("C.int", "E.int", "C.final", "E.final")
 
+  RD <- stop_early*RD_interim + continue*RD_final
+  SE <- stop_early*SE_interim + continue*SE_final
+  RD.stop_early <- RD[stop_early]
+  RD.continue <- RD[continue]
+  trueRD <- theta1-theta0
 
-
-  # results$early.stop <- stop_early
-  # results$SE.int <- SE_interim
-  # results$SE.final <- SE_final
-  # results$RD.int <- RD_interim
-  # results$RD.final <- RD_final
-  # results$n <- rep(N/2, nsims)
-  # results$n[results$early.stop] <- N/4
-  # results$RD <- RD_final
-  # results$RD[stop_early] <- RD_interim
-  # results$SE <- SE_final
-  # results$SE[stop_early] <- SE_interim
-
-  trueRD <- theta1-theta0 # True RD no longer fixed at -0.05
+  # Table
+  ntrials <- c(sum(stop_early), sum(continue), nsims, nsims)
+  RD.bias <- c(mean(RD.stop_early), mean(RD.continue), mean(RD), weighted.mean(x=RD, w=1/(SE)^2)) - trueRD
+# SE.RD <- c(sd(RD.stop_early), sd(RD.continue), sd(RD), sd(RD)) # By defn, same for unweighted and PW?
+#  mean.SE <- c(SE[stop_early], SE[continue], mean(SE), mean(RD)) # By defn, same for unweighted and PW?
 
   # Table (slide 18)
-  ests <- rbind(
-    c(sum(stop_early), mean(RD_interim[stop_early]) - trueRD,
-      mean(SE_interim[stop_early])),
 
-    c(sum(continue), mean(RD_final[continue]) - trueRD,
-      mean(SE_final[continue])),
-
-    c(nsims, mean(c(RD_interim[stop_early], RD_final[continue])) - trueRD,
-      mean(c(SE_interim[stop_early],SE_final[continue]))),
-
-    c(nsims, weighted.mean(c(RD_interim[stop_early], RD_final[continue]),
-                          c(1/SE_interim[stop_early]^2, 1/SE_final[continue]^2)) - trueRD,
-      weighted.mean(c(SE_interim[stop_early], SE_final[continue]),
-                    c(1/SE_interim[stop_early]^2, 1/SE_final[continue]^2)))
-  )
-  ests <- data.frame(ests,
-                     rep(theta0, 4),
-                     rep(theta1, 4),
-                     c("Stopped early", "Not stopped early", "All (unadjusted)", "All (precision-weighted)"))
-  names(ests) <- c("nsims", "Bias in RD", "Mean SE of RD", "theta0", "theta1", "type")
-  rownames(ests) <- c("Stopped early", "Not stopped early", "All (unadjusted)", "All (precision-weighted)")
-  #signif(ests, 3)
-  theta.hat <- c(RD_interim[stop_early], RD_final[continue])
-  all.theta.bar <- mean(theta.hat)
-  mc.error.bias <- sqrt( 1/(nsims*(nsims-1)) * sum((theta.hat-all.theta.bar)^2) )
+  # ests <- rbind(
+  #   c(sum(stop_early), mean(RD_interim[stop_early]) - trueRD,
+  #     mean(SE_interim[stop_early])),
+  #
+  #   c(sum(continue), mean(RD_final[continue]) - trueRD,
+  #     mean(SE_final[continue])),
+  #
+  #   c(nsims, mean(c(RD_interim[stop_early], RD_final[continue])) - trueRD,
+  #     mean(c(SE_interim[stop_early],SE_final[continue]))),
+  #
+  #   c(nsims, weighted.mean(c(RD_interim[stop_early], RD_final[continue]),
+  #                         c(1/SE_interim[stop_early]^2, 1/SE_final[continue]^2)) - trueRD,
+  #     weighted.mean(c(SE_interim[stop_early], SE_final[continue]),
+  #                   c(1/SE_interim[stop_early]^2, 1/SE_final[continue]^2)))
+  # )
+  all.theta.bar <- mean(RD)
+  mc.error.bias <- sqrt(1/(nsims*(nsims-1)) * sum((RD-all.theta.bar)^2))
+  ests <- data.frame(type=c("Stopped early", "Not stopped early", "All (unweighted)", "All (precision-weighted)"),
+                     ntrials,
+                     theta0,
+                     theta1,
+                     theta=trueRD,
+                     "Bias in RD"=RD.bias,
+                     bias.100=RD.bias*100,
+                     mc.error.bias)
+  rownames(ests) <- c("Stopped early", "Not stopped early", "All (unweighted)", "All (precision-weighted)")
   return(list(results=results,
               ests=ests,
               mc.error.bias=mc.error.bias))

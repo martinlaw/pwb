@@ -1,0 +1,96 @@
+---
+title: "Point Estimation Example"
+author: "Martin, David"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{point_est_example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2, forcats, flextable, gsDesign, here}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  echo = TRUE,
+  dev='png',
+  fig.path="figures/",
+  warning = FALSE)
+devtools::load_all()
+library(ggplot2)
+library(forcats)
+library(flextable)
+library(gsDesign)
+library(here)
+```
+
+```{r}
+set.seed(7)
+nsims.global <- 10000
+```
+
+# Trial data
+```{r observed-data}
+p0 <- 21/134
+p1 <- 42/143
+# Round these to match DR's SS effect size of 0.14:
+p0 <- 0.16
+p1 <- 0.30
+```
+
+Simulation study examines RDs of $\delta=\{0.10, 0.14, 0.18\}$. Generate the data by
+
+ - fixing $\theta_0=0.16$ and varying $\theta_1$, i.e. $\theta_1=\{0.26, 0.30, 0.34\}$.
+ - varying $\theta_0$ and $\theta_1$ around their observed values:  $\{\theta_0, \theta_1\} = \{0.18, 0.28\}$ and $\{\theta_0, \theta_1\} = \{0.14, 0.32\}$.
+
+```{r}
+theta0.vec <- c(0.16, 0.16, 0.16, 0.18, 0.14)
+theta1.vec <- c(0.26, 0.30, 0.34, 0.28, 0.32)
+iw.results <- vector("list", length(theta1.vec))
+mc.error <- numeric(length(theta1.vec))
+
+for(i in 1:length(theta1.vec)){
+  one.result <- pwb2stage(N=400, theta0=theta0.vec[i], theta1=theta1.vec[i], nsims=nsims.global)
+  iw.results[[i]] <- one.result$ests
+  mc.error[i] <- one.result$mc.error.bias
+}
+iw.results <- do.call(rbind, iw.results)
+```
+
+
+```{r}
+iw.results.tab <- iw.results
+iw.results.tab$Bias.in.RD <- round(iw.results.tab$Bias.in.RD, 4)
+iw.results.tab$bias.100 <- round(iw.results.tab$bias.100, 2)
+iw.results.tab$mc.error.bias <- round(iw.results.tab$mc.error.bias, 4) 
+names(iw.results.tab) <- c("type", "ntrials", "theta0", "theta1", "theta", "Bias", 
+"Bias*100", "MCSE.bias")
+tab <- autofit(flextable(iw.results.tab))
+tab <- hline(tab, i=c(4, 8, 12, 16))
+tab <- bg(tab, i=c(3:4, 7:8, 11:12, 15:16, 19:20), j=c(1,7), bg="grey90")
+tab
+save_as_html(tab, path=here("vignettes", "figures","2-stage-RD.html"))
+```
+
+```{r 2-stage-RD, fig.dim=c(7,5)}
+iw.results$sim <- factor(rep(LETTERS[1:length(theta0.vec)], each=4))
+iw.results.sub <- iw.results[iw.results$type %in% c("All (unweighted)", "All (precision-weighted)"), ]
+iw.plot <- ggplot(data=iw.results.sub, mapping=aes(x=sim, y=bias.100, fill=type))+
+  geom_bar(position = "dodge", stat="identity")+
+  labs(x="Scenario",
+       y="100*Bias (estimate - true RD)",
+       title="Bias in two-arm two-stage design")+
+  geom_hline(aes(yintercept=0), col="grey", linetype="dashed")+
+  ylim(max(abs(iw.results.sub$bias.100)) * c(-1.1, 1.1) )+
+  scale_x_discrete(labels=c(expression(paste(theta[0], "=0.16, ", theta[1], "=0.26")),
+                            expression(paste(theta[0], "=0.16, ", theta[1], "=0.30")),
+                            expression(paste(theta[0], "=0.16, ", theta[1], "=0.34")),
+                            expression(paste(theta[0], "=0.18, ", theta[1], "=0.28")),
+                            expression(paste(theta[0], "=0.14, ", theta[1], "=0.32"))
+                            ))+
+ theme(legend.position="bottom")
+iw.plot
+#ggsave(file.path("vignettes", "figures","2-stage-RD.png"), plot = iw.plot, device = "png", width=7, height = 5)
+```
+

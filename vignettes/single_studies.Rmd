@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{single_studies}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2, here, ggrepel}
 ---
 
 ```{r, include = FALSE}
@@ -21,9 +22,7 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-library(ggplot2)
-library(ggrepel)
-library(here)
+library(pwb)
 source(here("R", "pwbSimonPlusNonAD.R"))
 set.seed(19052025)
 nsims <- 1e4

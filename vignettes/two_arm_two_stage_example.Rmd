@@ -17,10 +17,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(pwb)
-nsim = 10^4
+devtools::load_all()
+nsim = 10^3
 N = 2428
-RD_interim = RD_final = SE_interim = SE_final = pval = rep(NA, N)
+RD_interim = RD_final = SE_interim = SE_final = pval = rep(NA, nsim)
 set.seed(7)
 ```
 
@@ -29,6 +29,7 @@ set.seed(7)
 #### Simulate the adaptive design trial only:
 
 ```{r simulate}
+xt_interim <- xc_interim <- xt_s2 <- xc_s2 <- rep(NA, nsim)
 
 for(i in 1:nsim){
   # Stage 1:
@@ -44,6 +45,9 @@ for(i in 1:nsim){
   RD_interim[i] = (EE/(EE+EN)) - (CE/(CE+CN))
   
   SE_interim[i] = sqrt(EE*EN/(EE+EN)^3 + CE*CN/(CE+CN)^3)
+  
+  xt_interim[i] <- EE
+  xc_interim[i] <- CE
   
   pval[i] = pnorm(RD_interim[i]/SE_interim[i])
   
@@ -61,10 +65,29 @@ for(i in 1:nsim){
   
   SE_final[i] = sqrt(EE*EN/(EE+EN)^3 + CE*CN/(CE+CN)^3)
   
+  xt_s2[i] <- EE
+  xc_s2[i] <- CE
+  
 }
+
+
+nt_interim <- nc_interim <- N/4
+nt_interim <- nc_interim <- N/4
 
 stop_early = (pval <= 0.001)
 continue = (pval > 0.001) 
+
+xt <- xc <- rep(NA, nsim)
+
+xt[stop_early] <- xt_interim[stop_early]
+xt[continue] <- xt_interim[continue] + xt_s2[continue]
+xc[stop_early] <- xc_interim[stop_early]
+xc[continue] <- xc_interim[continue] + xc_s2[continue]
+
+pt <- pc <- rep(NA, nsim)
+nt <- rep(N/2, nsim)
+nt[stop_early] <- N/4
+nc <- nt
 ```
 
 #### Plot the results:

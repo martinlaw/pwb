@@ -6,6 +6,7 @@
 #' @param des a realisation of a Simon design, formatted as per output of clinfun::ph2simon
 #' @param nsims number of simulations (default 1e5)
 #' @param n.studies number of non-adaptive studies in meta-analysis
+#' @param N max sample size (if NULL (default), max sample size of Simon design is used)
 #' @return Data frame of results
 #' @export
 #'

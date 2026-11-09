@@ -5,6 +5,7 @@ vignette: >
   %\VignetteIndexEntry{MA_add_trial_100}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2, kableExtra, webshot2, here}
 ---
 
 ```{r, include = FALSE}
@@ -16,8 +17,7 @@ knitr::opts_chunk$set(
 
 
 ```{r setup}
-librarian::shelf(ggplot2, kableExtra, flextable, here, webshot2, devtools)
-load_all()
+library("ggplot2", "kableExtra", "flextable", "here", "webshot2")
 set.seed(16)
 ```
 
